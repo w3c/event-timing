@@ -61,36 +61,18 @@ However, in the future, we’d like to be able to associate this with when pixel
 
 ### When should we dispatch PerformanceEventTiming entries?
 
-Proposal:
-
 Let’s dispatch `PerformanceEventTiming` for all events for which:
 
 `max(processingEnd, commitTime) - startTime > 50ms`
 
 This considers an event to start when it's timestamp indicates, and an event to end when it’s associated frame is committed, if one exists, and when the event handlers and default action are complete if no associated frame exists.
 
-Alternatives:
-
-* We could batch these entries, and dispatch one per event, but this is likely to incur too high a performance overhead, and may constrain what information we’re allowed to include in the Entry due to privacy concerns.
-
-* We could dispatch these entries if the event handlers or the default action ran longer than some threshold. This would miss a variety of cases however, such as when event handlers dirty style or layout, and the style or layout recalculation is expensive.
-
 ### What about input triggering multiple DOM event types?
 
-Proposal:
-
-* Report one entry per DOM event.
-    * For events which have no listeners, we report one entry per DOM event which would have been dispatched had there been listeners.
-    * For nested elements with, for example, touchmove event handlers, only one entry is reported, despite there being many listeners.
-    * For input which triggers multiple DOM events, such as a touch pointer release triggering touchend, pointerend and click, many entries may be dispatched for a single user input.
-
-Alternatives:
-
-* Report one entry per logical user input.
-    * We could dispatch less redundant information if we only reported one entry per logical user input. For example, a touch pointer release would report a single entry, instead of reporting touchend, pointerend and click. The primary advantage of using the existing DOM event types is simplicity - developers already understand DOM event types, specs already include the notion of DOM event types, and this allows us to assume that all event listener invocations occur in contiguous blocks.
-
-* Report one entry per event listener invocation.
-    * Developers will want to monitor the total amount of work done per event, so we should perform this aggregation step for them.
+Let's report one entry per DOM event.
+* For events which have no listeners, we report one entry per DOM event which would have been dispatched had there been listeners.
+* For nested elements with, for example, touchmove event handlers, only one entry is reported, despite there being many listeners.
+* For input which triggers multiple DOM events, such as a touch pointer release triggering touchend, pointerend and click, many entries may be dispatched for a single user input.
 
 ### Is a Polyfill Good Enough?
 
@@ -116,7 +98,7 @@ This API also provides additional context on the event in question.
 
 ## Asynchronous Scrolling
 
-Asynchronous scrolling should be essentially equivalent to other asynchronous animations, and should eventually be addressed by extensions to the Frame Timing API. The changes a developer can make to fix high compositing overhead are equivalent for scrolling and other composited animations. Insight into the events which caused the scrolling isn’t valuable in this context.
+Asynchronous scrolling should be essentially equivalent to other asynchronous animations, and will eventually be addressed by extensions to the Frame Timing API. The changes a developer can make to fix high compositing overhead are equivalent for scrolling and other composited animations. Insight into the events which caused scrolling isn’t valuable in this context.
 
 ## Cases where we only want to monitor one event type
 
