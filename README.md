@@ -53,8 +53,8 @@ Before step one, run these steps:
 
 
 
-1.  Let executedListeners be false
-2.  Let newEntry be a new PerformanceEventTiming object
+1.  Let executedListeners be false.
+2.  Let newEntry be a new PerformanceEventTiming object.
 3.  Set newEntry's name attribute to event.type.
 4.  Set newEntry's entryType attribute to "event".
 5.  Set newEntry's startTime attribute to event.timeStamp.
@@ -66,7 +66,7 @@ After step 6
 *   if any event listeners or a default action were executed, set executedListeners to true.
 
 After step 13
-*   set newEntry.duration to the value returned by performance.now() - event.timeStamp
+*   set newEntry.duration to the value returned by performance.now() - event.timeStamp.
 *   execute the **performance event timing entry dispatch algorithm** on newEntry and executedListeners.
 
 
