@@ -67,7 +67,7 @@ After step 6
 
 After step 13
 *   set newEntry.duration to the value returned by performance.now() - event.timeStamp
-*   execute the **performance event timing entry dispatch algorithm **on newEntry and executedListeners.
+*   execute the **performance event timing entry dispatch algorithm** on newEntry and executedListeners.
 
 
 ### Open Questions
