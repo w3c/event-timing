@@ -1,6 +1,4 @@
-# Minimal Event Timing Web Perf API
-
-## Background
+# Event Timing Web Perf API
 
 Monitoring event latency today requires an event listener. This precludes measuring event latency early in page load, and adds unnecessary performance overhead.
 
@@ -42,7 +40,7 @@ interface PerformanceEventTiming : PerformanceEntry {
 ```
 
 
-When the **performance event timing entry dispatch algorithm ** is invoked with a PerformanceEventTiming object |newEntry|, and a boolean |executedListeners|, execute the following steps:
+When the **performance event timing entry dispatch algorithm** is invoked with a PerformanceEventTiming object |newEntry|, and a boolean |executedListeners|, execute the following steps:
 
 1.  If executedListeners is false, return.
 2.  If newEntry.duration < 50 and the performance entry buffer contains an entry with entryType |newEntry.entryType| return.
