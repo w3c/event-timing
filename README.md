@@ -18,7 +18,7 @@ A polyfill implementing this API can be found [here](https://github.com/tdresser
 In order to accomplish these goals, we introduce:
 
 
-```
+```js
 interface PerformanceEventTiming : PerformanceEntry {
     // The type of event dispatched. E.g. "touchmove".
     // Doesn't require an event listener of this type to be registered.
