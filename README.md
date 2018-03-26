@@ -46,8 +46,8 @@ When beginning an operation which will dispatch an event `event`, execute these 
 After the operation during which `event` was dispatched, execute these steps:
  1.  Set `newEntry.duration` to the value returned by `performance.now() - event.timeStamp`.
  1.  If `event.isTrusted` is true and `newEntry.duration` > 50:
-  1.   Queue `newEntry`.
-  1.   Add `newEntry` to the performance entry buffer.
+     1.   Queue `newEntry`.
+     1.   Add `newEntry` to the performance entry buffer.
 
 ### Open Questions
 
