@@ -38,16 +38,16 @@ When beginning an operation which will dispatch an event `event`, execute these 
  1.  Let `newEntry` be a new `PerformanceEventTiming` object.
  1.  Set `newEntry`'s `name` attribute to `event.type`.
  1.  Set `newEntry`'s `entryType` attribute to "event".
- 1.  Set `newEntry`'s `startTime` attribute to `event.timeStamp`.
+ 1.  If `event` is coalesced, then get the first event `firstEvent` of `event`'s coalesced events, and set `newEntry`'s `startTime` attribute to `firstEvent.timeStamp`. Otherwise, set `newEntry`'s `startTime` attribute to `event.timeStamp`
  1.  Set `newEntry`'s `processingStart` attribute to the value returned by `performance.now()`.
  1.  Set `newEntry`'s `duration` attribute to 0.
  1.  Set `newEntry`'s `cancelable` attribute to `event.cancelable`.
 
 After the operation during which `event` was dispatched, execute these steps:
  1.  Set `newEntry.duration` to the value returned by `performance.now() - event.timeStamp`.
- 1.  If `event.isTrusted` is true and `newEntry.duration` > 50:
-     1.   Queue `newEntry`.
-     1.   Add `newEntry` to the performance entry buffer.
+ 1.  If `event.isTrusted` is true and `newEntry.duration` > 50 ms:
+     1.   Queue `newEntry` to the performance observers observing "event" type.
+     1.   If the event timing entry buffer is not full, and either `event.timeStamp` < `performance.timing.loadEventStart` - `performance.timing.origin` or `performance.timing.responseStart` is not recorded yet, then add `newEntry` to the event timing entry buffer.
 
 ### Open Questions
 
@@ -59,6 +59,7 @@ For example composited scrolling? I suspect behaving as though the duration is 0
 
 
 ### Usage
+1. With performance observer:
 ```javascript
 const performanceObserver = new PerformanceObserver((entries) => {
   for (const entry of entries.getEntries()) {
@@ -67,4 +68,13 @@ const performanceObserver = new PerformanceObserver((entries) => {
 });
 
 performanceObserver.observe({entryTypes:['event']});
+```
+
+2. To access event timing buffer:
+```javascript
+performance.getEntriesByType('event');
+
+performance.getEntriesByName('click');  // or other event type of interest
+
+performance.getEntries();  // event timing buffer will be included
 ```
