@@ -30,36 +30,39 @@ interface PerformanceEventTiming : PerformanceEntry {
     // The time the last event handler finished executing.
     // startTime if no event handlers executed.
     readonly attribute DOMHighResTimeStamp processingEnd;    
-    // The duration |startTime| and TODO
+    // The duration between |startTime| and the next execution of step 7.12 in the HTML event loop processing model.
     readonly attribute DOMHighResTimeStamp duration;
     // Whether or not the event was cancelable.
     readonly attribute boolean cancelable;
 };
 ```
 
-When beginning an operation which will dispatch an event `event`, execute these steps:
- 1.  Let `newEntry` be a new `PerformanceEventTiming` object.
- 1.  Set `newEntry`'s `name` attribute to `event.type`.
- 1.  Set `newEntry`'s `entryType` attribute to "event".
- 1.  Set `newEntry`'s `startTime` attribute to `event.timeStamp`.
- 1.  Set `newEntry`'s `processingStart` attribute to the value returned by `performance.now()`.
- 1.  Set `newEntry`'s `duration` attribute to 0.
- 1.  Set `newEntry`'s `cancelable` attribute to `event.cancelable`.
+Make the following modifications to the "[to dispatch an event algorithm](https://www.w3.org/TR/dom/#dispatching-events)".
 
-After the operation during which `event` was dispatched, execute these steps:
- 1.  Set `newEntry.duration` to the value returned by `performance.now() - event.timeStamp`.
- 1.  If `event.isTrusted` is true and `newEntry.duration` > 50:
-     1.   Queue `newEntry`.
-     1.   Add `newEntry` to the performance entry buffer.
+Let pendingEntries be an initially empty list of PerformanceEventTiming objects.
+
+Before step one, run these steps:
+
+1.  Let newEntry be a new PerformanceEventTiming object.
+1.  Set newEntry's name attribute to event.type.
+1.  Set newEntry's entryType attribute to "event".
+1.  Set newEntry's startTime attribute to event.timeStamp.
+1.  Set newEntry's processingStart attribute to the value returned by performance.now().
+1.  Set newEntry's duration attribute to 0.
+1.  Set newEntry's cancelable attribute to event.cancelable.
+
+After step 13
+* Set newEntry.processingEnd to the value returned by performance.now().
+* Append newEntry to pendingEntries.
+
+During step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
+* For each fully active `Document` in `docs`, update the rendering or user interface of that `Document` and its browsing context to reflect the current state, and, while doing so, for each `newEntry` in `pendingEntries`:
+ * Set newEntry's duration attribute to the value returned by `performance.now() - newEntry.startTime`.
+ * If `newEntry.duration > 50`, queue `newEntry`.
 
 ### Open Questions
 
-#### Should this apply to all events, or only UIEvents?
-
-#### How should we handle cases where the operation during which the event was dispatched doesn't block javascript?
-
-For example composited scrolling? I suspect behaving as though the duration is 0 is correct, but specifying this may prove tricky.
-
+#### Should this apply to all events, or only UIEvents? Perhaps only a subset of UIEvents?
 
 ### Usage
 ```javascript
