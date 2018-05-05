@@ -39,7 +39,7 @@ interface PerformanceEventTiming : PerformanceEntry {
 
 Make the following modifications to the "[to dispatch an event algorithm](https://www.w3.org/TR/dom/#dispatching-events)".
 
-Let pendingEntries be an initially empty list of PerformanceEventTiming objects.
+Let `pendingEntries` be an initially empty list of `PerformanceEventTiming` objects.
 
 Before step one, run these steps:
 
@@ -52,8 +52,8 @@ Before step one, run these steps:
 1.  Set newEntry's cancelable attribute to event.cancelable.
 
 After step 13
-* Set newEntry.processingEnd to the value returned by performance.now().
-* Append newEntry to pendingEntries.
+* Set `newEntry.processingEnd` to the value returned by `performance.now()`.
+* Append `newEntry` to `pendingEntries`.
 
 During step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
 * For each fully active `Document` in `docs`, update the rendering or user interface of that `Document` and its browsing context to reflect the current state, and, while doing so, for each `newEntry` in `pendingEntries`:
