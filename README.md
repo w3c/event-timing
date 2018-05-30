@@ -72,10 +72,12 @@ After step 13
 
 After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
 * For each `newEntry` in `pendingEventEntries`:
-  * Set newEntry's duration attribute to the value returned by `performance.now() - newEntry.startTime`.
+  * Set newEntry's duration attribute to the value returned by `Math.round((performance.now() - newEntry.startTime)/8) * 8`.
   * Increment `performance.eventsCounts[newEntry.name]`.
   * If `newEntry.duration > 50`, queue `newEntry`.
 
+### Security and Privacy
+To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
 
 ### Open Questions
 
