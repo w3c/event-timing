@@ -96,7 +96,7 @@ const performanceObserver = new PerformanceObserver((entries) => {
 performanceObserver.observe({entryTypes:['event']});
 ```
 
-## First Input Delay
+## First Input Timing
 The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow. In Chrome, the 99'th percentile of the `entry.processingStart` - `entry.startTime` for the following events is over 1 second:
 * Key down
 * Mouse down
@@ -112,13 +112,15 @@ In order to address capture user pain caused by slow initial interactions, we pr
 Let `pendingPointerDown` be `null`.
 
 When iterating through the entries in `pendingEventEntries`, after dispatching `newEntry`:
-  * If `newEntry.duration` > 50 and no other events have been dispatched since navigationStart:
-    * If `newEntry.type` is "pointerdown"`:
-      * Let `pendingPointerDown` be newEntry
-    * If `newEntry.type` is "pointerup":
+  * Let `newFirstInputDelayEntry` be a copy of `newEntry`.
+  * Set `newFirstInputDelayEntry.entryType` to `firstInput`.
+  * If `newFirstInputDelayEntry.duration` > 50 and no other events have been dispatched since navigationStart:
+    * If `newFirstInputDelayEntry.type` is "pointerdown"`:
+      * Set `pendingPointerDown` to newFirstInputDelayEntry
+    * If `newFirstInputDelayEntry.type` is "pointerup":
       * Queue `pendingPointerDown`
-    * If `newEntry.type` is one of "click", "keydown" or "mousedown":
-      * Queue `newEntry`
+    * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
+      * Queue `newFirstInputDelayEntry`
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
 
