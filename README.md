@@ -74,7 +74,10 @@ After step 7.12 of the [event loop processing model](https://html.spec.whatwg.or
 * For each `newEntry` in `pendingEventEntries`:
   * Set newEntry's duration attribute to the value returned by `Math.round((performance.now() - newEntry.startTime)/8) * 8`.
   * Increment `performance.eventsCounts[newEntry.name]`.
-  * If `newEntry.duration > 50`, queue `newEntry`.
+  * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry`.
+  * Optionally, if `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, queue `newEntry`.
+
+In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides browsers the flexibility to ignore input which never blocks on the main thread.
 
 ### Security and Privacy
 To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
