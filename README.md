@@ -85,10 +85,6 @@ In the case where event handlers took no time, a user agent may opt not to queue
 ### Security and Privacy
 To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
 
-### Open Questions
-
-#### Should this apply to all events, or only UIEvents? Perhaps only a subset of UIEvents?
-
 ### Usage
 ```javascript
 const performanceObserver = new PerformanceObserver((entries) => {
@@ -99,3 +95,34 @@ const performanceObserver = new PerformanceObserver((entries) => {
 
 performanceObserver.observe({entryTypes:['event']});
 ```
+
+## First Input Delay
+The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow. In Chrome, the 99'th percentile of the `entry.processingStart` - `entry.startTime` for the following events is over 1 second:
+* Key down
+* Mouse down
+* Pointer down which is followed by a pointer up
+* Click
+
+This is ~4x the 99'th percentile of these events overall. In the median, we see ~10ms for the first event, and ~2.5ms for subsequent events.
+
+This list intentionally excludes scrolls, which are often not blocked on javascript execution.
+
+In order to address capture user pain caused by slow initial interactions, we propose a small addition to the event timing API specific to this use-case.
+
+Let `pendingPointerDown` be `null`.
+
+When iterating through the entries in `pendingEventEntries`, after dispatching `newEntry`:
+  * If `newEntry.duration` > 50 and no other events have been dispatched since navigationStart:
+    * If `newEntry.type` is "pointerdown"`:
+      * Let `pendingPointerDown` be newEntry
+    * If `newEntry.type` is "pointerup":
+      * Queue `pendingPointerDown`
+    * If `newEntry.type` is one of "click", "keydown" or "mousedown":
+      * Queue `newEntry`
+      
+FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
+
+## Open Questions
+
+### Should this apply to all events, or only UIEvents? Perhaps only a subset of UIEvents?
+
