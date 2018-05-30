@@ -2,7 +2,7 @@
 
 Monitoring event latency today requires an event listener. This precludes measuring event latency early in page load, and adds unnecessary performance overhead.
 
-This document provides a proposal for giving developers insight into the latency of DOMEvents.
+This document provides a proposal for giving developers insight into the latency of a subset of events triggered by user interaction.
 
 ## Minimal Proposal
 
@@ -58,6 +58,7 @@ Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming`
 
 Before step one, run these steps:
 
+1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" and `event.type` isn't "scroll" then return.
 1.  Let newEntry be a new `PerformanceEventTiming` object.
 1.  Set newEntry's name attribute to `event.type`.
 1.  Set newEntry's entryType attribute to "event".
@@ -126,8 +127,4 @@ When iterating through the entries in `pendingEventEntries`, after dispatching `
     * Queue `newFirstInputDelayEntry`
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
-
-## Open Questions
-
-### Should this apply to all events, or only UIEvents? Perhaps only a subset of UIEvents?
 
