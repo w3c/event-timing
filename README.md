@@ -54,7 +54,7 @@ partial interface Performance {
 
 Make the following modifications to the "[to dispatch an event algorithm](https://www.w3.org/TR/dom/#dispatching-events)".
 
-Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming` objects.
+Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming` objects, stored per document.
 
 Before step one, run these steps:
 
@@ -76,8 +76,8 @@ After step 7.12 of the [event loop processing model](https://html.spec.whatwg.or
     * ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
     * This value is rounded to the nearest 8ms to avoid providing a high resolution timer.
   * Increment `performance.eventsCounts[newEntry.name]`.
-  * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry`.
-  * Optionally, if `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, queue `newEntry`.
+  * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry` on the current document.
+  * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
 
 In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides browsers the flexibility to ignore input which never blocks on the main thread.
 
