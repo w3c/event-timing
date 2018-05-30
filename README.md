@@ -9,9 +9,11 @@ This document provides a proposal for giving developers insight into all event l
 This proposal explains the minimal API required to solve the following use cases:
 
 1.  Observe the queueing delay of input events before event handlers are registered.
-2.  Measure combined event handler duration.
+2.  Measure combined event handler duration, including browser event handling logic.
 
 A polyfill approximately implementing this API can be found [here](https://github.com/tdresser/input-latency-web-perf-polyfill/tree/gh-pages).
+
+Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and performance remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow.
 
 To accomplish these goals, we introduce:
 
@@ -35,11 +37,24 @@ interface PerformanceEventTiming : PerformanceEntry {
     // Whether or not the event was cancelable.
     readonly attribute boolean cancelable;
 };
+
+// Contains the number of events which have been dispatched, per event type.
+interface EventCounts {
+  readonly attribute unsigned long click;
+  ...
+  readonly attribute unsigned long touchmove;
+  ...
+};
+
+partial interface Performance {
+    // Contains the number of events which have been dispatched, per event type. Populated asynchronously. 
+    readonly attribute EventCounts eventCounts;
+};
 ```
 
 Make the following modifications to the "[to dispatch an event algorithm](https://www.w3.org/TR/dom/#dispatching-events)".
 
-Let `pendingEntries` be an initially empty list of `PerformanceEventTiming` objects.
+Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming` objects.
 
 Before step one, run these steps:
 
@@ -53,12 +68,14 @@ Before step one, run these steps:
 
 After step 13
 * Set `newEntry.processingEnd` to the value returned by `performance.now()`.
-* Append `newEntry` to `pendingEntries`.
+* Append `newEntry` to `pendingEventEntries`.
 
 After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
-* For each `newEntry` in `pendingEntries`:
+* For each `newEntry` in `pendingEventEntries`:
   * Set newEntry's duration attribute to the value returned by `performance.now() - newEntry.startTime`.
+  * Increment `performance.eventsCounts[newEntry.name]`.
   * If `newEntry.duration > 50`, queue `newEntry`.
+
 
 ### Open Questions
 
