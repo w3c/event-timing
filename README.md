@@ -13,7 +13,7 @@ This proposal explains the minimal API required to solve the following use cases
 
 A polyfill approximately implementing this API can be found [here](https://github.com/tdresser/input-latency-web-perf-polyfill/tree/gh-pages).
 
-Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and the fraction of slow events remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow to avoid conflating changes in event frequency with change is event latency.
+Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and the fraction of slow events remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow to avoid conflating changes in event frequency with changes in event latency.
 
 To accomplish these goals, we introduce:
 
