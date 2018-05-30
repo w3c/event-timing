@@ -62,6 +62,7 @@ Before step one, run these steps:
 1.  Set newEntry's name attribute to `event.type`.
 1.  Set newEntry's entryType attribute to "event".
 1.  Set newEntry's startTime attribute to `event.timeStamp`.
+1.  If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
 1.  Set newEntry's processingStart attribute to the value returned by `performance.now()`.
 1.  Set newEntry's duration attribute to 0.
 1.  Set newEntry's cancelable attribute to `event.cancelable`.
