@@ -2,16 +2,18 @@
 
 Monitoring event latency today requires an event listener. This precludes measuring event latency early in page load, and adds unnecessary performance overhead.
 
-This document provides a proposal for giving developers insight into all event latencies.
+This document provides a proposal for giving developers insight into the latency of a subset of events triggered by user interaction.
 
 ## Minimal Proposal
 
 This proposal explains the minimal API required to solve the following use cases:
 
 1.  Observe the queueing delay of input events before event handlers are registered.
-2.  Measure combined event handler duration.
+2.  Measure combined event handler duration, including browser event handling logic.
 
 A polyfill approximately implementing this API can be found [here](https://github.com/tdresser/input-latency-web-perf-polyfill/tree/gh-pages).
+
+Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and the fraction of slow events remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow to avoid conflating changes in event frequency with changes in event latency.
 
 To accomplish these goals, we introduce:
 
@@ -24,39 +26,65 @@ interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute DOMString entryType;
     // The event timestamp.
     readonly attribute DOMHighResTimeStamp startTime;
-    // The start time of the operation during which the event was dispatched.
+    // The time the first event handler started to execute.
+    // |startTime| if no event handlers executed.
     readonly attribute DOMHighResTimeStamp processingStart;
-    // The duration between when the operation during which the event was
-    // dispatched finished executing and |startTime|.
+    // The time the last event handler finished executing.
+    // |startTime| if no event handlers executed.
+    readonly attribute DOMHighResTimeStamp processingEnd;    
+    // The duration between |startTime| and the next execution of step 7.12 in the HTML event loop processing model.
     readonly attribute DOMHighResTimeStamp duration;
     // Whether or not the event was cancelable.
     readonly attribute boolean cancelable;
 };
+
+// Contains the number of events which have been dispatched, per event type.
+interface EventCounts {
+  readonly attribute unsigned long click;
+  ...
+  readonly attribute unsigned long touchmove;
+  ...
+};
+
+partial interface Performance {
+    // Contains the number of events which have been dispatched, per event type. Populated asynchronously. 
+    readonly attribute EventCounts eventCounts;
+};
 ```
 
-When beginning an operation which will dispatch an event `event`, execute these steps:
- 1.  Let `newEntry` be a new `PerformanceEventTiming` object.
- 1.  Set `newEntry`'s `name` attribute to `event.type`.
- 1.  Set `newEntry`'s `entryType` attribute to "event".
- 1.  Set `newEntry`'s `startTime` attribute to `event.timeStamp`.
- 1.  Set `newEntry`'s `processingStart` attribute to the value returned by `performance.now()`.
- 1.  Set `newEntry`'s `duration` attribute to 0.
- 1.  Set `newEntry`'s `cancelable` attribute to `event.cancelable`.
+Make the following modifications to the "[to dispatch an event algorithm](https://www.w3.org/TR/dom/#dispatching-events)".
 
-After the operation during which `event` was dispatched, execute these steps:
- 1.  Set `newEntry.duration` to the value returned by `performance.now() - event.timeStamp`.
- 1.  If `event.isTrusted` is true and `newEntry.duration` > 50:
-     1.   Queue `newEntry`.
-     1.   Add `newEntry` to the performance entry buffer.
+Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming` objects, stored per document.
 
-### Open Questions
+Before step one, run these steps:
 
-#### Should this apply to all events, or only UIEvents?
+1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" and `event.type` isn't "scroll" then return.
+1.  Let newEntry be a new `PerformanceEventTiming` object.
+1.  Set newEntry's name attribute to `event.type`.
+1.  Set newEntry's entryType attribute to "event".
+1.  Set newEntry's startTime attribute to `event.timeStamp`.
+1.  If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
+1.  Set newEntry's processingStart attribute to the value returned by `performance.now()`.
+1.  Set newEntry's duration attribute to 0.
+1.  Set newEntry's cancelable attribute to `event.cancelable`.
 
-#### How should we handle cases where the operation during which the event was dispatched doesn't block javascript?
+After step 13
+* Set `newEntry.processingEnd` to the value returned by `performance.now()`.
+* Append `newEntry` to `pendingEventEntries`.
 
-For example composited scrolling? I suspect behaving as though the duration is 0 is correct, but specifying this may prove tricky.
+After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
+* For each `newEntry` in `pendingEventEntries`:
+  * Set newEntry's duration attribute to the value returned by 
+    * ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
+    * This value is rounded to the nearest 8ms to avoid providing a high resolution timer.
+  * Increment `performance.eventsCounts[newEntry.name]`.
+  * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry` on the current document.
+  * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
 
+In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides browsers the flexibility to ignore input which never blocks on the main thread.
+
+### Security and Privacy
+To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
 
 ### Usage
 ```javascript
@@ -68,3 +96,35 @@ const performanceObserver = new PerformanceObserver((entries) => {
 
 performanceObserver.observe({entryTypes:['event']});
 ```
+
+## First Input Timing
+The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow. In Chrome, the 99'th percentile of the `entry.processingStart` - `entry.startTime` for the following events is over 1 second:
+* Key down
+* Mouse down
+* Pointer down which is followed by a pointer up
+* Click
+
+This is ~4x the 99'th percentile of these events overall. In the median, we see ~10ms for the first event, and ~2.5ms for subsequent events.
+
+This list intentionally excludes scrolls, which are often not blocked on javascript execution.
+
+In order to address capture user pain caused by slow initial interactions, we propose a small addition to the event timing API specific to this use-case.
+
+Let `pendingPointerDown` be `null`.
+Let `hasDispatchedEvent` be set to `false` on navigationStart.
+
+When iterating through the entries in `pendingEventEntries`, after dispatching `newEntry`:
+  * If `hasDispatchedEvent` is `true`, return.
+  * Let `newFirstInputDelayEntry` be a copy of `newEntry`.
+  * Set `newFirstInputDelayEntry.entryType` to `firstInput`.
+  * If `newFirstInputDelayEntry.type` is "pointerdown"`:
+    * Set `pendingPointerDown` to newFirstInputDelayEntry
+    * return
+  * Set `hasDispatchedEvent` to `true`.
+  * If `newFirstInputDelayEntry.type` is "pointerup":
+    * Queue `pendingPointerDown`
+  * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
+    * Queue `newFirstInputDelayEntry`
+      
+FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
+
