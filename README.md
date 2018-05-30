@@ -2,7 +2,7 @@
 
 Monitoring event latency today requires an event listener. This precludes measuring event latency early in page load, and adds unnecessary performance overhead.
 
-This document provides a proposal for giving developers insight into all event latencies.
+This document provides a proposal for giving developers insight into the latency of DOMEvents.
 
 ## Minimal Proposal
 
@@ -13,7 +13,7 @@ This proposal explains the minimal API required to solve the following use cases
 
 A polyfill approximately implementing this API can be found [here](https://github.com/tdresser/input-latency-web-perf-polyfill/tree/gh-pages).
 
-Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and performance remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow.
+Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and the fraction of slow events remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow to avoid conflating changes in event frequency with change is event latency.
 
 To accomplish these goals, we introduce:
 
@@ -27,7 +27,7 @@ interface PerformanceEventTiming : PerformanceEntry {
     // The event timestamp.
     readonly attribute DOMHighResTimeStamp startTime;
     // The time the first event handler started to execute.
-    // startTime if no event handlers executed.
+    // |startTime| if no event handlers executed.
     readonly attribute DOMHighResTimeStamp processingStart;
     // The time the last event handler finished executing.
     // |startTime| if no event handlers executed.
@@ -73,9 +73,8 @@ After step 13
 After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
 * For each `newEntry` in `pendingEventEntries`:
   * Set newEntry's duration attribute to the value returned by 
-  
-  ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
-  
+    * ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
+    * This value is rounded to the nearest 8ms to avoid providing a high resolution timer.
   * Increment `performance.eventsCounts[newEntry.name]`.
   * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry`.
   * Optionally, if `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, queue `newEntry`.
@@ -110,17 +109,20 @@ This list intentionally excludes scrolls, which are often not blocked on javascr
 In order to address capture user pain caused by slow initial interactions, we propose a small addition to the event timing API specific to this use-case.
 
 Let `pendingPointerDown` be `null`.
+Let `hasDispatchedEvent` be set to `false` on navigationStart.
 
 When iterating through the entries in `pendingEventEntries`, after dispatching `newEntry`:
+  * If `hasDispatchedEvent` is `true`, return.
   * Let `newFirstInputDelayEntry` be a copy of `newEntry`.
   * Set `newFirstInputDelayEntry.entryType` to `firstInput`.
-  * If `newFirstInputDelayEntry.duration` > 50 and no other events have been dispatched since navigationStart:
-    * If `newFirstInputDelayEntry.type` is "pointerdown"`:
-      * Set `pendingPointerDown` to newFirstInputDelayEntry
-    * If `newFirstInputDelayEntry.type` is "pointerup":
-      * Queue `pendingPointerDown`
-    * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
-      * Queue `newFirstInputDelayEntry`
+  * If `newFirstInputDelayEntry.type` is "pointerdown"`:
+    * Set `pendingPointerDown` to newFirstInputDelayEntry
+    * return
+  * Set `hasDispatchedEvent` to `true`.
+  * If `newFirstInputDelayEntry.type` is "pointerup":
+    * Queue `pendingPointerDown`
+  * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
+    * Queue `newFirstInputDelayEntry`
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
 
