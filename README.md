@@ -72,7 +72,10 @@ After step 13
 
 After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
 * For each `newEntry` in `pendingEventEntries`:
-  * Set newEntry's duration attribute to the value returned by `Math.round((performance.now() - newEntry.startTime)/8) * 8`.
+  * Set newEntry's duration attribute to the value returned by 
+  
+  ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
+  
   * Increment `performance.eventsCounts[newEntry.name]`.
   * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry`.
   * Optionally, if `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, queue `newEntry`.
