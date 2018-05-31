@@ -16,7 +16,7 @@ We propose exposing performance information for events of the following types wh
 * CompositionEvents
 * Events of type "scroll"
 
-This proposal explains the minimal API required to solve the following use cases:
+This proposal defines an API addressing the following use cases:
 
 1.  Observe the queueing delay of input events before event handlers are registered.
 2.  Measure combined event handler duration, including browser event handling logic.
@@ -69,14 +69,14 @@ Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming`
 Before step one, run these steps:
 
 1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" and `event.type` isn't "scroll" then return.
-1.  Let newEntry be a new `PerformanceEventTiming` object.
-1.  Set newEntry's name attribute to `event.type`.
-1.  Set newEntry's entryType attribute to "event".
-1.  Set newEntry's startTime attribute to `event.timeStamp`.
-1.  If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
-1.  Set newEntry's processingStart attribute to the value returned by `performance.now()`.
-1.  Set newEntry's duration attribute to 0.
-1.  Set newEntry's cancelable attribute to `event.cancelable`.
+1. Let newEntry be a new `PerformanceEventTiming` object.
+1. Set newEntry's name attribute to `event.type`.
+1. Set newEntry's entryType attribute to "event".
+1. Set newEntry's startTime attribute to `event.timeStamp`.
+1. If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
+1. Set newEntry's processingStart attribute to the value returned by `performance.now()`.
+1. Set newEntry's duration attribute to 0.
+1. Set newEntry's cancelable attribute to `event.cancelable`.
 
 After step 13
 * Set `newEntry.processingEnd` to the value returned by `performance.now()`.
@@ -87,7 +87,7 @@ After step 7.12 of the [event loop processing model](https://html.spec.whatwg.or
   * Set newEntry's duration attribute to the value returned by 
     * ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
     * This value is rounded to the nearest 8ms to avoid providing a high resolution timer.
-  * Increment `performance.eventsCounts[newEntry.name]`.
+  * Increment `performance.eventCounts[newEntry.name]`.
   * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry` on the current document.
   * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
 
