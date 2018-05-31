@@ -14,7 +14,6 @@ We propose exposing performance information for events of the following types wh
 * WheelEvents
 * InputEvents
 * CompositionEvents
-* Events of type "scroll"
 
 This proposal defines an API addressing the following use cases:
 
@@ -68,7 +67,7 @@ Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming`
 
 Before step one, run these steps:
 
-1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" and `event.type` isn't "scroll" then return.
+1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" then return.
 1. Let newEntry be a new `PerformanceEventTiming` object.
 1. Set newEntry's name attribute to `event.type`.
 1. Set newEntry's entryType attribute to "event".
