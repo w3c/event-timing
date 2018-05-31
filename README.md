@@ -6,6 +6,16 @@ This document provides a proposal for giving developers insight into the latency
 
 ## Minimal Proposal
 
+We propose exposing performance information for events of the following types when they take longer than 50ms from timestamp to the next paint.
+* MouseEvents
+* PointerEvents
+* TouchEvents
+* KeyboardEvents
+* WheelEvents
+* InputEvents
+* CompositionEvents
+* Events of type "scroll"
+
 This proposal explains the minimal API required to solve the following use cases:
 
 1.  Observe the queueing delay of input events before event handlers are registered.
