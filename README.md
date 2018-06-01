@@ -4,7 +4,7 @@ Monitoring event latency today requires an event listener. This precludes measur
 
 This document provides a proposal for giving developers insight into the latency of a subset of events triggered by user interaction.
 
-## Minimal Proposal
+## Proposal
 
 We propose exposing performance information for events of the following types when they take longer than 50ms from timestamp to the next paint.
 * MouseEvents
@@ -49,6 +49,11 @@ interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute boolean cancelable;
 };
 
+partial dictionary PerformanceObserverInit {
+    // If an entry of type "event" has duration < |threshold|, the entry won't be dispatched.
+    double threshold = 50;
+};
+
 // Contains the number of events which have been dispatched, per event type.
 interface EventCounts {
   readonly attribute unsigned long click;
@@ -89,8 +94,21 @@ After step 7.12 of the [event loop processing model](https://html.spec.whatwg.or
     * ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
     * This value is rounded to the nearest 8ms to avoid providing a high resolution timer.
   * Increment `performance.eventCounts[newEntry.name]`.
-  * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry` on the current document.
-  * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
+  * Queue `newEntry` on the current document.
+  
+  
+Make the following modification to the ["Queue a PerformanceEntry" algorithm](https://w3c.github.io/performance-timeline/#x4-1-queue-a-performanceentry):
+
+Replace step 3, which currently states:
+* For each observer in interested observers:
+  * Append new entry to observer buffer.
+  
+With:  
+ * For each observer in interested observers:
+  * If *new entry*'s entryType is "event" 
+   * If *new entry*'s duration < *observer*'s options' threshold, return.
+   * If *new entry*'s processingStart and processingEnd are equal, this algorithm MAY return.
+  * Append new entry to observer buffer.
 
 In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides browsers the flexibility to ignore input which never blocks on the main thread.
 
