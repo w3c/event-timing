@@ -20,6 +20,8 @@ This proposal defines an API addressing the following use cases:
 1.  Observe the queueing delay of input events before event handlers are registered.
 2.  Measure combined event handler duration, including browser event handling logic.
 
+See more specific use cases [here](#specific-use-cases).
+
 A polyfill approximately implementing this API can be found [here](https://github.com/tdresser/input-latency-web-perf-polyfill/tree/gh-pages).
 
 Only knowing about slow events doesn't provide enough context to determine if a site is getting better or worse. If a site change results in more engaged users, and the fraction of slow events remains constant, we expect an increase in the number of slow events. We also need to enable computing the fraction of events which are slow to avoid conflating changes in event frequency with changes in event latency.
@@ -137,3 +139,9 @@ When iterating through the entries in `pendingEventEntries`, after dispatching `
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
 
+## Specific Use Cases
+* Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
+* A user drags a slider to control volume. Measure the latency to drag the slider. 
+ * Note that part of the latency may come from event handlers, but a site may choose to coalesce input during the frame, and respond to it during rAF.
+* Hovering a menu item triggers a flyout menu. Measure the latency for the flyout to appear.
+* Measure the 75'th percentile of click event queueing times.
