@@ -69,7 +69,7 @@ Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming`
 
 Before step one, run these steps:
 
-1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" then return.
+1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" or `event.isTrusted` is false, then return.
 1. Let newEntry be a new `PerformanceEventTiming` object.
 1. Set newEntry's name attribute to `event.type`.
 1. Set newEntry's entryType attribute to "event".
@@ -86,8 +86,8 @@ After step 13
 After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
 * For each `newEntry` in `pendingEventEntries`:
   * Set newEntry's duration attribute to the value returned by 
-    * ```Math.round((performance.now() - newEntry.startTime)/8) * 8```
-    * This value is rounded to the nearest 8ms to avoid providing a high resolution timer.
+    * ```Math.ceil((performance.now() - newEntry.startTime)/8) * 8```
+    * This value is rounded up to the next 8ms to avoid providing a high resolution timer.
   * Increment `performance.eventCounts[newEntry.name]`.
   * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry` on the current document.
   * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
