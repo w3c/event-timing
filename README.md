@@ -65,7 +65,7 @@ partial interface Performance {
 };
 ```
 
-Make the following modifications to the "[to dispatch an event algorithm](https://www.w3.org/TR/dom/#dispatching-events)".
+Make the following modifications to the "[to dispatch an event algorithm](https://dom.spec.whatwg.org/#dispatching-events)".
 
 Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming` objects, stored per document.
 
@@ -81,7 +81,7 @@ Before step one, run these steps:
     1. Set newEntry's duration attribute to 0.
     1. Set newEntry's cancelable attribute to `event.cancelable`.
 
-After step 13
+After step 12
 * Set `newEntry.processingEnd` to the value returned by `performance.now()`.
 * Append `newEntry` to `pendingEventEntries`.
 
