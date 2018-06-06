@@ -43,7 +43,9 @@ interface PerformanceEventTiming : PerformanceEntry {
     // The time the last event handler finished executing.
     // |startTime| if no event handlers executed.
     readonly attribute DOMHighResTimeStamp processingEnd;    
-    // The duration between |startTime| and the next execution of step 7.12 in the HTML event loop processing model.
+    // The duration between |startTime| and the next time we "update the rendering 
+    // or user interface of that Document and its browsing context to reflect the 
+    // current state" in step 7.12 in the HTML event loop processing model.
     readonly attribute DOMHighResTimeStamp duration;
     // Whether or not the event was cancelable.
     readonly attribute boolean cancelable;
@@ -83,7 +85,7 @@ After step 13
 * Set `newEntry.processingEnd` to the value returned by `performance.now()`.
 * Append `newEntry` to `pendingEventEntries`.
 
-After step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
+Define the Dispatch Pending Entries Algorithm as follows:
 * For each `newEntry` in `pendingEventEntries`:
   * Set newEntry's duration attribute to the value returned by 
     * ```Math.ceil((performance.now() - newEntry.startTime)/8) * 8```
@@ -93,6 +95,10 @@ After step 7.12 of the [event loop processing model](https://html.spec.whatwg.or
   * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
 
 In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides browsers the flexibility to ignore input which never blocks on the main thread.
+
+During step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model):
+
+For each fully active Document in docs, update the rendering or user interface of that Document and its browsing context to reflect the current state, and invoke §4.2.1 Mark Paint Timing and Dispatch Pending Entries while doing so. 
 
 ### Security and Privacy
 To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
