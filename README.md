@@ -69,15 +69,15 @@ Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming`
 
 Before step one, run these steps:
 
-1. If `event` is none of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" or `event.isTrusted` is false, then return.
-1. Let newEntry be a new `PerformanceEventTiming` object.
-1. Set newEntry's name attribute to `event.type`.
-1. Set newEntry's entryType attribute to "event".
-1. Set newEntry's startTime attribute to `event.timeStamp`.
-1. If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
-1. Set newEntry's processingStart attribute to the value returned by `performance.now()`.
-1. Set newEntry's duration attribute to 0.
-1. Set newEntry's cancelable attribute to `event.cancelable`.
+1. If `event` is one of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" and `event.isTrusted` is true:
+    1. Let newEntry be a new `PerformanceEventTiming` object.
+    1. Set newEntry's name attribute to `event.type`.
+    1. Set newEntry's entryType attribute to "event".
+    1. Set newEntry's startTime attribute to `event.timeStamp`.
+    1. If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
+    1. Set newEntry's processingStart attribute to the value returned by `performance.now()`.
+    1. Set newEntry's duration attribute to 0.
+    1. Set newEntry's cancelable attribute to `event.cancelable`.
 
 After step 13
 * Set `newEntry.processingEnd` to the value returned by `performance.now()`.
@@ -125,17 +125,17 @@ Let `pendingPointerDown` be `null`.
 Let `hasDispatchedEvent` be set to `false` on navigationStart.
 
 When iterating through the entries in `pendingEventEntries`, after dispatching `newEntry`:
-  * If `hasDispatchedEvent` is `true`, return.
-  * Let `newFirstInputDelayEntry` be a copy of `newEntry`.
-  * Set `newFirstInputDelayEntry.entryType` to `firstInput`.
-  * If `newFirstInputDelayEntry.type` is "pointerdown"`:
-    * Set `pendingPointerDown` to newFirstInputDelayEntry
-    * return
-  * Set `hasDispatchedEvent` to `true`.
-  * If `newFirstInputDelayEntry.type` is "pointerup":
-    * Queue `pendingPointerDown`
-  * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
-    * Queue `newFirstInputDelayEntry`
+  * If `hasDispatchedEvent` is `false`:
+      * Let `newFirstInputDelayEntry` be a copy of `newEntry`.
+      * Set `newFirstInputDelayEntry.entryType` to `firstInput`.
+      * If `newFirstInputDelayEntry.type` is "pointerdown"`:
+          * Set `pendingPointerDown` to newFirstInputDelayEntry
+      * Otherwise
+          * Set `hasDispatchedEvent` to `true`.
+          * If `newFirstInputDelayEntry.type` is "pointerup":
+              * Queue `pendingPointerDown`
+          * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
+            * Queue `newFirstInputDelayEntry`
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
 
