@@ -100,6 +100,16 @@ During step 7.12 of the [event loop processing model](https://html.spec.whatwg.o
 
 For each fully active Document in docs, update the rendering or user interface of that Document and its browsing context to reflect the current state, and invoke §4.2.1 Mark Paint Timing and Dispatch Pending Entries while doing so. 
 
+During step 7.3 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model):
+
+If there are top-level browsing contexts B that the user agent believes would not benefit from having their rendering updated at this time, then for each Document object _document_ whose browsing context's top-level browsing context is in B:
+  * Remove from _document_ from _docs_.
+  * The user agent MAY invoke Dispatch Pending Entries.
+  
+Ideally, we'd be able to report the time at which the user agent is fully done processing an event. In practice, it's impossible to determine whether or not event processing is complete. Event handling could continue in rAF, or an event may have dirtied style or layout. We also can't determine whether or not an event triggered the user agent to believe a browsing context would be worth updating.
+
+Because of this, in cases where the rendering was updated, we use the rendering time to indicate the end of event processing. When the user agent decides the browing context isn't worth updating however, we shouldn't consider event processing to continue until the next time the rendering is updated. To prevent this, the user agent MAY Dispatch Pending Entries when a document's rendering isn't updated. The user agent SHOULD Dispatch Pending Entries when step 7.12 would have been executed, if rendering had been required. (TODO - clarify around refresh rate etc).
+
 ### Security and Privacy
 To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
 
