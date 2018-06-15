@@ -137,10 +137,11 @@ When iterating through the entries in `pendingEventEntries`, after dispatching `
       * If `newFirstInputDelayEntry.type` is "pointerdown"`:
           * Set `pendingPointerDown` to newFirstInputDelayEntry
       * Otherwise
-          * Set `hasDispatchedEvent` to `true`.
           * If `newFirstInputDelayEntry.type` is "pointerup":
+              * Set `hasDispatchedEvent` to `true`.
               * Queue `pendingPointerDown`
           * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
+            * Set `hasDispatchedEvent` to `true`.
             * Queue `newFirstInputDelayEntry`
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
