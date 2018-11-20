@@ -17,7 +17,7 @@ We propose exposing performance information for events of the following types wh
 
 This proposal defines an API addressing the following use cases:
 
-1.  Observe the queueing delay of input events before event handlers are registered.
+1.  Observe the queueing delay of input events before performance observers are registered.
 2.  Measure combined event handler duration, including browser event handling logic.
 
 See more specific use cases [here](#specific-use-cases).
