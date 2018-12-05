@@ -221,7 +221,7 @@ Extensions to the {{Performance}} interface {#sec-extensions}
 
 <pre class="idl">
 partial interface Performance {
-    readonly attribute EventCounts eventCounts;
+    [SameObject] readonly attribute EventCounts eventCounts;
 };
 </pre>
 
