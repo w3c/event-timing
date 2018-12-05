@@ -65,41 +65,6 @@ partial interface Performance {
 };
 ```
 
-Make the following modifications to the "[to dispatch an event algorithm](https://dom.spec.whatwg.org/#dispatching-events)".
-
-Let `pendingEventEntries` be an initially empty list of `PerformanceEventTiming` objects, stored per document.
-
-Before step one, run these steps:
-
-1. If `event` is one of: "MouseEvent", "PointerEvent", "TouchEvent", "KeyboardEvent", "WheelEvent", "InputEvent", "CompositionEvent" and `event.isTrusted` is true:
-    1. Let newEntry be a new `PerformanceEventTiming` object.
-    1. Set newEntry's name attribute to `event.type`.
-    1. Set newEntry's entryType attribute to "event".
-    1. Set newEntry's startTime attribute to `event.timeStamp`.
-    1. If `event.type` is "pointermove", set newEntry's startTime to `event.getCoalescedEvents()[0].startTime`.
-    1. Set newEntry's processingStart attribute to the value returned by `performance.now()`.
-    1. Set newEntry's duration attribute to 0.
-    1. Set newEntry's cancelable attribute to `event.cancelable`.
-
-After step 12
-* Set `newEntry.processingEnd` to the value returned by `performance.now()`.
-* Append `newEntry` to `pendingEventEntries`.
-
-Define the Dispatch Pending Entries Algorithm as follows:
-* For each `newEntry` in `pendingEventEntries`:
-  * Set newEntry's duration attribute to the value returned by 
-    * ```Math.ceil((performance.now() - newEntry.startTime)/8) * 8```
-    * This value is rounded up to the next 8ms to avoid providing a high resolution timer.
-  * Increment `performance.eventCounts[newEntry.name]`.
-  * If `newEntry.duration > 50 && newEntry.processingStart != newEntry.processingEnd`, queue `newEntry` on the current document.
-  * If `newEntry.duration > 50 && newEntry.processingStart == newEntry.processingEnd`, the user agent MAY queue `newEntry` on the current document.
-
-In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides browsers the flexibility to ignore input which never blocks on the main thread.
-
-During step 7.12 of the [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model):
-
-For each fully active Document in docs, update the rendering or user interface of that Document and its browsing context to reflect the current state, and invoke §4.2.1 Mark Paint Timing and Dispatch Pending Entries while doing so. 
-
 ### Security and Privacy
 To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
 
@@ -125,30 +90,13 @@ This is ~4x the 99'th percentile of these events overall. In the median, we see 
 
 This list intentionally excludes scrolls, which are often not blocked on javascript execution.
 
-In order to address capture user pain caused by slow initial interactions, we propose a small addition to the event timing API specific to this use-case.
-
-Let `pendingPointerDown` be `null`.
-Let `hasDispatchedEvent` be set to `false` on navigationStart.
-
-When iterating through the entries in `pendingEventEntries`, after dispatching `newEntry`:
-  * If `hasDispatchedEvent` is `false`:
-      * Let `newFirstInputDelayEntry` be a copy of `newEntry`.
-      * Set `newFirstInputDelayEntry.entryType` to `firstInput`.
-      * If `newFirstInputDelayEntry.type` is "pointerdown"`:
-          * Set `pendingPointerDown` to newFirstInputDelayEntry
-      * Otherwise
-          * If `newFirstInputDelayEntry.type` is "pointerup":
-              * Set `hasDispatchedEvent` to `true`.
-              * Queue `pendingPointerDown`
-          * If `newFirstInputDelayEntry.type` is one of "click", "keydown" or "mousedown":
-            * Set `hasDispatchedEvent` to `true`.
-            * Queue `newFirstInputDelayEntry`
+In order to address capture user pain caused by slow initial interactions, we propose always reporting first input timing within the event timing API specific to this use-case.
       
 FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
 
 ## Specific Use Cases
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
 * A user drags a slider to control volume. Measure the latency to drag the slider. 
- * Note that part of the latency may come from event handlers, but a site may choose to coalesce input during the frame, and respond to it during rAF.
+  * Note that part of the latency may come from event handlers, but a site may choose to coalesce input during the frame, and respond to it during rAF.
 * Hovering a menu item triggers a flyout menu. Measure the latency for the flyout to appear.
 * Measure the 75'th percentile of click event queueing times.
