@@ -151,6 +151,7 @@ Event Timing involves the following new interfaces:
 ------------------------------------------------------------------------
 
 <pre class="idl">
+[Exposed=Window]
 interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute DOMHighResTimeStamp processingStart;
     readonly attribute DOMHighResTimeStamp processingEnd;
@@ -208,6 +209,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
 ------------------------
 
 <pre class="idl">
+[Exposed=Window]
 interface EventCounts {
     readonly maplike&lt;DOMString, unsigned long&gt;;
 };
@@ -220,6 +222,7 @@ Extensions to the {{Performance}} interface {#sec-extensions}
 ------------------------
 
 <pre class="idl">
+[Exposed=Window]
 partial interface Performance {
     readonly attribute EventCounts eventCounts;
 };
