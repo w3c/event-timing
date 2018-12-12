@@ -99,4 +99,4 @@ FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChr
 * A user drags a slider to control volume. Measure the latency to drag the slider. 
   * Note that part of the latency may come from event handlers, but a site may choose to coalesce input during the frame, and respond to it during rAF.
 * Hovering a menu item triggers a flyout menu. Measure the latency for the flyout to appear.
-* Measure the 75'th percentile of click event queueing times.
+* Approximate the 75'th percentile of click event queueing times. An approximation can be achieved by assuming that all events that aren't slow have a queueing time of 0.
