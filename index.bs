@@ -335,11 +335,12 @@ To <em>create an event timing entry</em> outside of the event dispatching logic,
 1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var> and <var>target</var> as inputs, and replacing the <a>processing end step</a> with the following step:
     1. Set <var>timingEntry</var>'s {{processingEnd}} to its {{PerformanceEntry/startTime}}.
 
-Note: processing the first input entry via the event dispatching logic ensures that the first input delay is calculated accurately.
+Note: processing the first input entry via the event dispatching logic ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
 If skipping first inputs without event handlers was allowed, or if they were processed outside of event dispatching logic, then unwanted skews could happen.
 For example, consider a website which initially only has a few event handlers.
-This website would only receive first input entries for events targetting those event handlers.
-If the website then added a trivial event handler for the page, its first input would increase because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
+This website would only receive first input entries for events targetting those event handlers, so the first input {{PerformanceEntry/duration}} would be large.
+If the website then added a trivial event handler for the page, the first input {{PerformanceEntry/duration}} would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
+But, in practice, the website having the trivial event handler will handle input more slowly.
 
 Security & privacy considerations {#priv-sec}
 ===============================================
