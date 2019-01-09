@@ -322,8 +322,8 @@ Queueing other entries {#sec-queue-other}
 
 Some user agents skip the event dispatching logic for some events.
 In fact, this is theoretically possible for any event which does not have associated event handlers or cause user agent defined behavior.
-If the input is the first input, then the user agent must always queue the corresponding <code>"firstInput"</code> entry and it must do so via the event dispatching logic.
-Otherwise, the user agent may opt not to queue the entry when there are no event handlers associated to the event.
+If the input is the first input, then the user agent MUST always queue the corresponding <code>"firstInput"</code> entry and it MUST do so via the event dispatching logic.
+Otherwise, the user agent MAY opt not to queue the entry when there are no event handlers associated to the event.
 This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which event dispatching logic is skipped.
 
 To <em>create an event timing entry</em> outside of the event dispatching logic, the user agent must run the following steps:
