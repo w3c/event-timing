@@ -320,21 +320,21 @@ When asked to <dfn>dispatch pending entries</dfn> for a {{Document}} <var>doc</v
 Queueing other entries {#sec-queue-other}
 --------------------------------------------------------
 
-Some user agents skip the event dispatching logic for some events.
+Some user agents skip some steps of the <a>event dispatch algorithm</a> for some events.
 In fact, this is theoretically possible for any event which does not have associated event handlers or cause user agent defined behavior.
-If the input is the first input, then the user agent MUST always queue the corresponding <code>"firstInput"</code> entry and it MUST do so via the event dispatching logic.
+If the input is the first input, then the user agent MUST always queue the corresponding <code>"firstInput"</code> entry and it MUST do so via the <a>event dispatch algorithm</a>.
 Otherwise, the user agent MAY opt not to queue the entry when there are no event handlers associated to the event.
-This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which event dispatching logic is skipped.
+This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which <a>event dispatch algorithm</a> is skipped.
 
-To <em>create an event timing entry</em> outside of the event dispatching logic, the user agent must run the following steps:
+To <em>create an event timing entry</em> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
 
 1. Let <var>event</var> be the event being measured and let <var>target</var> be the target {{Document}}.
 1. Run the <a>initialize event timing</a> algorithm, passing in <var>event</var> and <code>0</code> as inputs.
 1. Let <var>timingEntry</var> be the output from the algorithm.
 1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>target</var>, and <code>0</code> as inputs.
 
-Note: processing the first input entry via the event dispatching logic ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
-If skipping first inputs without event handlers was allowed, or if they were processed outside of event dispatching logic, then statistical biases could be introduced.
+Note: processing the first input entry via the <a>event dispatch algorithm</a> ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
+If skipping first inputs without event handlers was allowed, or if they were processed outside of <a>event dispatch algorithm</a>, then statistical biases could be introduced.
 For example, consider a website which initially only has a few event handlers.
 This website would only receive first input entries for events targetting those event handlers, so the first input {{PerformanceEntry/duration}} would be large.
 If the website then added a trivial event handler for the page, the first input {{PerformanceEntry/duration}} would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
