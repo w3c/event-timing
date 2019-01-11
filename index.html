@@ -1460,7 +1460,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-12-05">5 December 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-11">11 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1475,7 +1475,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2018 the Contributors to the Event Timing API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2019 the Contributors to the Event Timing API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -1519,6 +1519,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#sec-init-event-timing"><span class="secno">3.3</span> <span class="content">Initialize event timing</span></a>
       <li><a href="#sec-fin-event-timing"><span class="secno">3.4</span> <span class="content">Finalize event timing</span></a>
       <li><a href="#sec-dispatch-pending"><span class="secno">3.5</span> <span class="content">Dispatch pending entries</span></a>
+      <li><a href="#sec-queue-other"><span class="secno">3.6</span> <span class="content">Queueing other entries</span></a>
      </ol>
     <li><a href="#priv-sec"><span class="secno">4</span> <span class="content">Security &amp; privacy considerations</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
@@ -1598,14 +1599,14 @@ This allows developers to measure percentiles and improvements without having to
      <p>Click</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="sec-example"><span class="secno">1.2. </span><span class="content">Usage Example</span><a class="self-link" href="#sec-example"></a></h3>
-<pre class="example highlight" id="example-3b2d9e56"><a class="self-link" href="#example-3b2d9e56"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
+<pre class="example highlight" id="example-65919048"><a class="self-link" href="#example-65919048"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
         <c- kr>const</c-> perfEntries <c- o>=</c-> list<c- p>.</c->getEntries<c- p>();</c->
         <c- k>for</c-> <c- p>(</c-><c- a>let</c-> i <c- o>=</c-> <c- mi>0</c-><c- p>;</c-> i <c- o>&lt;</c-> perfEntries<c- p>.</c->length<c- p>;</c-> i<c- o>++</c-><c- p>)</c-> <c- p>{</c->
             <c- c1>// Process event and report to analytics and monitoring...</c->
             <c- kr>const</c-> entry <c- o>=</c-> perfEntries<c- p>[</c->i<c- p>];</c->
-            <c- kr>const</c-> inputDelay <c- o>=</c-> entry<c- p>.</c->processingStart <c- o>-</c-> entry<c- p>.</c->startTime<c- p>;</c->
-            <c- k>if</c-> <c- p>(</c->inputDelay <c- o>!==</c-> <c- mi>0</c-><c- p>)</c-> <c- p>{</c->
-                <c- c1>// Report the input delay when there are event handlers.</c->
+            <c- k>if</c-> <c- p>(</c->entry<c- p>.</c->processingStart <c- o>!==</c-> <c- mi>0</c-><c- p>)</c-> <c- p>{</c->
+                <c- kr>const</c-> inputDelay <c- o>=</c-> entry<c- p>.</c->processingStart <c- o>-</c-> entry<c- p>.</c->startTime<c- p>;</c->
+                <c- c1>// Report the input delay when the processing start was provided.</c->
             <c- p>}</c->
         <c- p>}</c->
     <c- p>});</c->
@@ -1699,12 +1700,12 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://dom.spec.w
    <p>Right after step 1, we add the following step:</p>
    <ul>
     <li data-md>
-     <p>Invoke the algorithm to <a data-link-type="dfn" href="#initialize-event-timing" id="ref-for-initialize-event-timing">initialize event timing</a> passing <var>event</var> as input. Let <var>timingEntry</var> be the output.</p>
+     <p>Invoke the algorithm to <a data-link-type="dfn" href="#initialize-event-timing" id="ref-for-initialize-event-timing">initialize event timing</a> passing <var>event</var> and the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time">current high resolution time</a> as inputs. Let <var>timingEntry</var> be the output.</p>
    </ul>
    <p>Right before the returning step of that algorithm, add the following steps:</p>
    <ul>
     <li data-md>
-     <p>Invoke the algorithm to <a data-link-type="dfn" href="#finalize-event-timing" id="ref-for-finalize-event-timing">finalize event timing</a> passing <var>timingEntry</var> and <em>target</em> as inputs.</p>
+     <p>Invoke the algorithm to <a data-link-type="dfn" href="#finalize-event-timing" id="ref-for-finalize-event-timing">finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time①">current high resolution time</a> as inputs.</p>
    </ul>
    <h3 class="heading settled" data-level="3.2" id="sec-modifications-HTML"><span class="secno">3.2. </span><span class="content">Modifications to the HTML specification</span><a class="self-link" href="#sec-modifications-HTML"></a></h3>
    <p><em>This section will be removed once the <a href="https://html.spec.whatwg.org/multipage">HTML specification</a> has been modified.</em></p>
@@ -1714,7 +1715,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://dom.spec.w
      <p>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> in <em>docs</em>, invoke the algorithm to <a data-link-type="dfn" href="#dispatch-pending-entries" id="ref-for-dispatch-pending-entries">dispatch pending entries</a> for that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document④">Document</a></code>.</p>
    </ol>
    <h3 class="heading settled" data-level="3.3" id="sec-init-event-timing"><span class="secno">3.3. </span><span class="content">Initialize event timing</span><a class="self-link" href="#sec-init-event-timing"></a></h3>
-   <p>When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="initialize-event-timing">initialize event timing</dfn>, with <var>event</var> as input, run the following steps:</p>
+   <p>When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="initialize-event-timing">initialize event timing</dfn>, with <var>event</var> and <var>processing start</var> as inputs, run the following steps:</p>
    <ol>
     <li data-md>
      <p>Let <var>timingEntry</var> be <code class="highlight"><c- kc>null</c-></code>.</p>
@@ -1736,7 +1737,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://dom.spec.w
          <p>Otherwise, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑧">startTime</a></code> to <code class="highlight"><var>event</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code></code>.</p>
        </ol>
       <li data-md>
-       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart②">processingStart</a></code> to the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time">current high resolution time</a>.</p>
+       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart②">processingStart</a></code> to <var>processing start</var>.</p>
       <li data-md>
        <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration②">duration</a></code> to 0.</p>
       <li data-md>
@@ -1746,12 +1747,12 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://dom.spec.w
      <p>Return <var>timingEntry</var>.</p>
    </ol>
    <h3 class="heading settled" data-level="3.4" id="sec-fin-event-timing"><span class="secno">3.4. </span><span class="content">Finalize event timing</span><a class="self-link" href="#sec-fin-event-timing"></a></h3>
-   <p>When asked to to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="finalize-event-timing">finalize event timing</dfn>, with <var>timingEntry</var> and <var>target</var> as inputs, run the following steps:</p>
+   <p>When asked to to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="finalize-event-timing">finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processing end</var> as inputs, run the following steps:</p>
    <ol>
     <li data-md>
      <p>If <var>timingEntry</var> is <code class="highlight"><c- kc>null</c-></code>, abort these steps.</p>
     <li data-md>
-     <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend②">processingEnd</a></code> to the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time①">current high resolution time</a>.</p>
+     <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend②">processingEnd</a></code> to <var>processing end</var>.</p>
     <li data-md>
      <p>Append <var>timingEntry</var> to <var>target</var>’s <a data-link-type="dfn" href="#pendingevententries" id="ref-for-pendingevententries">pendingEventEntries</a>.</p>
    </ol>
@@ -1815,20 +1816,42 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://dom.spec.w
        </ol>
      </ol>
    </ol>
-   <p>In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which event dispatching logic is skipped.</p>
+   <h3 class="heading settled" data-level="3.6" id="sec-queue-other"><span class="secno">3.6. </span><span class="content">Queueing other entries</span><a class="self-link" href="#sec-queue-other"></a></h3>
+   <p>Some user agents skip some steps of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①">event dispatch algorithm</a> for some events.
+In fact, this is theoretically possible for any event which does not have associated event handlers or cause user agent defined behavior.
+If the input is the first input, then the user agent MUST always queue the corresponding <code class="highlight"><c- u>"firstInput"</c-></code> entry and it MUST do so via the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch②">event dispatch algorithm</a>.
+Otherwise, the user agent MAY opt not to queue the entry when there are no event handlers associated to the event.
+This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch③">event dispatch algorithm</a> is skipped.</p>
+   <p>To <em>create an event timing entry</em> outside of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch④">event dispatch algorithm</a>, the user agent must run the following steps:</p>
+   <ol>
+    <li data-md>
+     <p>Let <var>event</var> be the event being measured and let <var>target</var> be the target <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code>.</p>
+    <li data-md>
+     <p>Run the <a data-link-type="dfn" href="#initialize-event-timing" id="ref-for-initialize-event-timing①">initialize event timing</a> algorithm, passing in <var>event</var> and <code class="highlight"><c- mi>0</c-></code> as inputs.</p>
+    <li data-md>
+     <p>Let <var>timingEntry</var> be the output from the algorithm.</p>
+    <li data-md>
+     <p>Run the <a data-link-type="dfn" href="#finalize-event-timing" id="ref-for-finalize-event-timing①">finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>target</var>, and <code class="highlight"><c- mi>0</c-></code> as inputs.</p>
+   </ol>
+   <p class="note" role="note"><span>Note:</span> processing the first input entry via the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch⑤">event dispatch algorithm</a> ensures that the first input’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑥">duration</a></code> is calculated accurately.
+If skipping first inputs without event handlers was allowed, or if they were processed outside of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch⑥">event dispatch algorithm</a>, then statistical biases could be introduced.
+For example, consider a website which initially only has a few event handlers.
+This website would only receive first input entries for events targetting those event handlers, so the first input <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑦">duration</a></code> would be large.
+If the website then added a trivial event handler for the page, the first input <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑧">duration</a></code> would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
+But, in practice, the website having the trivial event handler will handle input more slowly.</p>
    <h2 class="heading settled" data-level="4" id="priv-sec"><span class="secno">4. </span><span class="content">Security &amp; privacy considerations</span><a class="self-link" href="#priv-sec"></a></h2>
    <p>We would not like to introduce more high resolution timers to the web platform due to the security concerns entailed by such timers.
 Event handler timestamps have the same accuracy as <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dom-performance-now" id="ref-for-dom-performance-now①">performance.now()</a>.
 Since <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart④">processingStart</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend④">processingEnd</a></code> could be computed without using this API,
 exposing these attributes does not produce new attack surfaces.
-Thus, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑥">duration</a></code> is the only one which requires further consideration.</p>
-   <p>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑦">duration</a></code> has an 8 millisecond granularity (it is computed as such by performing rounding).
+Thus, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑨">duration</a></code> is the only one which requires further consideration.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①⓪">duration</a></code> has an 8 millisecond granularity (it is computed as such by performing rounding).
 Thus, a high resolution timer cannot be produced from this timestamps.
 However, it does introduce new information that is not readily available to web developers: the time pixels draw after an event has been processed.
 We do not find security or privacy concerns on exposing the timestamp, given its granularity.
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.</p>
-   <p>The choice of 56 as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑧">duration</a></code> is just the first multiple of 8 greater than 50.</p>
+   <p>The choice of 56 as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①①">duration</a></code> is just the first multiple of 8 greater than 50.</p>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -1999,6 +2022,7 @@ This allows relatively precise timing even for 120Hz displays.</p>
     <li><a href="#ref-for-document">3.1. Modifications to the DOM specification</a> <a href="#ref-for-document①">(2)</a> <a href="#ref-for-document②">(3)</a>
     <li><a href="#ref-for-document③">3.2. Modifications to the HTML specification</a> <a href="#ref-for-document④">(2)</a>
     <li><a href="#ref-for-document⑤">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-document⑥">3.6. Queueing other entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event">
@@ -2018,6 +2042,7 @@ This allows relatively precise timing even for 120Hz displays.</p>
    <a href="https://dom.spec.whatwg.org/#concept-event-dispatch">https://dom.spec.whatwg.org/#concept-event-dispatch</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-event-dispatch">3.1. Modifications to the DOM specification</a>
+    <li><a href="#ref-for-concept-event-dispatch①">3.6. Queueing other entries</a> <a href="#ref-for-concept-event-dispatch②">(2)</a> <a href="#ref-for-concept-event-dispatch③">(3)</a> <a href="#ref-for-concept-event-dispatch④">(4)</a> <a href="#ref-for-concept-event-dispatch⑤">(5)</a> <a href="#ref-for-concept-event-dispatch⑥">(6)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-istrusted">
@@ -2064,8 +2089,7 @@ This allows relatively precise timing even for 120Hz displays.</p>
   <aside class="dfn-panel" data-for="term-for-dfn-current-high-resolution-time">
    <a href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time">https://w3c.github.io/hr-time/#dfn-current-high-resolution-time</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dfn-current-high-resolution-time">3.3. Initialize event timing</a>
-    <li><a href="#ref-for-dfn-current-high-resolution-time①">3.4. Finalize event timing</a>
+    <li><a href="#ref-for-dfn-current-high-resolution-time">3.1. Modifications to the DOM specification</a> <a href="#ref-for-dfn-current-high-resolution-time①">(2)</a>
     <li><a href="#ref-for-dfn-current-high-resolution-time②">3.5. Dispatch pending entries</a>
    </ul>
   </aside>
@@ -2125,7 +2149,8 @@ This allows relatively precise timing even for 120Hz displays.</p>
     <li><a href="#ref-for-dom-performanceentry-duration">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-duration①">(2)</a>
     <li><a href="#ref-for-dom-performanceentry-duration②">3.3. Initialize event timing</a>
     <li><a href="#ref-for-dom-performanceentry-duration③">3.5. Dispatch pending entries</a> <a href="#ref-for-dom-performanceentry-duration④">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑤">(3)</a>
-    <li><a href="#ref-for-dom-performanceentry-duration⑥">4. Security &amp; privacy considerations</a> <a href="#ref-for-dom-performanceentry-duration⑦">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑧">(3)</a>
+    <li><a href="#ref-for-dom-performanceentry-duration⑥">3.6. Queueing other entries</a> <a href="#ref-for-dom-performanceentry-duration⑦">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑧">(3)</a>
+    <li><a href="#ref-for-dom-performanceentry-duration⑨">4. Security &amp; privacy considerations</a> <a href="#ref-for-dom-performanceentry-duration①⓪">(2)</a> <a href="#ref-for-dom-performanceentry-duration①①">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-entrytype">
@@ -2450,12 +2475,14 @@ This allows relatively precise timing even for 120Hz displays.</p>
    <b><a href="#initialize-event-timing">#initialize-event-timing</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-initialize-event-timing">3.1. Modifications to the DOM specification</a>
+    <li><a href="#ref-for-initialize-event-timing①">3.6. Queueing other entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="finalize-event-timing">
    <b><a href="#finalize-event-timing">#finalize-event-timing</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-finalize-event-timing">3.1. Modifications to the DOM specification</a>
+    <li><a href="#ref-for-finalize-event-timing①">3.6. Queueing other entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dispatch-pending-entries">
