@@ -1,4 +1,3 @@
-
 <pre class=metadata>
 Title: Event Timing API
 Status: ED
@@ -118,9 +117,9 @@ Usage Example {#sec-example}
         for (let i = 0; i < perfEntries.length; i++) {
             // Process event and report to analytics and monitoring...
             const entry = perfEntries[i];
-            const inputDelay = entry.processingStart - entry.startTime;
-            if (inputDelay !== 0) {
-                // Report the input delay when there are event handlers.
+            if (entry.processingStart !== 0) {
+                const inputDelay = entry.processingStart - entry.startTime;
+                // Report the input delay when the processing start was provided.
             }
         }
     });
@@ -248,12 +247,12 @@ We modify the <a>event dispatch algorithm</a> as follows.
 Right after step 1, we add the following step:
 
 
-* Invoke the algorithm to <a>initialize event timing</a> passing <var>event</var> as input. Let <var>timingEntry</var> be the output.
+* Invoke the algorithm to <a>initialize event timing</a> passing <var>event</var> and the <a>current high resolution time</a> as inputs. Let <var>timingEntry</var> be the output.
 
 Right before the returning step of that algorithm, add the following steps:
 
 
-* Invoke the algorithm to <a>finalize event timing</a> passing <var>timingEntry</var> and <em>target</em> as inputs.
+* Invoke the algorithm to <a>finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 
 Modifications to the HTML specification {#sec-modifications-HTML}
 --------------------------------------------------------
@@ -267,7 +266,7 @@ In the <a>update the rendering</a> step of the <a>event loop processing model</a
 Initialize event timing {#sec-init-event-timing}
 --------------------------------------------------------
 
-When asked to <dfn>initialize event timing</dfn>, with <var>event</var> as input, run the following steps:
+When asked to <dfn>initialize event timing</dfn>, with <var>event</var> and <var>processing start</var> as inputs, run the following steps:
 
 1. Let <var>timingEntry</var> be <code>null</code>.
 1. If <var>event</var> is a {{MouseEvent}}, {{PointerEvent}} {{TouchEvent}}, {{KeyboardEvent}}, {{WheelEvent}}, {{InputEvent}}, or {{CompositionEvent}}, AND if <var>event</var>'s {{Event/isTrusted}} attribute value is set to true, then:
@@ -277,7 +276,7 @@ When asked to <dfn>initialize event timing</dfn>, with <var>event</var> as input
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} as follows:
         1. If <var>event</var>'s {{Event/type}} attribute value is equal to <code>"pointermove"</code>, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <code><var>event</var>.<a>getCoalescedEvents()</a>[0].{{PerformanceEntry/startTime}}</code>.
         1. Otherwise, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <code><var>event</var>.{{Event/timeStamp}}</code>.
-    1. Set <var>timingEntry</var>'s {{processingStart}} to the <a>current high resolution time</a>.
+    1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processing start</var>.
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to 0.
     1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
 1. Return <var>timingEntry</var>.
@@ -285,10 +284,10 @@ When asked to <dfn>initialize event timing</dfn>, with <var>event</var> as input
 Finalize event timing {#sec-fin-event-timing}
 --------------------------------------------------------
 
-When asked to to <dfn>finalize event timing</dfn>, with <var>timingEntry</var> and <var>target</var> as inputs, run the following steps:
+When asked to to <dfn>finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processing end</var> as inputs, run the following steps:
 
 1. If <var>timingEntry</var> is <code>null</code>, abort these steps.
-1. Set <var>timingEntry</var>'s {{processingEnd}} to the <a>current high resolution time</a>.
+1. Set <var>timingEntry</var>'s {{processingEnd}} to <var>processing end</var>.
 1. Append <var>timingEntry</var> to <var>target</var>’s <a>pendingEventEntries</a>.
 
 Dispatch pending entries {#sec-dispatch-pending}
@@ -318,7 +317,28 @@ When asked to <dfn>dispatch pending entries</dfn> for a {{Document}} <var>doc</v
                 1. Set <var>doc</var>'s <a>hasDispatchedEvent</a> to true.
                 1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
 
-In the case where event handlers took no time, a user agent may opt not to queue the entry. This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which event dispatching logic is skipped.
+Queueing other entries {#sec-queue-other}
+--------------------------------------------------------
+
+Some user agents skip some steps of the <a>event dispatch algorithm</a> for some events.
+In fact, this is theoretically possible for any event which does not have associated event handlers or cause user agent defined behavior.
+If the input is the first input, then the user agent MUST always queue the corresponding <code>"firstInput"</code> entry and it MUST do so via the <a>event dispatch algorithm</a>.
+Otherwise, the user agent MAY opt not to queue the entry when there are no event handlers associated to the event.
+This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which <a>event dispatch algorithm</a> is skipped.
+
+To <em>create an event timing entry</em> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
+
+1. Let <var>event</var> be the event being measured and let <var>target</var> be the target {{Document}}.
+1. Run the <a>initialize event timing</a> algorithm, passing in <var>event</var> and <code>0</code> as inputs.
+1. Let <var>timingEntry</var> be the output from the algorithm.
+1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>target</var>, and <code>0</code> as inputs.
+
+Note: processing the first input entry via the <a>event dispatch algorithm</a> ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
+If skipping first inputs without event handlers was allowed, or if they were processed outside of <a>event dispatch algorithm</a>, then statistical biases could be introduced.
+For example, consider a website which initially only has a few event handlers.
+This website would only receive first input entries for events targetting those event handlers, so the first input {{PerformanceEntry/duration}} would be large.
+If the website then added a trivial event handler for the page, the first input {{PerformanceEntry/duration}} would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
+But, in practice, the website having the trivial event handler will handle input more slowly.
 
 Security & privacy considerations {#priv-sec}
 ===============================================
