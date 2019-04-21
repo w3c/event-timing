@@ -1,6 +1,6 @@
 <pre class=metadata>
 Title: Event Timing API
-Status: ED
+Status: CG-DRAFT
 Shortname: event-timing
 Group: WICG
 Level: 1
