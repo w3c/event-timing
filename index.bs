@@ -45,10 +45,16 @@ urlPrefix: https://w3c.github.io/pointerevents/; spec: POINTEREVENTS;
 urlPrefix: https://w3c.github.io/pointerevents/extension.html; spec: POINTEREVENTS-EXTENSION;
     type: method; for: PointerEvent;
         url: #dom-pointerevent-getcoalescedevents; text: getCoalescedEvents();
+    type: dfn; url: #the-pointerdown-event; text: pointerdown;
+    type: dfn; url: #the-pointerup-event; text: pointerup;
 urlPrefix: https://w3c.github.io/touch-events/; spec: TOUCH-EVENTS;
     type: interface; url: #touchevent-interface; text: TouchEvent;
 urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
     type: dfn; url: #mark-paint-timing; text: mark paint timing;
+urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
+    type: dfn; url: #event-type-click; text: click;
+    type: dfn; url: #event-type-keydown; text: keydown;
+    type: dfn; url: #event-type-mousedown; text: mousedown;
 </pre>
 
 Introduction {#sec-intro}
@@ -76,7 +82,7 @@ This adds unnecessary performance overhead to the event latency calculation.
 And lastly, it would be very hard to measure asynchronous work caused by the event via this approach.
 
 This specification provides an alternative to event latency monitoring that solves some of these problems.
-By requesting the user agent to compute the timestamps, there is no need for event listeners in order to measure performance.
+Since the user agent computes the timestamps, there is no need for event listeners in order to measure performance.
 This means that even events that occur very early in the page load can be captured.
 This also enables visibility into slow events without requiring analytics providers to attempt to patch and subscribe to every conceivable event.
 In addition to this, the website's performance will not suffer from the overhead of unneeded event listeners.
@@ -86,7 +92,7 @@ This can be useful to measure the overhead of website modifications that are tri
 
 The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
 It's slow because it's often blocked on javascript execution that is not properly split into chunks during page load.
-The latency of the website's response to the first user interaction should be considered a key responsiveness metric.
+The latency of the website's response to the first user interaction should be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
 This allows developers to measure percentiles and improvements without having to register event handlers.
 
@@ -94,34 +100,32 @@ Events exposed {#sec-events-exposed}
 ------------------------
 
 The event timing API exposes timing information for any of the following events, in cases where the time difference between user input and paint operations that follow input processing exceeds a certain threshold:
-* <a href=MouseEvent>MouseEvents</a>
-* <a href=PointerEvent>PointerEvents</a>
-* <a href=TouchEvent>TouchEvents</a>
-* <a href=KeyboardEvent>KeyboardEvents</a>
-* <a href=WheelEvent>WheelEvents</a>
-* <a href=InputEvent>InputEvents</a>
-* <a href=CompositionEvent>CompositionEvents</a>
+* {{MouseEvent}}
+* {{PointerEvent}}
+* {{TouchEvent}}
+* {{KeyboardEvent}}
+* {{WheelEvent}}
+* {{InputEvent}}
+* {{CompositionEvent}}
 
 The Event Timing API also exposes timing information about the first user interaction among the following:
-* Key down
-* Mouse down
-* Pointer down which is followed by pointer up
-* Click
+* <a>keydown</a>
+* <a>mousedown</a>
+* <a>pointerdown</a> which is followed by <a>pointerup</a>
+* <a>click</a>
 
 Usage Example {#sec-example}
 ------------------------
 
 <pre class="example highlight">
     const observer = new PerformanceObserver(function(list) {
-        const perfEntries = list.getEntries();
-        for (let i = 0; i < perfEntries.length; i++) {
-            // Process event and report to analytics and monitoring...
-            const entry = perfEntries[i];
+        const perfEntries = list.getEntries().forEach(entry => {
             if (entry.processingStart !== 0) {
                 const inputDelay = entry.processingStart - entry.startTime;
                 // Report the input delay when the processing start was provided.
             }
-        }
+            // Report full input duration via entry.duration.
+        });
     });
     // Register observer for event.
     observer.observe({entryTypes: ["event"]});
@@ -181,7 +185,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dd>The {{PerformanceEntry/startTime}} attribute's getter returns the <a>associated event</a>'s {{Event/timeStamp}}.</dd>
     <dt>{{PerformanceEntry/duration}}</dt>
     <dd>The {{PerformanceEntry/duration}} attribute's getter must return the difference between
-    the time of the first <a>update the rendering</a> occurring after <a>associated event</a> has been dispatched
+    the time of the first <a>update the rendering</a> step occurring after <a>associated event</a> has been dispatched
     and the {{PerformanceEntry/startTime}}, rounded up to the nearest 8 ms.</dd>
 </dl>
 
@@ -191,16 +195,16 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dt>{{processingStart}}</dt>
     <dd>
         The <dfn>processingStart</dfn> attribute's getter returns the time when event handlers start to execute, or
-        {{PerformanceEntry/startTime}} if there are no event handlers.
+        0 if the event dispatching logic is skipped (this can happen when there are no event handlers).
     </dd>
     <dt>{{processingEnd}}</dt>
     <dd>
         The <dfn>processingEnd</dfn> attribute's getter returns the time when event handlers have finished executing, or
-        {{PerformanceEntry/startTime}} if there are no event handlers.
+        0 if the event dispatching logic is skipped (this can happen when there are no event handlers).
     </dd>
     <dt>{{cancelable}}</dt>
     <dd>
-        The <dfn>cancelable</dfn> attribute's getter must return the <a>associated event</a>'s {{Event/cancelable}}.
+        The <dfn>cancelable</dfn> attribute's getter must return the <a>associated event</a>'s {{Event/cancelable}} attribute value.
     </dd>
 </dl>
 
@@ -215,6 +219,7 @@ interface EventCounts {
 </pre>
 
 The {{EventCounts}} object is a map where the keys are event <a href=Event/type>types</a> and the values are the number of events that have been dispatched that are of that {{Event/type}}.
+Only events whose {{Event/type}} is supported by {{PerformanceEventTiming}} entries (see section [[#sec-events-exposed]]) are counted via this map.
 
 Extensions to the {{Performance}} interface {#sec-extensions}
 ------------------------
@@ -227,7 +232,7 @@ partial interface Performance {
 </pre>
 
 The {{Performance/eventCounts}} attribute's getter returns a map with entries of the form &lt;<var>type</var>, <var>num-events</var>&gt;.
-This implies that there have been <var>num-events</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
+This means that there have been <var>num-events</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
 
 Processing model {#sec-processing-model}
 ========================================
@@ -237,10 +242,6 @@ Modifications to the DOM specification {#sec-modifications-DOM}
 
 <em>This section will be removed once the <a href=https://dom.spec.whatwg.org>DOM specification</a> has been modified.</em>
 
-Each {{Document}} has <dfn>pendingEventEntries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
-Each {{Document}} also has <dfn>pendingPointerDown</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially <code>null</code>.
-Finally, each {{Document}} has <dfn>hasDispatchedEvent</dfn>, a boolean which is initially set to <code>false</code>.
-
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
 
@@ -248,7 +249,7 @@ Finally, each {{Document}} has <dfn>hasDispatchedEvent</dfn>, a boolean which is
 
     * Invoke the algorithm to <a>initialize event timing</a> passing <em>event</em> and the <a>current high resolution time</a> as inputs. Let <var>timingEntry</var> be the output.
 
-    Right before the returning step of that algorithm, add the following steps:
+    Right before the returning step of that algorithm, add the following step:
 
     * Invoke the algorithm to <a>finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 </div>
@@ -257,6 +258,10 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 --------------------------------------------------------
 
 <em>This section will be removed once the <a href=https://html.spec.whatwg.org/multipage>HTML specification</a> has been modified.</em>
+
+Each {{Window}} has <dfn>pendingEventEntries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
+Each {{Window}} also has <dfn>pendingPointerDown</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially <code>null</code>.
+Finally, each {{Window}} has <dfn>hasDispatchedEvent</dfn>, a boolean which is initially set to <code>false</code>.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -270,17 +275,15 @@ Initialize event timing {#sec-init-event-timing}
 <div algorithm="initialize event timing">
     When asked to <dfn>initialize event timing</dfn>, with <var>event</var> and <var>processing start</var> as inputs, run the following steps:
 
-    1. Let <var>timingEntry</var> be <code>null</code>.
-    1. If <var>event</var> is a {{MouseEvent}}, {{PointerEvent}} {{TouchEvent}}, {{KeyboardEvent}}, {{WheelEvent}}, {{InputEvent}}, or {{CompositionEvent}}, AND if <var>event</var>'s {{Event/isTrusted}} attribute value is set to true, then:
-        1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object.
-        1. Set <var>timingEntry</var>'s {{PerformanceEntry/name}} to <var>event</var>'s {{Event/type}} attribute value.
-        1. Set <var>timingEntry</var>'s {{PerformanceEntry/entryType}} to <code>"event"</code>.
-        1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} as follows:
-            1. If <var>event</var>'s {{Event/type}} attribute value is equal to <code>"pointermove"</code>, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <code><var>event</var>.<a>getCoalescedEvents()</a>[0].{{PerformanceEntry/startTime}}</code>.
-            1. Otherwise, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <code><var>event</var>.{{Event/timeStamp}}</code>.
-        1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processing start</var>.
-        1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to 0.
-        1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
+    1. If <var>event</var> is NOT a {{MouseEvent}}, {{PointerEvent}} {{TouchEvent}}, {{KeyboardEvent}}, {{WheelEvent}}, {{InputEvent}}, or {{CompositionEvent}}, OR if <var>event</var>'s {{Event/isTrusted}} attribute value is set to <code>false</code>, return <code>null</code>.
+    1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object.
+    1. Set <var>timingEntry</var>'s {{PerformanceEntry/name}} to <var>event</var>'s {{Event/type}} attribute value.
+    1. Set <var>timingEntry</var>'s {{PerformanceEntry/entryType}} to <code>"event"</code>.
+    1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} as follows:
+        1. If <var>event</var>'s {{Event/type}} attribute value is equal to <code>"pointermove"</code>, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <code><var>event</var>.<a>getCoalescedEvents()</a>[0].{{PerformanceEntry/startTime}}</code>.
+        1. Otherwise, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <code><var>event</var>.{{Event/timeStamp}}</code>.
+    1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processing start</var>.
+    1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
     1. Return <var>timingEntry</var>.
 </div>
 
@@ -303,24 +306,26 @@ Dispatch pending entries {#sec-dispatch-pending}
 
     1. Let <var>window</var> be <var>doc</var>'s associated {{Window}}.
     1. Let <var>rendering-timestamp</var> be the <a>current high resolution time</a>.
-    1. For each <var>timingEntry</var> in <var>doc</var>'s <a>pendingEventEntries</a>:
+    1. For each <var>timingEntry</var> in <var>window</var>'s <a>pendingEventEntries</a>:
         1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} by running the following steps:
             1. Let <var>difference</var> be <code><var>rendering-timestamp</var> - <var>timingEntry</var>.{{PerformanceEntry/startTime}}</code>.
             1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to <code><a>Math.ceil</a>(<var>difference</var>/8)*8</code>.
         1. Perform the following steps to update the event counts:
             1. If <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}</code> does not contain a key <code><var>timingEntry</var>.{{PerformanceEntry/name}}</code>, then set <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}[<var>timingEntry</var>.{{PerformanceEntry/name}}]</code> to 1.
             1. Otherwise, increase <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}[<var>timingEntry</var>.{{PerformanceEntry/name}}]</code> by 1.
-        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than 56 AND if <var>timingEntry</var>'s {{processingStart}} attribute value is not equal to <var>timingEntry</var>'s {{processingEnd}} attribute value, then <a>queue the entry</a> <var>timingEntry</var> on <var>window</var>.
-        1. If <var>doc</var>'s <a>hasDispatchedEvent</a> is <code>false</code>, run the following steps:
-            1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
-            1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to <code>"firstInput"</code>.
-            1. If <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/name}} attribute value is <code>"pointerdown"</code>, set <var>doc</var>'s <a>pendingPointerDown</a> to <var>newFirstInputDelayEntry</var>.
-            1. Otherwise, run the following substeps:
-                1. If <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/name}} attribute value is <code>"pointerup"</code> AND if <var>doc</var>'s <a>pendingPointerDown</a> is not <code>null</code>, then:
-                    1. Set <var>doc</var>'s <a>hasDispatchedEvent</a> to <code>true</code>.
-                    1. <a>Queue the entry</a> <a>pendingPointerDown</a>.
-                1. Otherwise, if <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/name}} attribute value is one of <code>"click"</code>, <code>"keydown"</code> or <code>"mousedown"</code>, then:
-                    1. Set <var>doc</var>'s <a>hasDispatchedEvent</a> to true.
+        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 56, then <a>queue the entry</a> <var>timingEntry</var>.
+        1. If <var>window</var>'s <a>hasDispatchedEvent</a> is <code>false</code>, run the following steps:
+            1. If <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value is <code>"pointerdown"</code>, run the following steps:
+                1. Set <var>window</var>'s <a>pendingPointerDown</a> to a copy of <var>timingEntry</var>.
+                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pendingPointerDown</a> to <code>"firstInput"</code>.
+            1. Otherwise, run the following steps:
+                1. If <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value is <code>"pointerup"</code> AND if <var>window</var>'s <a>pendingPointerDown</a> is not <code>null</code>, then:
+                    1. Set <var>window</var>'s <a>hasDispatchedEvent</a> to <code>true</code>.
+                    1. <a href=https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry>Queue</a> <var>window</var>'s <a>pendingPointerDown</a>.
+                1. Otherwise, if <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value is one of <code>"click"</code>, <code>"keydown"</code> or <code>"mousedown"</code>, then:
+                    1. Set <var>window</var>'s <a>hasDispatchedEvent</a> to <code>true</code>.
+                    1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
+                    1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to <code>"firstInput"</code>.
                     1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
 </div>
 
@@ -336,7 +341,7 @@ This provides user agents with the flexibility to ignore input which never block
 <div algorithm="report outside of event dispatch">
     To <em>create an event timing entry</em> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
 
-    1. Let <var>event</var> be the event being measured and let <var>target</var> be the target {{Document}}.
+    1. Let <var>event</var> be the event being measured and let <var>target</var> be the target {{Window}}.
     1. Run the <a>initialize event timing</a> algorithm, passing in <var>event</var> and <code>0</code> as inputs.
     1. Let <var>timingEntry</var> be the output from the algorithm.
     1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>target</var>, and <code>0</code> as inputs.
@@ -345,8 +350,8 @@ This provides user agents with the flexibility to ignore input which never block
 Note: processing the first input entry via the <a>event dispatch algorithm</a> ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
 If skipping first inputs without event handlers was allowed, or if they were processed outside of <a>event dispatch algorithm</a>, then statistical biases could be introduced.
 For example, consider a website which initially only has a few event handlers.
-This website would only receive first input entries for events targetting those event handlers, so the first input {{PerformanceEntry/duration}} would be large.
-If the website then added a trivial event handler for the page, the first input {{PerformanceEntry/duration}} would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
+This website would only receive first input entries for events targetting those event handlers, so the first input's {{PerformanceEntry/duration}} would be large on average.
+If the website then added a trivial event handler for the page, the average first input {{PerformanceEntry/duration}} would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
 But, in practice, the website having the trivial event handler will handle input more slowly.
 
 Security & privacy considerations {#priv-sec}
@@ -361,7 +366,7 @@ Thus, {{PerformanceEntry/duration}} is the only one which requires further consi
 The {{PerformanceEntry/duration}} has an 8 millisecond granularity (it is computed as such by performing rounding).
 Thus, a high resolution timer cannot be produced from this timestamps.
 However, it does introduce new information that is not readily available to web developers: the time pixels draw after an event has been processed.
-We do not find security or privacy concerns on exposing the timestamp, given its granularity.
+We do not find security or privacy concerns on exposing the timestamp, especially given its granularity.
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.
 
