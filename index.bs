@@ -304,7 +304,7 @@ Dispatch pending entries {#sec-dispatch-pending}
 <div algorithm="dispatch pending entries">
     When asked to <dfn>dispatch pending entries</dfn> for a {{Document}} <var>doc</var>, run the following steps:
 
-    1. Let <var>window</var> be <var>doc</var>'s associated {{Window}}.
+    1. Let <var>window</var> be <var>doc</var>'s <a>relevant global object</a>.
     1. Let <var>rendering-timestamp</var> be the <a>current high resolution time</a>.
     1. For each <var>timingEntry</var> in <var>window</var>'s <a>pendingEventEntries</a>:
         1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} by running the following steps:
