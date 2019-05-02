@@ -313,7 +313,7 @@ Dispatch pending entries {#sec-dispatch-pending}
         1. Perform the following steps to update the event counts:
             1. If <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}</code> does not contain a key <code><var>timingEntry</var>.{{PerformanceEntry/name}}</code>, then set <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}[<var>timingEntry</var>.{{PerformanceEntry/name}}]</code> to 1.
             1. Otherwise, increase <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}[<var>timingEntry</var>.{{PerformanceEntry/name}}]</code> by 1.
-        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 56, then <a>queue the entry</a> <var>timingEntry</var>.
+        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 104, then <a>queue the entry</a> <var>timingEntry</var>.
         1. If <var>window</var>'s <a>hasDispatchedEvent</a> is <code>false</code>, run the following steps:
             1. If <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value is <code>"pointerdown"</code>, run the following steps:
                 1. Set <var>window</var>'s <a>pendingPointerDown</a> to a copy of <var>timingEntry</var>.
@@ -370,4 +370,5 @@ We do not find security or privacy concerns on exposing the timestamp, especiall
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.
 
-The choice of 56 as the cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 50.
+The choice of 104 ms as the cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 100 ms.
+Such events are not handled in accordance with the RAIL performance model, which suggests applications respond within 100 ms to user input.
