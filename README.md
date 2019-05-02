@@ -6,7 +6,7 @@ This document provides a proposal for giving developers insight into the latency
 
 ## Minimal Proposal
 
-We propose exposing performance information for events of the following types when they take longer than 50ms from timestamp to the next paint.
+We propose exposing performance information for events of the following types when they take longer than 100ms from timestamp to the next paint.
 * MouseEvents
 * PointerEvents
 * TouchEvents
@@ -66,7 +66,7 @@ partial interface Performance {
 ```
 
 ### Security and Privacy
-To avoid adding another high resolution timer to the platform, `duration` is rounded to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
+To avoid adding another high resolution timer to the platform, `duration` is rounded up to the nearest multiple of 8. Event handler duration inherits it's precision from `performance.now()`, and could previously be measured by overriding addEventListener, as demonstrated in the polyfill.
 
 ### Usage
 ```javascript
@@ -92,7 +92,7 @@ This list intentionally excludes scrolls, which are often not blocked on javascr
 
 In order to address capture user pain caused by slow initial interactions, we propose always reporting first input timing within the event timing API specific to this use-case.
       
-FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 50ms.
+FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example. However, this requires registering analytics JS before any events are processed, which is often not possible. First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 100ms.
 
 ## Specific Use Cases
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
