@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 10ff3eb4050069e20bb9b943c8b76fe5bfe3a48f" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="b82c21cc2cd210c514bbfc9e6a15a60a6802da1a" name="document-revision">
+  <meta content="81358bac6fe002eb823dcd645a3d37b5096f6bb3" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1552,24 +1552,25 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   </nav>
   <main>
    <h2 class="heading settled" data-level="1" id="sec-intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#sec-intro"></a></h2>
-   <p><em>This section is non-normative.</em></p>
-   <p>When a user engages with a website, they expect their actions to cause changes to the website quickly.
+   <div class="non-normative">
+    <p><em>This section is non-normative.</em></p>
+    <p>When a user engages with a website, they expect their actions to cause changes to the website quickly.
 In fact, <a href="https://www.nngroup.com/articles/response-times-3-important-limits/">research</a> suggests that any user input that is not handled within 100ms is considered slow.
 Therefore, it is important to surface input events that could not achieve those guidelines.</p>
-   <p>A common way to monitor event latency consists of registering an event listener.
+    <p>A common way to monitor event latency consists of registering an event listener.
 The timestamp at which the event was created can be obtained via the event’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp">timeStamp</a></code>.
 In addition, <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dom-performance-now" id="ref-for-dom-performance-now">performance.now()</a> could be called both at the beginning and at the end of the event handler logic.
 By subtracting the hardware timestamp from the timestamp obtained at the beginning of the event handler,
 the developer can compute the input delay: the time it takes for an input to start being processed.
 By subtracting the timestamp obtained at the beginning of the event handler from the timestamp obtained at the end of the event handler,
 the developer can compute the amount of synchronous work performed in the event handler.</p>
-   <p>This approach has several fundamental flaws.
+    <p>This approach has several fundamental flaws.
 First, requiring event listeners precludes measuring event latency very early in the page load because
 listeners will likely not be registered yet at that point in time.
 Second, developers that are only interested in the input delay might be forced to add new listeners to events that originally did not have one.
 This adds unnecessary performance overhead to the event latency calculation.
 And lastly, it would be very hard to measure asynchronous work caused by the event via this approach.</p>
-   <p>This specification provides an alternative to event latency monitoring that solves some of these problems.
+    <p>This specification provides an alternative to event latency monitoring that solves some of these problems.
 Since the user agent computes the timestamps, there is no need for event listeners in order to measure performance.
 This means that even events that occur very early in the page load can be captured.
 This also enables visibility into slow events without requiring analytics providers to attempt to patch and subscribe to every conceivable event.
@@ -1577,11 +1578,12 @@ In addition to this, the website’s performance will not suffer from the overhe
 Finally, this specification allows developers to obtain detailed information about the timing of
 the rendering that occurs right after the event has been processed.
 This can be useful to measure the overhead of website modifications that are triggered by events.</p>
-   <p>The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
+    <p>The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
 It’s slow because it’s often blocked on javascript execution that is not properly split into chunks during page load.
-The latency of the website’s response to the first user interaction should be considered a key responsiveness and loading metric.
+The latency of the website’s response to the first user interaction can be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
 This allows developers to measure percentiles and improvements without having to register event handlers.</p>
+   </div>
    <h3 class="heading settled" data-level="1.1" id="sec-events-exposed"><span class="secno">1.1. </span><span class="content">Events exposed</span><a class="self-link" href="#sec-events-exposed"></a></h3>
    <p>The event timing API exposes timing information for any of the following events, in cases where the time difference between user input and paint operations that follow input processing exceeds a certain threshold:</p>
    <ul>
@@ -1660,34 +1662,36 @@ This allows developers to measure percentiles and improvements without having to
     <li data-md>
      <p>Run the <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-register-a-performance-entry-type" id="ref-for-dfn-register-a-performance-entry-type①">register a performance entry type</a> algorithm  with <code class="highlight"><c- u>"event"</c-></code> as input.</p>
    </ol>
-   <p><em> This remainder of this section is non-normative.
+   <div class="non-normative">
+    <p><em> This remainder of this section is non-normative.
     The values of the attributes of <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①">PerformanceEventTiming</a></code> are set in the processing model in <a href="#sec-processing-model">§3 Processing model</a>.
     This section provides an informative summary of how they will be set. </em></p>
-   <p>Each <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming②">PerformanceEventTiming</a></code> object reports timing information about an <dfn class="dfn-paneled" data-dfn-for="PerformanceEventTiming" data-dfn-type="dfn" data-noexport id="performanceeventtiming-associated-event">associated <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event">Event</a></code></dfn>.</p>
-   <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming③">PerformanceEventTiming</a></code> extends the following attributes of the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface" id="ref-for-the-performanceentry-interface①">PerformanceEntry</a></code> interface:</p>
-   <dl>
-    <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name">name</a></code>
-    <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name①">name</a></code> attribute’s getter provides the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code>.
-    <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype">entryType</a></code>
-    <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype①">entryType</a></code> attribute’s getter returns <code class="highlight"><c- u>"event"</c-></code> (for long events) or <code class="highlight"><c- u>"firstInput"</c-></code> (for the first user interaction).
-    <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime">startTime</a></code>
-    <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime①">startTime</a></code> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event①">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp①">timeStamp</a></code>.
-    <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration">duration</a></code>
-    <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①">duration</a></code> attribute’s getter must return the difference between
+    <p>Each <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming②">PerformanceEventTiming</a></code> object reports timing information about an <dfn class="dfn-paneled" data-dfn-for="PerformanceEventTiming" data-dfn-type="dfn" data-noexport id="performanceeventtiming-associated-event">associated <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event">Event</a></code></dfn>.</p>
+    <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming③">PerformanceEventTiming</a></code> extends the following attributes of the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface" id="ref-for-the-performanceentry-interface①">PerformanceEntry</a></code> interface:</p>
+    <dl>
+     <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name">name</a></code>
+     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name①">name</a></code> attribute’s getter provides the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code>.
+     <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype">entryType</a></code>
+     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype①">entryType</a></code> attribute’s getter returns <code class="highlight"><c- u>"event"</c-></code> (for long events) or <code class="highlight"><c- u>"firstInput"</c-></code> (for the first user interaction).
+     <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime">startTime</a></code>
+     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime①">startTime</a></code> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event①">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp①">timeStamp</a></code>.
+     <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration">duration</a></code>
+     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①">duration</a></code> attribute’s getter returns the difference between
     the time of the first <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering">update the rendering</a> step occurring after <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event②">associated event</a> has been dispatched
     and the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime②">startTime</a></code>, rounded to the nearest 8 ms.
-   </dl>
-   <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming④">PerformanceEventTiming</a></code> has the following additional attributes:</p>
-   <dl>
-    <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart①">processingStart</a></code>
-    <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-processingstart"><code class="highlight">processingStart</code></dfn> attribute’s getter returns the time when event handlers start to execute, or
+    </dl>
+    <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming④">PerformanceEventTiming</a></code> has the following additional attributes:</p>
+    <dl>
+     <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart①">processingStart</a></code>
+     <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-processingstart"><code class="highlight">processingStart</code></dfn> attribute’s getter returns the time when event handlers start to execute, or
         0 if the event dispatching logic is skipped (this can happen when there are no event handlers). 
-    <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend①">processingEnd</a></code>
-    <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-processingend"><code class="highlight">processingEnd</code></dfn> attribute’s getter returns the time when event handlers have finished executing, or
+     <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend①">processingEnd</a></code>
+     <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-processingend"><code class="highlight">processingEnd</code></dfn> attribute’s getter returns the time when event handlers have finished executing, or
         0 if the event dispatching logic is skipped (this can happen when there are no event handlers). 
-    <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-cancelable" id="ref-for-dom-performanceeventtiming-cancelable①">cancelable</a></code>
-    <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-cancelable"><code class="highlight">cancelable</code></dfn> attribute’s getter must return the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event③">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-cancelable" id="ref-for-dom-event-cancelable">cancelable</a></code> attribute value. 
-   </dl>
+     <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-cancelable" id="ref-for-dom-performanceeventtiming-cancelable①">cancelable</a></code>
+     <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-cancelable"><code class="highlight">cancelable</code></dfn> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event③">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-cancelable" id="ref-for-dom-event-cancelable">cancelable</a></code> attribute value. 
+    </dl>
+   </div>
    <h3 class="heading settled" data-level="2.2" id="sec-event-counts"><span class="secno">2.2. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts">EventCounts</a></code> interface</span><a class="self-link" href="#sec-event-counts"></a></h3>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="eventcounts"><code class="highlight"><c- g>EventCounts</c-></code></dfn> {
