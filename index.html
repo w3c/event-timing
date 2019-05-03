@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 10ff3eb4050069e20bb9b943c8b76fe5bfe3a48f" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="9b6bc1cc3ecd16e9b8352d0b8056b45206893c54" name="document-revision">
+  <meta content="b82c21cc2cd210c514bbfc9e6a15a60a6802da1a" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-02">2 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-03">3 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1675,7 +1675,7 @@ This allows developers to measure percentiles and improvements without having to
     <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration">duration</a></code>
     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①">duration</a></code> attribute’s getter must return the difference between
     the time of the first <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering">update the rendering</a> step occurring after <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event②">associated event</a> has been dispatched
-    and the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime②">startTime</a></code>, rounded up to the nearest 8 ms.
+    and the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime②">startTime</a></code>, rounded to the nearest 8 ms.
    </dl>
    <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming④">PerformanceEventTiming</a></code> has the following additional attributes:</p>
    <dl>
@@ -1789,7 +1789,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
          <li data-md>
           <p>Let <var>difference</var> be <code class="highlight"><var>rendering<c- o>-</c->timestamp</var> <c- o>-</c-> <var>timingEntry</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑦">startTime</a></code></code>.</p>
          <li data-md>
-          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to <code class="highlight"><a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-math.ceil" id="ref-for-sec-math.ceil">Math<c- p>.</c->ceil</a><c- p>(</c-><var>difference</var><c- o>/</c-><c- mi>8</c-><c- p>)</c-><c- o>*</c-><c- mi>8</c-></code>.</p>
+          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to <code class="highlight"><a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-math.round" id="ref-for-sec-math.round">Math<c- p>.</c->round</a><c- p>(</c-><var>difference</var><c- o>/</c-><c- mi>8</c-><c- p>)</c-><c- o>*</c-><c- mi>8</c-></code>.</p>
         </ol>
        <li data-md>
         <p>Perform the following steps to update the event counts:</p>
@@ -1878,6 +1878,7 @@ We do not find security or privacy concerns on exposing the timestamp, especiall
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.</p>
    <p>The choice of 104 ms as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①⓪">duration</a></code> is just the first multiple of 8 greater than 100 ms.
+An event whose rounded duration is greater than or equal to 104 ms will have its pre-rounded duration greater than or equal to 100 ms.
 Such events are not handled in accordance with the RAIL performance model, which suggests applications respond within 100 ms to user input.</p>
   </main>
   <div data-fill-with="conformance">
@@ -2093,10 +2094,10 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-dom-event-type④">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-type⑤">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-sec-math.ceil">
-   <a href="https://tc39.github.io/ecma262/#sec-math.ceil">https://tc39.github.io/ecma262/#sec-math.ceil</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-sec-math.round">
+   <a href="https://tc39.github.io/ecma262/#sec-math.round">https://tc39.github.io/ecma262/#sec-math.round</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sec-math.ceil">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-sec-math.round">3.5. Dispatch pending entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-def-domhighrestimestamp">
@@ -2353,7 +2354,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <li>
     <a data-link-type="biblio">[ECMASCRIPT]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-sec-math.ceil" style="color:initial">math.ceil</span>
+     <li><span class="dfn-paneled" id="term-for-sec-math.round" style="color:initial">math.round</span>
     </ul>
    <li>
     <a data-link-type="biblio">[hr-time-2]</a> defines the following terms:
