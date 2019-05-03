@@ -31,7 +31,7 @@ urlPrefix: https://w3c.github.io/hr-time/; spec: HR-TIME-2;
     type: attribute; for: WindowOrWorkerGlobalScope;
         text: performance; url: #dom-windoworworkerglobalscope-performance;
 urlPrefix: https://tc39.github.io/ecma262/; spec: ECMASCRIPT;
-    type: dfn; url: #sec-math.ceil; text: Math.ceil;
+    type: dfn; url: #sec-math.round; text: Math.round;
 urlPrefix: https://dom.spec.whatwg.org/; spec: DOM;
     type: attribute; for: Event;
         text: type; url: #dom-event-type;
@@ -186,7 +186,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dt>{{PerformanceEntry/duration}}</dt>
     <dd>The {{PerformanceEntry/duration}} attribute's getter must return the difference between
     the time of the first <a>update the rendering</a> step occurring after <a>associated event</a> has been dispatched
-    and the {{PerformanceEntry/startTime}}, rounded up to the nearest 8 ms.</dd>
+    and the {{PerformanceEntry/startTime}}, rounded to the nearest 8 ms.</dd>
 </dl>
 
 {{PerformanceEventTiming}} has the following additional attributes:
@@ -309,7 +309,7 @@ Dispatch pending entries {#sec-dispatch-pending}
     1. For each <var>timingEntry</var> in <var>window</var>'s <a>pendingEventEntries</a>:
         1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} by running the following steps:
             1. Let <var>difference</var> be <code><var>rendering-timestamp</var> - <var>timingEntry</var>.{{PerformanceEntry/startTime}}</code>.
-            1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to <code><a>Math.ceil</a>(<var>difference</var>/8)*8</code>.
+            1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to <code><a>Math.round</a>(<var>difference</var>/8)*8</code>.
         1. Perform the following steps to update the event counts:
             1. If <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}</code> does not contain a key <code><var>timingEntry</var>.{{PerformanceEntry/name}}</code>, then set <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}[<var>timingEntry</var>.{{PerformanceEntry/name}}]</code> to 1.
             1. Otherwise, increase <code><var>window</var>.{{WindowOrWorkerGlobalScope/performance}}.{{Performance/eventCounts}}[<var>timingEntry</var>.{{PerformanceEntry/name}}]</code> by 1.
@@ -371,4 +371,5 @@ In an effort to expose the minimal amount of new information that is useful, we 
 This allows relatively precise timing even for 120Hz displays.
 
 The choice of 104 ms as the cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 100 ms.
+An event whose rounded duration is greater than or equal to 104 ms will have its pre-rounded duration greater than or equal to 100 ms.
 Such events are not handled in accordance with the RAIL performance model, which suggests applications respond within 100 ms to user input.
