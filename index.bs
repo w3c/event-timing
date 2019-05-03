@@ -11,6 +11,7 @@ Repository: https://github.com/WICG/event-timing
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/event-timing
 Abstract: This document defines an API that provides web page authors with insights into the latency of certain events triggered by user interactions.
 Default Highlight: js
+Complain About: accidental-2119 yes
 </pre>
 
 <pre class=anchors>
@@ -60,6 +61,8 @@ urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
 Introduction {#sec-intro}
 =====================
 
+<div class="non-normative">
+
 <em>This section is non-normative.</em>
 
 When a user engages with a website, they expect their actions to cause changes to the website quickly.
@@ -92,9 +95,11 @@ This can be useful to measure the overhead of website modifications that are tri
 
 The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
 It's slow because it's often blocked on javascript execution that is not properly split into chunks during page load.
-The latency of the website's response to the first user interaction should be considered a key responsiveness and loading metric.
+The latency of the website's response to the first user interaction can be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
 This allows developers to measure percentiles and improvements without having to register event handlers.
+
+</div>
 
 Events exposed {#sec-events-exposed}
 ------------------------
@@ -166,6 +171,8 @@ A user agent implementing the Event Timing API must perform the following steps:
 1. Run the <a>register a performance entry type</a> algorithm  with <code>"firstInput"</code> as input.
 1. Run the <a>register a performance entry type</a> algorithm  with <code>"event"</code> as input.
 
+<div class="non-normative">
+
 <em>
     This remainder of this section is non-normative.
     The values of the attributes of {{PerformanceEventTiming}} are set in the processing model in [[#sec-processing-model]].
@@ -184,7 +191,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dt>{{PerformanceEntry/startTime}}</dt>
     <dd>The {{PerformanceEntry/startTime}} attribute's getter returns the <a>associated event</a>'s {{Event/timeStamp}}.</dd>
     <dt>{{PerformanceEntry/duration}}</dt>
-    <dd>The {{PerformanceEntry/duration}} attribute's getter must return the difference between
+    <dd>The {{PerformanceEntry/duration}} attribute's getter returns the difference between
     the time of the first <a>update the rendering</a> step occurring after <a>associated event</a> has been dispatched
     and the {{PerformanceEntry/startTime}}, rounded to the nearest 8 ms.</dd>
 </dl>
@@ -204,9 +211,11 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     </dd>
     <dt>{{cancelable}}</dt>
     <dd>
-        The <dfn>cancelable</dfn> attribute's getter must return the <a>associated event</a>'s {{Event/cancelable}} attribute value.
+        The <dfn>cancelable</dfn> attribute's getter returns the <a>associated event</a>'s {{Event/cancelable}} attribute value.
     </dd>
 </dl>
+
+</div>
 
 {{EventCounts}} interface {#sec-event-counts}
 ------------------------
