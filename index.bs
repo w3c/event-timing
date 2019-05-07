@@ -275,7 +275,7 @@ Finally, each {{Window}} has <dfn>hasDispatchedEvent</dfn>, a boolean which is i
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
 
-    1. For each <a>fully active</a> {{Document}} in <em>docs</em>, invoke the algorithm to <a>dispatch pending entries</a> for that {{Document}}.
+    1. For each <a>fully active</a> {{Document}} in <em>docs</em>, invoke the algorithm to <a>dispatch pending Event Timing entries</a> for that {{Document}}.
 </div>
 
 Initialize event timing {#sec-init-event-timing}
@@ -307,11 +307,11 @@ Finalize event timing {#sec-fin-event-timing}
     1. Append <var>timingEntry</var> to <var>target</var>’s <a>pendingEventEntries</a>.
 </div>
 
-Dispatch pending entries {#sec-dispatch-pending}
+Dispatch pending Event Timing entries {#sec-dispatch-pending}
 --------------------------------------------------------
 
-<div algorithm="dispatch pending entries">
-    When asked to <dfn>dispatch pending entries</dfn> for a {{Document}} <var>doc</var>, run the following steps:
+<div algorithm="dispatch pending Event Timing entries">
+    When asked to <dfn>dispatch pending Event Timing entries</dfn> for a {{Document}} <var>doc</var>, run the following steps:
 
     1. Let <var>window</var> be <var>doc</var>'s <a>relevant global object</a>.
     1. Let <var>rendering-timestamp</var> be the <a>current high resolution time</a>.
