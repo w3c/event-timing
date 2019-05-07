@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 10ff3eb4050069e20bb9b943c8b76fe5bfe3a48f" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="81358bac6fe002eb823dcd645a3d37b5096f6bb3" name="document-revision">
+  <meta content="d4dce49fd99c795c86c08f4db683759fa205eed1" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-03">3 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-07">7 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1531,7 +1531,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#sec-modifications-HTML"><span class="secno">3.2</span> <span class="content">Modifications to the HTML specification</span></a>
       <li><a href="#sec-init-event-timing"><span class="secno">3.3</span> <span class="content">Initialize event timing</span></a>
       <li><a href="#sec-fin-event-timing"><span class="secno">3.4</span> <span class="content">Finalize event timing</span></a>
-      <li><a href="#sec-dispatch-pending"><span class="secno">3.5</span> <span class="content">Dispatch pending entries</span></a>
+      <li><a href="#sec-dispatch-pending"><span class="secno">3.5</span> <span class="content">Dispatch pending Event Timing entries</span></a>
       <li><a href="#sec-queue-other"><span class="secno">3.6</span> <span class="content">Queueing other entries</span></a>
      </ol>
     <li><a href="#priv-sec"><span class="secno">4</span> <span class="content">Security &amp; privacy considerations</span></a>
@@ -1695,7 +1695,7 @@ This allows developers to measure percentiles and improvements without having to
    <h3 class="heading settled" data-level="2.2" id="sec-event-counts"><span class="secno">2.2. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts">EventCounts</a></code> interface</span><a class="self-link" href="#sec-event-counts"></a></h3>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="eventcounts"><code class="highlight"><c- g>EventCounts</c-></code></dfn> {
-    <c- b>readonly</c-> <c- b>maplike</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long" id="ref-for-idl-unsigned-long"><c- b>unsigned</c-> <c- b>long</c-></a>>;
+    <c- b>readonly</c-> <c- b>maplike</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a>>;
 };
 </pre>
    <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <a href="Event/type">types</a> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①">type</a></code>.
@@ -1733,7 +1733,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering①">update the rendering</a> step of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model">event loop processing model</a>, add a step right after the step that calls <a data-link-type="dfn" href="https://w3c.github.io/paint-timing/#mark-paint-timing" id="ref-for-mark-paint-timing">mark paint timing</a>: 
     <ol>
      <li data-md>
-      <p>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> in <em>docs</em>, invoke the algorithm to <a data-link-type="dfn" href="#dispatch-pending-entries" id="ref-for-dispatch-pending-entries">dispatch pending entries</a> for that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.</p>
+      <p>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> in <em>docs</em>, invoke the algorithm to <a data-link-type="dfn" href="#dispatch-pending-event-timing-entries" id="ref-for-dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</a> for that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.3" id="sec-init-event-timing"><span class="secno">3.3. </span><span class="content">Initialize event timing</span><a class="self-link" href="#sec-init-event-timing"></a></h3>
@@ -1776,9 +1776,9 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
       <p>Append <var>timingEntry</var> to <var>target</var>’s <a data-link-type="dfn" href="#pendingevententries" id="ref-for-pendingevententries">pendingEventEntries</a>.</p>
     </ol>
    </div>
-   <h3 class="heading settled" data-level="3.5" id="sec-dispatch-pending"><span class="secno">3.5. </span><span class="content">Dispatch pending entries</span><a class="self-link" href="#sec-dispatch-pending"></a></h3>
-   <div class="algorithm" data-algorithm="dispatch pending entries">
-     When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="dispatch-pending-entries">dispatch pending entries</dfn> for a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> <var>doc</var>, run the following steps: 
+   <h3 class="heading settled" data-level="3.5" id="sec-dispatch-pending"><span class="secno">3.5. </span><span class="content">Dispatch pending Event Timing entries</span><a class="self-link" href="#sec-dispatch-pending"></a></h3>
+   <div class="algorithm" data-algorithm="dispatch pending Event Timing entries">
+     When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</dfn> for a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> <var>doc</var>, run the following steps: 
     <ol>
      <li data-md>
       <p>Let <var>window</var> be <var>doc</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>.</p>
@@ -2036,7 +2036,7 @@ Such events are not handled in accordance with the RAIL performance model, which
   <ul class="index">
    <li><a href="#performanceeventtiming-associated-event">associated Event</a><span>, in §2.1</span>
    <li><a href="#dom-performanceeventtiming-cancelable">cancelable</a><span>, in §2.1</span>
-   <li><a href="#dispatch-pending-entries">dispatch pending entries</a><span>, in §3.5</span>
+   <li><a href="#dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</a><span>, in §3.5</span>
    <li><a href="#dom-performance-eventcounts">eventCounts</a><span>, in §2.3</span>
    <li><a href="#eventcounts">EventCounts</a><span>, in §2.2</span>
    <li><a href="#finalize-event-timing">finalize event timing</a><span>, in §3.4</span>
@@ -2052,7 +2052,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://dom.spec.whatwg.org/#document">https://dom.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-document">3.2. Modifications to the HTML specification</a> <a href="#ref-for-document①">(2)</a>
-    <li><a href="#ref-for-document②">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-document②">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event">
@@ -2101,7 +2101,7 @@ Such events are not handled in accordance with the RAIL performance model, which
   <aside class="dfn-panel" data-for="term-for-sec-math.round">
    <a href="https://tc39.github.io/ecma262/#sec-math.round">https://tc39.github.io/ecma262/#sec-math.round</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sec-math.round">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-sec-math.round">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-def-domhighrestimestamp">
@@ -2120,13 +2120,13 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time">https://w3c.github.io/hr-time/#dfn-current-high-resolution-time</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dfn-current-high-resolution-time">3.1. Modifications to the DOM specification</a> <a href="#ref-for-dfn-current-high-resolution-time①">(2)</a>
-    <li><a href="#ref-for-dfn-current-high-resolution-time②">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-dfn-current-high-resolution-time②">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-windoworworkerglobalscope-performance">
    <a href="https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance">https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-windoworworkerglobalscope-performance">3.5. Dispatch pending entries</a> <a href="#ref-for-dom-windoworworkerglobalscope-performance①">(2)</a> <a href="#ref-for-dom-windoworworkerglobalscope-performance②">(3)</a>
+    <li><a href="#ref-for-dom-windoworworkerglobalscope-performance">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-windoworworkerglobalscope-performance①">(2)</a> <a href="#ref-for-dom-windoworworkerglobalscope-performance②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performance-now">
@@ -2158,7 +2158,7 @@ Such events are not handled in accordance with the RAIL performance model, which
   <aside class="dfn-panel" data-for="term-for-concept-relevant-global">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-relevant-global">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-concept-relevant-global">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-update-the-rendering">
@@ -2184,7 +2184,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration">https://w3c.github.io/performance-timeline/#dom-performanceentry-duration</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-duration">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-duration①">(2)</a>
-    <li><a href="#ref-for-dom-performanceentry-duration②">3.5. Dispatch pending entries</a> <a href="#ref-for-dom-performanceentry-duration③">(2)</a> <a href="#ref-for-dom-performanceentry-duration④">(3)</a>
+    <li><a href="#ref-for-dom-performanceentry-duration②">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-duration③">(2)</a> <a href="#ref-for-dom-performanceentry-duration④">(3)</a>
     <li><a href="#ref-for-dom-performanceentry-duration⑤">3.6. Queueing other entries</a> <a href="#ref-for-dom-performanceentry-duration⑥">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑦">(3)</a>
     <li><a href="#ref-for-dom-performanceentry-duration⑧">4. Security &amp; privacy considerations</a> <a href="#ref-for-dom-performanceentry-duration⑨">(2)</a> <a href="#ref-for-dom-performanceentry-duration①⓪">(3)</a>
    </ul>
@@ -2194,7 +2194,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <ul>
     <li><a href="#ref-for-dom-performanceentry-entrytype">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-entrytype①">(2)</a>
     <li><a href="#ref-for-dom-performanceentry-entrytype②">3.3. Initialize event timing</a>
-    <li><a href="#ref-for-dom-performanceentry-entrytype③">3.5. Dispatch pending entries</a> <a href="#ref-for-dom-performanceentry-entrytype④">(2)</a>
+    <li><a href="#ref-for-dom-performanceentry-entrytype③">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-entrytype④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-name">
@@ -2202,13 +2202,13 @@ Such events are not handled in accordance with the RAIL performance model, which
    <ul>
     <li><a href="#ref-for-dom-performanceentry-name">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-name①">(2)</a>
     <li><a href="#ref-for-dom-performanceentry-name②">3.3. Initialize event timing</a>
-    <li><a href="#ref-for-dom-performanceentry-name③">3.5. Dispatch pending entries</a> <a href="#ref-for-dom-performanceentry-name④">(2)</a> <a href="#ref-for-dom-performanceentry-name⑤">(3)</a> <a href="#ref-for-dom-performanceentry-name⑥">(4)</a> <a href="#ref-for-dom-performanceentry-name⑦">(5)</a> <a href="#ref-for-dom-performanceentry-name⑧">(6)</a>
+    <li><a href="#ref-for-dom-performanceentry-name③">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-name④">(2)</a> <a href="#ref-for-dom-performanceentry-name⑤">(3)</a> <a href="#ref-for-dom-performanceentry-name⑥">(4)</a> <a href="#ref-for-dom-performanceentry-name⑦">(5)</a> <a href="#ref-for-dom-performanceentry-name⑧">(6)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-queue-a-performanceentry">
    <a href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry">https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dfn-queue-a-performanceentry">3.5. Dispatch pending entries</a> <a href="#termref-for-">(2)</a> <a href="#ref-for-dfn-queue-a-performanceentry①">(3)</a>
+    <li><a href="#ref-for-dfn-queue-a-performanceentry">3.5. Dispatch pending Event Timing entries</a> <a href="#termref-for-">(2)</a> <a href="#ref-for-dfn-queue-a-performanceentry①">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-register-a-performance-entry-type">
@@ -2222,7 +2222,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <ul>
     <li><a href="#ref-for-dom-performanceentry-starttime">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-starttime①">(2)</a> <a href="#ref-for-dom-performanceentry-starttime②">(3)</a>
     <li><a href="#ref-for-dom-performanceentry-starttime③">3.3. Initialize event timing</a> <a href="#ref-for-dom-performanceentry-starttime④">(2)</a> <a href="#ref-for-dom-performanceentry-starttime⑤">(3)</a> <a href="#ref-for-dom-performanceentry-starttime⑥">(4)</a>
-    <li><a href="#ref-for-dom-performanceentry-starttime⑦">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-dom-performanceentry-starttime⑦">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-pointerevent-interface">
@@ -2336,10 +2336,10 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-idl-boolean">2.1. PerformanceEventTiming interface</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-idl-unsigned-long">
-   <a href="https://heycam.github.io/webidl/#idl-unsigned-long">https://heycam.github.io/webidl/#idl-unsigned-long</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-idl-unsigned-long-long">
+   <a href="https://heycam.github.io/webidl/#idl-unsigned-long-long">https://heycam.github.io/webidl/#idl-unsigned-long-long</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-unsigned-long">2.2. EventCounts interface</a>
+    <li><a href="#ref-for-idl-unsigned-long-long">2.2. EventCounts interface</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -2430,7 +2430,7 @@ Such events are not handled in accordance with the RAIL performance model, which
      <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
      <li><span class="dfn-paneled" id="term-for-SameObject" style="color:initial">SameObject</span>
      <li><span class="dfn-paneled" id="term-for-idl-boolean" style="color:initial">boolean</span>
-     <li><span class="dfn-paneled" id="term-for-idl-unsigned-long" style="color:initial">unsigned long</span>
+     <li><span class="dfn-paneled" id="term-for-idl-unsigned-long-long" style="color:initial">unsigned long long</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -2469,7 +2469,7 @@ Such events are not handled in accordance with the RAIL performance model, which
 
 [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <a href="#eventcounts"><code class="highlight"><c- g>EventCounts</c-></code></a> {
-    <c- b>readonly</c-> <c- b>maplike</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long" id="ref-for-idl-unsigned-long①"><c- b>unsigned</c-> <c- b>long</c-></a>>;
+    <c- b>readonly</c-> <c- b>maplike</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long①"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a>>;
 };
 
 [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed②①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
@@ -2527,26 +2527,26 @@ Such events are not handled in accordance with the RAIL performance model, which
    <b><a href="#dom-performance-eventcounts">#dom-performance-eventcounts</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performance-eventcounts">2.3. Extensions to the Performance interface</a>
-    <li><a href="#ref-for-dom-performance-eventcounts①">3.5. Dispatch pending entries</a> <a href="#ref-for-dom-performance-eventcounts②">(2)</a> <a href="#ref-for-dom-performance-eventcounts③">(3)</a>
+    <li><a href="#ref-for-dom-performance-eventcounts①">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performance-eventcounts②">(2)</a> <a href="#ref-for-dom-performance-eventcounts③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="pendingevententries">
    <b><a href="#pendingevententries">#pendingevententries</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-pendingevententries">3.4. Finalize event timing</a>
-    <li><a href="#ref-for-pendingevententries①">3.5. Dispatch pending entries</a>
+    <li><a href="#ref-for-pendingevententries①">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="pendingpointerdown">
    <b><a href="#pendingpointerdown">#pendingpointerdown</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-pendingpointerdown">3.5. Dispatch pending entries</a> <a href="#ref-for-pendingpointerdown①">(2)</a> <a href="#ref-for-pendingpointerdown②">(3)</a> <a href="#ref-for-pendingpointerdown③">(4)</a>
+    <li><a href="#ref-for-pendingpointerdown">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-pendingpointerdown①">(2)</a> <a href="#ref-for-pendingpointerdown②">(3)</a> <a href="#ref-for-pendingpointerdown③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="hasdispatchedevent">
    <b><a href="#hasdispatchedevent">#hasdispatchedevent</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-hasdispatchedevent">3.5. Dispatch pending entries</a> <a href="#ref-for-hasdispatchedevent①">(2)</a> <a href="#ref-for-hasdispatchedevent②">(3)</a>
+    <li><a href="#ref-for-hasdispatchedevent">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-hasdispatchedevent①">(2)</a> <a href="#ref-for-hasdispatchedevent②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="initialize-event-timing">
@@ -2563,10 +2563,10 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-finalize-event-timing①">3.6. Queueing other entries</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="dispatch-pending-entries">
-   <b><a href="#dispatch-pending-entries">#dispatch-pending-entries</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="dispatch-pending-event-timing-entries">
+   <b><a href="#dispatch-pending-event-timing-entries">#dispatch-pending-event-timing-entries</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dispatch-pending-entries">3.2. Modifications to the HTML specification</a>
+    <li><a href="#ref-for-dispatch-pending-event-timing-entries">3.2. Modifications to the HTML specification</a>
    </ul>
   </aside>
 <script>/* script-var-click-highlighting */
