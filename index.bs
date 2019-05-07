@@ -223,7 +223,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
 <pre class="idl">
 [Exposed=Window]
 interface EventCounts {
-    readonly maplike&lt;DOMString, unsigned long&gt;;
+    readonly maplike&lt;DOMString, unsigned long long&gt;;
 };
 </pre>
 
