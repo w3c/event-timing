@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 10ff3eb4050069e20bb9b943c8b76fe5bfe3a48f" name="generator">
+  <meta content="Bikeshed version ee4d7efc3ed6155392d49e10a542e2351fd5792d" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="d4dce49fd99c795c86c08f4db683759fa205eed1" name="document-revision">
+  <meta content="abb0e248e79c2de0b0e618ac47e76820133cf3c9" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-07">7 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-09">9 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1585,33 +1585,27 @@ To that effect, this API surfaces all the timing information about this interact
 This allows developers to measure percentiles and improvements without having to register event handlers.</p>
    </div>
    <h3 class="heading settled" data-level="1.1" id="sec-events-exposed"><span class="secno">1.1. </span><span class="content">Events exposed</span><a class="self-link" href="#sec-events-exposed"></a></h3>
-   <p>The event timing API exposes timing information for any of the following events, in cases where the time difference between user input and paint operations that follow input processing exceeds a certain threshold:</p>
-   <ul>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#mouseevent" id="ref-for-mouseevent">MouseEvent</a></code></p>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#pointerevent-interface" id="ref-for-pointerevent-interface">PointerEvent</a></code></p>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#touchevent-interface" id="ref-for-touchevent-interface">TouchEvent</a></code></p>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#keyboardevent" id="ref-for-keyboardevent">KeyboardEvent</a></code></p>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#wheelevent" id="ref-for-wheelevent">WheelEvent</a></code></p>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#inputevent" id="ref-for-inputevent">InputEvent</a></code></p>
-    <li data-md>
-     <p><code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#compositionevent" id="ref-for-compositionevent">CompositionEvent</a></code></p>
-   </ul>
+   <p>The Event Timing API exposes timing information for certain events.
+Certain types of events are considered, and timing information is exposed when the time difference between user input and paint operations that follow input processing exceeds a certain threshold.</p>
+   <div class="algorithm" data-algorithm="considered for Event Timing">
+     Given an <var>event</var>, to determine if it should be <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="considered-for-event-timing">considered for Event Timing</dfn>, run the following steps: 
+    <ul>
+     <li data-md>
+      <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-istrusted" id="ref-for-dom-event-istrusted">isTrusted</a></code> attribute value is set to <code class="highlight"><c- kc>false</c-></code>, return <code class="highlight"><c- kc>false</c-></code>.</p>
+     <li data-md>
+      <p>Otherwise, return <code class="highlight"><c- kc>true</c-></code> if <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code> is one of the following (return <code class="highlight"><c- kc>false</c-></code> otherwise): <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-auxclick" id="ref-for-event-type-auxclick">auxclick</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click">click</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-dblclick" id="ref-for-event-type-dblclick">dblclick</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mousedown" id="ref-for-event-type-mousedown">mousedown</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mouseenter" id="ref-for-event-type-mouseenter">mouseenter</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mouseleave" id="ref-for-event-type-mouseleave">mouseleave</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mousemove" id="ref-for-event-type-mousemove">mousemove</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mouseout" id="ref-for-event-type-mouseout">mouseout</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mouseover" id="ref-for-event-type-mouseover">mouseover</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mouseup" id="ref-for-event-type-mouseup">mouseup</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerover-event" id="ref-for-the-pointerover-event">pointerover</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerenter-event" id="ref-for-the-pointerenter-event">pointerenter</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event">pointerdown</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointermove-event" id="ref-for-the-pointermove-event">pointermove</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event">pointerup</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event">pointercancel</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerout-event" id="ref-for-the-pointerout-event">pointerout</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerleave-event" id="ref-for-the-pointerleave-event">pointerleave</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-gotpointercapture-event" id="ref-for-the-gotpointercapture-event">gotpointercapture</a>, <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-lostpointercapture-event" id="ref-for-the-lostpointercapture-event">lostpointercapture</a> <a data-link-type="dfn" href="https://w3c.github.io/touch-events/#the-touchstart-event" id="ref-for-the-touchstart-event">touchStart</a>, <a data-link-type="dfn" href="https://w3c.github.io/touch-events/#the-touchend-event" id="ref-for-the-touchend-event">touchend</a>, <a data-link-type="dfn" href="https://w3c.github.io/touch-events/#the-touchmove-event" id="ref-for-the-touchmove-event">touchmove</a>, <a data-link-type="dfn" href="https://w3c.github.io/touch-events/#the-touchcancel-event" id="ref-for-the-touchcancel-event">touchcancel</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown">keydown</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup">keyup</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-wheel" id="ref-for-event-type-wheel">wheel</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-beforeinput" id="ref-for-event-type-beforeinput">beforeinput</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input">input</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-compositionstart" id="ref-for-event-type-compositionstart">compositionstart</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-compositionupdate" id="ref-for-event-type-compositionupdate">compositionupdate</a>, <a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-compositionend" id="ref-for-event-type-compositionend">compositionend</a>.</p>
+    </ul>
+   </div>
    <p>The Event Timing API also exposes timing information about the first user interaction among the following:</p>
    <ul>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown">keydown</a></p>
+     <p><a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown①">keydown</a></p>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mousedown" id="ref-for-event-type-mousedown">mousedown</a></p>
+     <p><a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-mousedown" id="ref-for-event-type-mousedown①">mousedown</a></p>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://w3c.github.io/pointerevents/extension.html#the-pointerdown-event" id="ref-for-the-pointerdown-event">pointerdown</a> which is followed by <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/extension.html#the-pointerup-event" id="ref-for-the-pointerup-event">pointerup</a></p>
+     <p><a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event①">pointerdown</a> which is followed by <a data-link-type="dfn" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①">pointerup</a></p>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click">click</a></p>
+     <p><a data-link-type="dfn" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click①">click</a></p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="sec-example"><span class="secno">1.2. </span><span class="content">Usage Example</span><a class="self-link" href="#sec-example"></a></h3>
 <pre class="example highlight" id="example-031ada12"><a class="self-link" href="#example-031ada12"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
@@ -1670,7 +1664,7 @@ This allows developers to measure percentiles and improvements without having to
     <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming③">PerformanceEventTiming</a></code> extends the following attributes of the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface" id="ref-for-the-performanceentry-interface①">PerformanceEntry</a></code> interface:</p>
     <dl>
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name">name</a></code>
-     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name①">name</a></code> attribute’s getter provides the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code>.
+     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name①">name</a></code> attribute’s getter provides the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①">type</a></code>.
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype">entryType</a></code>
      <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype①">entryType</a></code> attribute’s getter returns <code class="highlight"><c- u>"event"</c-></code> (for long events) or <code class="highlight"><c- u>"firstInput"</c-></code> (for the first user interaction).
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime">startTime</a></code>
@@ -1698,8 +1692,8 @@ This allows developers to measure percentiles and improvements without having to
     <c- b>readonly</c-> <c- b>maplike</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a>>;
 };
 </pre>
-   <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <a href="Event/type">types</a> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①">type</a></code>.
-Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type②">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑤">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§1.1 Events exposed</a>) are counted via this map.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <a href="Event/type">types</a> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type②">type</a></code>.
+Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type③">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑤">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§1.1 Events exposed</a>) are counted via this map.</p>
    <h3 class="heading settled" data-level="2.3" id="sec-extensions"><span class="secno">2.3. </span><span class="content">Extensions to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance">Performance</a></code> interface</span><a class="self-link" href="#sec-extensions"></a></h3>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance①"><c- g>Performance</c-></a> {
@@ -1707,7 +1701,7 @@ Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.sp
 };
 </pre>
    <p>The <code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts">eventCounts</a></code> attribute’s getter returns a map with entries of the form &lt;<var>type</var>, <var>num-events</var>>.
-This means that there have been <var>num-events</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type③">type</a></code> attribute value is equal to <var>type</var>.</p>
+This means that there have been <var>num-events</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code> attribute value is equal to <var>type</var>.</p>
    <h2 class="heading settled" data-level="3" id="sec-processing-model"><span class="secno">3. </span><span class="content">Processing model</span><a class="self-link" href="#sec-processing-model"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="sec-modifications-DOM"><span class="secno">3.1. </span><span class="content">Modifications to the DOM specification</span><a class="self-link" href="#sec-modifications-DOM"></a></h3>
    <p><em>This section will be removed once the <a href="https://dom.spec.whatwg.org">DOM specification</a> has been modified.</em></p>
@@ -1741,18 +1735,18 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="initialize-event-timing">initialize event timing</dfn>, with <var>event</var> and <var>processing start</var> as inputs, run the following steps: 
     <ol>
      <li data-md>
-      <p>If <var>event</var> is NOT a <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#mouseevent" id="ref-for-mouseevent①">MouseEvent</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#pointerevent-interface" id="ref-for-pointerevent-interface①">PointerEvent</a></code> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#touchevent-interface" id="ref-for-touchevent-interface①">TouchEvent</a></code>, <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#keyboardevent" id="ref-for-keyboardevent①">KeyboardEvent</a></code>, <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#wheelevent" id="ref-for-wheelevent①">WheelEvent</a></code>, <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#inputevent" id="ref-for-inputevent①">InputEvent</a></code>, or <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/uievents/#compositionevent" id="ref-for-compositionevent①">CompositionEvent</a></code>, OR if <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-istrusted" id="ref-for-dom-event-istrusted">isTrusted</a></code> attribute value is set to <code class="highlight"><c- kc>false</c-></code>, return <code class="highlight"><c- kc>null</c-></code>.</p>
+      <p>If the algorithm to determine if <var>event</var> should be <a data-link-type="dfn" href="#considered-for-event-timing" id="ref-for-considered-for-event-timing">considered for Event Timing</a> returns <code class="highlight"><c- kc>false</c-></code>, then return <code class="highlight"><c- kc>null</c-></code>.</p>
      <li data-md>
       <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑧">PerformanceEventTiming</a></code> object.</p>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code> attribute value.</p>
+      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> attribute value.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype②">entryType</a></code> to <code class="highlight"><c- u>"event"</c-></code>.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime③">startTime</a></code> as follows:</p>
       <ol>
        <li data-md>
-        <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> attribute value is equal to <code class="highlight"><c- u>"pointermove"</c-></code>, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> to <code class="highlight"><var>event</var><c- p>.</c-><a data-link-type="functionish" href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents" id="ref-for-dom-pointerevent-getcoalescedevents">getCoalescedEvents<c- p>()</c-></a><c- p>[</c-><c- mi>0</c-><c- p>].</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑤">startTime</a></code></code>.</p>
+        <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value is equal to <code class="highlight"><c- u>"pointermove"</c-></code>, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> to <code class="highlight"><var>event</var><c- p>.</c-><a data-link-type="functionish" href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents" id="ref-for-dom-pointerevent-getcoalescedevents">getCoalescedEvents<c- p>()</c-></a><c- p>[</c-><c- mi>0</c-><c- p>].</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑤">startTime</a></code></code>.</p>
        <li data-md>
         <p>Otherwise, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑥">startTime</a></code> to <code class="highlight"><var>event</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code></code>.</p>
       </ol>
@@ -2036,6 +2030,7 @@ Such events are not handled in accordance with the RAIL performance model, which
   <ul class="index">
    <li><a href="#performanceeventtiming-associated-event">associated Event</a><span>, in §2.1</span>
    <li><a href="#dom-performanceeventtiming-cancelable">cancelable</a><span>, in §2.1</span>
+   <li><a href="#considered-for-event-timing">considered for Event Timing</a><span>, in §1.1</span>
    <li><a href="#dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</a><span>, in §3.5</span>
    <li><a href="#dom-performance-eventcounts">eventCounts</a><span>, in §2.3</span>
    <li><a href="#eventcounts">EventCounts</a><span>, in §2.2</span>
@@ -2078,7 +2073,7 @@ Such events are not handled in accordance with the RAIL performance model, which
   <aside class="dfn-panel" data-for="term-for-dom-event-istrusted">
    <a href="https://dom.spec.whatwg.org/#dom-event-istrusted">https://dom.spec.whatwg.org/#dom-event-istrusted</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-event-istrusted">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-dom-event-istrusted">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-timestamp">
@@ -2092,10 +2087,11 @@ Such events are not handled in accordance with the RAIL performance model, which
   <aside class="dfn-panel" data-for="term-for-dom-event-type">
    <a href="https://dom.spec.whatwg.org/#dom-event-type">https://dom.spec.whatwg.org/#dom-event-type</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-event-type">2.1. PerformanceEventTiming interface</a>
-    <li><a href="#ref-for-dom-event-type①">2.2. EventCounts interface</a> <a href="#ref-for-dom-event-type②">(2)</a>
-    <li><a href="#ref-for-dom-event-type③">2.3. Extensions to the Performance interface</a>
-    <li><a href="#ref-for-dom-event-type④">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-type⑤">(2)</a>
+    <li><a href="#ref-for-dom-event-type">1.1. Events exposed</a>
+    <li><a href="#ref-for-dom-event-type①">2.1. PerformanceEventTiming interface</a>
+    <li><a href="#ref-for-dom-event-type②">2.2. EventCounts interface</a> <a href="#ref-for-dom-event-type③">(2)</a>
+    <li><a href="#ref-for-dom-event-type④">2.3. Extensions to the Performance interface</a>
+    <li><a href="#ref-for-dom-event-type⑤">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-type⑥">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-sec-math.round">
@@ -2225,11 +2221,64 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-dom-performanceentry-starttime⑦">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-pointerevent-interface">
-   <a href="https://w3c.github.io/pointerevents/#pointerevent-interface">https://w3c.github.io/pointerevents/#pointerevent-interface</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-the-gotpointercapture-event">
+   <a href="https://w3c.github.io/pointerevents/#the-gotpointercapture-event">https://w3c.github.io/pointerevents/#the-gotpointercapture-event</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-pointerevent-interface">1.1. Events exposed</a>
-    <li><a href="#ref-for-pointerevent-interface①">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-the-gotpointercapture-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-lostpointercapture-event">
+   <a href="https://w3c.github.io/pointerevents/#the-lostpointercapture-event">https://w3c.github.io/pointerevents/#the-lostpointercapture-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-lostpointercapture-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointercancel-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointercancel-event">https://w3c.github.io/pointerevents/#the-pointercancel-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointercancel-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointerdown-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointerdown-event">https://w3c.github.io/pointerevents/#the-pointerdown-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointerdown-event">1.1. Events exposed</a> <a href="#ref-for-the-pointerdown-event①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointerenter-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointerenter-event">https://w3c.github.io/pointerevents/#the-pointerenter-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointerenter-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointerleave-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointerleave-event">https://w3c.github.io/pointerevents/#the-pointerleave-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointerleave-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointermove-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointermove-event">https://w3c.github.io/pointerevents/#the-pointermove-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointermove-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointerout-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointerout-event">https://w3c.github.io/pointerevents/#the-pointerout-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointerout-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointerover-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointerover-event">https://w3c.github.io/pointerevents/#the-pointerover-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointerover-event">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-pointerup-event">
+   <a href="https://w3c.github.io/pointerevents/#the-pointerup-event">https://w3c.github.io/pointerevents/#the-pointerup-event</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-pointerup-event">1.1. Events exposed</a> <a href="#ref-for-the-pointerup-event①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-pointerevent-getcoalescedevents">
@@ -2238,76 +2287,136 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-dom-pointerevent-getcoalescedevents">3.3. Initialize event timing</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-the-pointerdown-event">
-   <a href="https://w3c.github.io/pointerevents/extension.html#the-pointerdown-event">https://w3c.github.io/pointerevents/extension.html#the-pointerdown-event</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-the-touchcancel-event">
+   <a href="https://w3c.github.io/touch-events/#the-touchcancel-event">https://w3c.github.io/touch-events/#the-touchcancel-event</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-the-pointerdown-event">1.1. Events exposed</a>
+    <li><a href="#ref-for-the-touchcancel-event">1.1. Events exposed</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-the-pointerup-event">
-   <a href="https://w3c.github.io/pointerevents/extension.html#the-pointerup-event">https://w3c.github.io/pointerevents/extension.html#the-pointerup-event</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-the-touchend-event">
+   <a href="https://w3c.github.io/touch-events/#the-touchend-event">https://w3c.github.io/touch-events/#the-touchend-event</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-the-pointerup-event">1.1. Events exposed</a>
+    <li><a href="#ref-for-the-touchend-event">1.1. Events exposed</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-touchevent-interface">
-   <a href="https://w3c.github.io/touch-events/#touchevent-interface">https://w3c.github.io/touch-events/#touchevent-interface</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-the-touchmove-event">
+   <a href="https://w3c.github.io/touch-events/#the-touchmove-event">https://w3c.github.io/touch-events/#the-touchmove-event</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-touchevent-interface">1.1. Events exposed</a>
-    <li><a href="#ref-for-touchevent-interface①">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-the-touchmove-event">1.1. Events exposed</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-compositionevent">
-   <a href="https://www.w3.org/TR/uievents/#compositionevent">https://www.w3.org/TR/uievents/#compositionevent</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-the-touchstart-event">
+   <a href="https://w3c.github.io/touch-events/#the-touchstart-event">https://w3c.github.io/touch-events/#the-touchstart-event</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-compositionevent">1.1. Events exposed</a>
-    <li><a href="#ref-for-compositionevent①">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-the-touchstart-event">1.1. Events exposed</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-inputevent">
-   <a href="https://www.w3.org/TR/uievents/#inputevent">https://www.w3.org/TR/uievents/#inputevent</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-event-type-auxclick">
+   <a href="https://w3c.github.io/uievents/#event-type-auxclick">https://w3c.github.io/uievents/#event-type-auxclick</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-inputevent">1.1. Events exposed</a>
-    <li><a href="#ref-for-inputevent①">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-event-type-auxclick">1.1. Events exposed</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-keyboardevent">
-   <a href="https://www.w3.org/TR/uievents/#keyboardevent">https://www.w3.org/TR/uievents/#keyboardevent</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-event-type-beforeinput">
+   <a href="https://w3c.github.io/uievents/#event-type-beforeinput">https://w3c.github.io/uievents/#event-type-beforeinput</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-keyboardevent">1.1. Events exposed</a>
-    <li><a href="#ref-for-keyboardevent①">3.3. Initialize event timing</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-mouseevent">
-   <a href="https://www.w3.org/TR/uievents/#mouseevent">https://www.w3.org/TR/uievents/#mouseevent</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-mouseevent">1.1. Events exposed</a>
-    <li><a href="#ref-for-mouseevent①">3.3. Initialize event timing</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-wheelevent">
-   <a href="https://www.w3.org/TR/uievents/#wheelevent">https://www.w3.org/TR/uievents/#wheelevent</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-wheelevent">1.1. Events exposed</a>
-    <li><a href="#ref-for-wheelevent①">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-event-type-beforeinput">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-type-click">
    <a href="https://w3c.github.io/uievents/#event-type-click">https://w3c.github.io/uievents/#event-type-click</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event-type-click">1.1. Events exposed</a>
+    <li><a href="#ref-for-event-type-click">1.1. Events exposed</a> <a href="#ref-for-event-type-click①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-compositionend">
+   <a href="https://w3c.github.io/uievents/#event-type-compositionend">https://w3c.github.io/uievents/#event-type-compositionend</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-compositionend">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-compositionstart">
+   <a href="https://w3c.github.io/uievents/#event-type-compositionstart">https://w3c.github.io/uievents/#event-type-compositionstart</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-compositionstart">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-compositionupdate">
+   <a href="https://w3c.github.io/uievents/#event-type-compositionupdate">https://w3c.github.io/uievents/#event-type-compositionupdate</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-compositionupdate">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-dblclick">
+   <a href="https://w3c.github.io/uievents/#event-type-dblclick">https://w3c.github.io/uievents/#event-type-dblclick</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-dblclick">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-input">
+   <a href="https://w3c.github.io/uievents/#event-type-input">https://w3c.github.io/uievents/#event-type-input</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-input">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-type-keydown">
    <a href="https://w3c.github.io/uievents/#event-type-keydown">https://w3c.github.io/uievents/#event-type-keydown</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event-type-keydown">1.1. Events exposed</a>
+    <li><a href="#ref-for-event-type-keydown">1.1. Events exposed</a> <a href="#ref-for-event-type-keydown①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-keyup">
+   <a href="https://w3c.github.io/uievents/#event-type-keyup">https://w3c.github.io/uievents/#event-type-keyup</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-keyup">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-type-mousedown">
    <a href="https://w3c.github.io/uievents/#event-type-mousedown">https://w3c.github.io/uievents/#event-type-mousedown</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event-type-mousedown">1.1. Events exposed</a>
+    <li><a href="#ref-for-event-type-mousedown">1.1. Events exposed</a> <a href="#ref-for-event-type-mousedown①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-mouseenter">
+   <a href="https://w3c.github.io/uievents/#event-type-mouseenter">https://w3c.github.io/uievents/#event-type-mouseenter</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-mouseenter">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-mouseleave">
+   <a href="https://w3c.github.io/uievents/#event-type-mouseleave">https://w3c.github.io/uievents/#event-type-mouseleave</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-mouseleave">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-mousemove">
+   <a href="https://w3c.github.io/uievents/#event-type-mousemove">https://w3c.github.io/uievents/#event-type-mousemove</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-mousemove">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-mouseout">
+   <a href="https://w3c.github.io/uievents/#event-type-mouseout">https://w3c.github.io/uievents/#event-type-mouseout</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-mouseout">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-mouseover">
+   <a href="https://w3c.github.io/uievents/#event-type-mouseover">https://w3c.github.io/uievents/#event-type-mouseover</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-mouseover">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-mouseup">
+   <a href="https://w3c.github.io/uievents/#event-type-mouseup">https://w3c.github.io/uievents/#event-type-mouseup</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-mouseup">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-type-wheel">
+   <a href="https://w3c.github.io/uievents/#event-type-wheel">https://w3c.github.io/uievents/#event-type-wheel</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-type-wheel">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
@@ -2397,31 +2506,51 @@ Such events are not handled in accordance with the RAIL performance model, which
    <li>
     <a data-link-type="biblio">[pointerevents]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-pointerevent-interface" style="color:initial">PointerEvent</span>
+     <li><span class="dfn-paneled" id="term-for-the-gotpointercapture-event" style="color:initial">gotpointercapture</span>
+     <li><span class="dfn-paneled" id="term-for-the-lostpointercapture-event" style="color:initial">lostpointercapture</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointercancel-event" style="color:initial">pointercancel</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointerdown-event" style="color:initial">pointerdown</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointerenter-event" style="color:initial">pointerenter</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointerleave-event" style="color:initial">pointerleave</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointermove-event" style="color:initial">pointermove</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointerout-event" style="color:initial">pointerout</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointerover-event" style="color:initial">pointerover</span>
+     <li><span class="dfn-paneled" id="term-for-the-pointerup-event" style="color:initial">pointerup</span>
     </ul>
    <li>
     <a data-link-type="biblio">[pointerevents-extension]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-dom-pointerevent-getcoalescedevents" style="color:initial">getCoalescedEvents()</span>
-     <li><span class="dfn-paneled" id="term-for-the-pointerdown-event" style="color:initial">pointerdown</span>
-     <li><span class="dfn-paneled" id="term-for-the-pointerup-event" style="color:initial">pointerup</span>
     </ul>
    <li>
     <a data-link-type="biblio">[touch-events]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-touchevent-interface" style="color:initial">TouchEvent</span>
+     <li><span class="dfn-paneled" id="term-for-the-touchcancel-event" style="color:initial">touchcancel</span>
+     <li><span class="dfn-paneled" id="term-for-the-touchend-event" style="color:initial">touchend</span>
+     <li><span class="dfn-paneled" id="term-for-the-touchmove-event" style="color:initial">touchmove</span>
+     <li><span class="dfn-paneled" id="term-for-the-touchstart-event" style="color:initial">touchstart</span>
     </ul>
    <li>
     <a data-link-type="biblio">[uievents]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-compositionevent" style="color:initial">CompositionEvent</span>
-     <li><span class="dfn-paneled" id="term-for-inputevent" style="color:initial">InputEvent</span>
-     <li><span class="dfn-paneled" id="term-for-keyboardevent" style="color:initial">KeyboardEvent</span>
-     <li><span class="dfn-paneled" id="term-for-mouseevent" style="color:initial">MouseEvent</span>
-     <li><span class="dfn-paneled" id="term-for-wheelevent" style="color:initial">WheelEvent</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-auxclick" style="color:initial">auxclick</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-beforeinput" style="color:initial">beforeinput</span>
      <li><span class="dfn-paneled" id="term-for-event-type-click" style="color:initial">click</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-compositionend" style="color:initial">compositionend</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-compositionstart" style="color:initial">compositionstart</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-compositionupdate" style="color:initial">compositionupdate</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-dblclick" style="color:initial">dblclick</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-input" style="color:initial">input</span>
      <li><span class="dfn-paneled" id="term-for-event-type-keydown" style="color:initial">keydown</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-keyup" style="color:initial">keyup</span>
      <li><span class="dfn-paneled" id="term-for-event-type-mousedown" style="color:initial">mousedown</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-mouseenter" style="color:initial">mouseenter</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-mouseleave" style="color:initial">mouseleave</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-mousemove" style="color:initial">mousemove</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-mouseout" style="color:initial">mouseout</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-mouseover" style="color:initial">mouseover</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-mouseup" style="color:initial">mouseup</span>
+     <li><span class="dfn-paneled" id="term-for-event-type-wheel" style="color:initial">wheel</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
@@ -2478,6 +2607,12 @@ Such events are not handled in accordance with the RAIL performance model, which
 };
 
 </pre>
+  <aside class="dfn-panel" data-for="considered-for-event-timing">
+   <b><a href="#considered-for-event-timing">#considered-for-event-timing</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-considered-for-event-timing">3.3. Initialize event timing</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="performanceeventtiming">
    <b><a href="#performanceeventtiming">#performanceeventtiming</a></b><b>Referenced in:</b>
    <ul>
