@@ -42,20 +42,47 @@ urlPrefix: https://dom.spec.whatwg.org/; spec: DOM;
     type: dfn; url: #concept-event-dispatch; text: event dispatch algorithm
 urlPrefix: https://w3c.github.io/pointerevents/; spec: POINTEREVENTS;
     type: interface; url: #pointerevent-interface; text: PointerEvent;
+    type: dfn; url: #the-pointerover-event; text: pointerover;
+    type: dfn; url: #the-pointerenter-event; text: pointerenter;
+    type: dfn; url: #the-pointerdown-event; text: pointerdown;
+    type: dfn; url: #the-pointermove-event; text: pointermove;
+    type: dfn; url: #the-pointerup-event; text: pointerup;
+    type: dfn; url: #the-pointercancel-event; text: pointercancel;
+    type: dfn; url: #the-pointerout-event; text: pointerout;
+    type: dfn; url: #the-pointerleave-event; text: pointerleave;
+    type: dfn; url: #the-gotpointercapture-event; text: gotpointercapture;
+    type: dfn; url: #the-lostpointercapture-event; text: lostpointercapture;
 <!-- TODO there does not seem to be a way to link to getCoalescedEvents properly -->
 urlPrefix: https://w3c.github.io/pointerevents/extension.html; spec: POINTEREVENTS-EXTENSION;
     type: method; for: PointerEvent;
         url: #dom-pointerevent-getcoalescedevents; text: getCoalescedEvents();
-    type: dfn; url: #the-pointerdown-event; text: pointerdown;
-    type: dfn; url: #the-pointerup-event; text: pointerup;
 urlPrefix: https://w3c.github.io/touch-events/; spec: TOUCH-EVENTS;
     type: interface; url: #touchevent-interface; text: TouchEvent;
+    type: dfn; url: #the-touchstart-event; text: touchstart;
+    type: dfn; url: #the-touchend-event; text: touchend;
+    type: dfn; url: #the-touchmove-event; text: touchmove;
+    type: dfn; url: #the-touchcancel-event; text: touchcancel;
 urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
     type: dfn; url: #mark-paint-timing; text: mark paint timing;
 urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
+    type: dfn; url: #event-type-auxclick; text: auxclick;
     type: dfn; url: #event-type-click; text: click;
-    type: dfn; url: #event-type-keydown; text: keydown;
+    type: dfn; url: #event-type-dblclick; text: dblclick;
     type: dfn; url: #event-type-mousedown; text: mousedown;
+    type: dfn; url: #event-type-mouseenter; text: mouseenter;
+    type: dfn; url: #event-type-mouseleave; text: mouseleave;
+    type: dfn; url: #event-type-mousemove; text: mousemove;
+    type: dfn; url: #event-type-mouseout; text: mouseout;
+    type: dfn; url: #event-type-mouseover; text: mouseover;
+    type: dfn; url: #event-type-mouseup; text: mouseup;
+    type: dfn; url: #event-type-keydown; text: keydown;
+    type: dfn; url: #event-type-keyup; text: keyup;
+    type: dfn; url: #event-type-wheel; text: wheel;
+    type: dfn; url: #event-type-beforeinput; text: beforeinput;
+    type: dfn; url: #event-type-input; text: input;
+    type: dfn; url: #event-type-compositionstart; text: compositionstart;
+    type: dfn; url: #event-type-compositionupdate; text: compositionupdate;
+    type: dfn; url: #event-type-compositionend; text: compositionend;
 </pre>
 
 Introduction {#sec-intro}
@@ -104,14 +131,28 @@ This allows developers to measure percentiles and improvements without having to
 Events exposed {#sec-events-exposed}
 ------------------------
 
-The event timing API exposes timing information for any of the following events, in cases where the time difference between user input and paint operations that follow input processing exceeds a certain threshold:
-* {{MouseEvent}}
-* {{PointerEvent}}
-* {{TouchEvent}}
-* {{KeyboardEvent}}
-* {{WheelEvent}}
-* {{InputEvent}}
-* {{CompositionEvent}}
+The Event Timing API exposes timing information for certain events.
+Certain types of events are considered, and timing information is exposed when the time difference between user input and paint operations that follow input processing exceeds a certain threshold.
+
+<div algorithm="considered for Event Timing">
+    Given an <var>event</var>, to determine if it should be <dfn>considered for Event Timing</dfn>, run the following steps:
+    * If <var>event</var>'s {{Event/isTrusted}} attribute value is set to <code>false</code>, return <code>false</code>.
+    * Otherwise, return <code>true</code> if <var>event</var>'s {{Event/type}} is one of the following (return <code>false</code> otherwise):
+    <!-- MouseEvents -->
+        <a>auxclick</a>, <a>click</a>, <a>dblclick</a>, <a>mousedown</a>, <a>mouseenter</a>, <a>mouseleave</a>, <a>mousemove</a>, <a>mouseout</a>, <a>mouseover</a>, <a>mouseup</a>,
+    <!-- PointerEvents -->
+        <a>pointerover</a>, <a>pointerenter</a>, <a>pointerdown</a>, <a>pointermove</a>, <a>pointerup</a>, <a>pointercancel</a>, <a>pointerout</a>, <a>pointerleave</a>, <a>gotpointercapture</a>, <a>lostpointercapture</a>
+    <!-- TouchEvents -->
+        <a>touchStart</a>, <a>touchend</a>, <a>touchmove</a>, <a>touchcancel</a>,
+    <!-- KeyboardEvents -->
+        <a>keydown</a>, <a>keyup</a>,
+    <!-- WheelEvents -->
+        <a>wheel</a>,
+    <!-- InputEvents -->
+        <a>beforeinput</a>, <a>input</a>,
+    <!-- CompositionEvents -->
+        <a>compositionstart</a>, <a>compositionupdate</a>, <a>compositionend</a>.
+</div>
 
 The Event Timing API also exposes timing information about the first user interaction among the following:
 * <a>keydown</a>
@@ -284,7 +325,7 @@ Initialize event timing {#sec-init-event-timing}
 <div algorithm="initialize event timing">
     When asked to <dfn>initialize event timing</dfn>, with <var>event</var> and <var>processing start</var> as inputs, run the following steps:
 
-    1. If <var>event</var> is NOT a {{MouseEvent}}, {{PointerEvent}} {{TouchEvent}}, {{KeyboardEvent}}, {{WheelEvent}}, {{InputEvent}}, or {{CompositionEvent}}, OR if <var>event</var>'s {{Event/isTrusted}} attribute value is set to <code>false</code>, return <code>null</code>.
+    1. If the algorithm to determine if <var>event</var> should be <a>considered for Event Timing</a> returns <code>false</code>, then return <code>null</code>.
     1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object.
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/name}} to <var>event</var>'s {{Event/type}} attribute value.
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/entryType}} to <code>"event"</code>.
