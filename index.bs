@@ -137,14 +137,14 @@ Certain types of events are considered, and timing information is exposed when t
 
 <div algorithm="considered for Event Timing">
     Given an <var>event</var>, to determine if it should be <dfn>considered for Event Timing</dfn>, run the following steps:
-    * If <var>event</var>'s {{Event/isTrusted}} attribute value is set to false, return false.
-    * Otherwise, return true if <var>event</var>'s {{Event/type}} is one of the following (return false otherwise):
+    1. If <var>event</var>'s {{Event/isTrusted}} attribute value is set to false, return false.
+    1. If <var>event</var>'s {{Event/type}} is one of the following:
     <!-- MouseEvents -->
         <a>auxclick</a>, <a>click</a>, <a>dblclick</a>, <a>mousedown</a>, <a>mouseenter</a>, <a>mouseleave</a>, <a>mousemove</a>, <a>mouseout</a>, <a>mouseover</a>, <a>mouseup</a>,
     <!-- PointerEvents -->
         <a>pointerover</a>, <a>pointerenter</a>, <a>pointerdown</a>, <a>pointermove</a>, <a>pointerup</a>, <a>pointercancel</a>, <a>pointerout</a>, <a>pointerleave</a>, <a>gotpointercapture</a>, <a>lostpointercapture</a>
     <!-- TouchEvents -->
-        <a>touchStart</a>, <a>touchend</a>, <a>touchmove</a>, <a>touchcancel</a>,
+        <a>touchstart</a>, <a>touchend</a>, <a>touchmove</a>, <a>touchcancel</a>,
     <!-- KeyboardEvents -->
         <a>keydown</a>, <a>keyup</a>,
     <!-- WheelEvents -->
@@ -152,7 +152,9 @@ Certain types of events are considered, and timing information is exposed when t
     <!-- InputEvents -->
         <a>beforeinput</a>, <a>input</a>,
     <!-- CompositionEvents -->
-        <a>compositionstart</a>, <a>compositionupdate</a>, <a>compositionend</a>.
+        <a>compositionstart</a>, <a>compositionupdate</a>, <a>compositionend</a>,
+        return true.
+    1. Return false.
 </div>
 
 The Event Timing API also exposes timing information about the first user interaction among the following:
