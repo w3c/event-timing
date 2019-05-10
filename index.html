@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ee4d7efc3ed6155392d49e10a542e2351fd5792d" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="abb0e248e79c2de0b0e618ac47e76820133cf3c9" name="document-revision">
+  <meta content="c519e8d850782351ba4cfb71c6e201a6f0ad7ca3" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-09">9 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-10">10 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1765,9 +1765,13 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      <li data-md>
       <p>If <var>timingEntry</var> is <code class="highlight"><c- kc>null</c-></code>, abort these steps.</p>
      <li data-md>
+      <p>Let <var>relevant global</var> be <var>target</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>.</p>
+     <li data-md>
+      <p>If <var>relevant global</var> does not <a data-link-type="dfn" href="https://heycam.github.io/webidl/#implements" id="ref-for-implements">implement</a> <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code>, abort these steps.</p>
+     <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend②">processingEnd</a></code> to <var>processing end</var>.</p>
      <li data-md>
-      <p>Append <var>timingEntry</var> to <var>target</var>’s <a data-link-type="dfn" href="#pendingevententries" id="ref-for-pendingevententries">pendingEventEntries</a>.</p>
+      <p>Append <var>timingEntry</var> to <var>relevant global</var>’s <a data-link-type="dfn" href="#pendingevententries" id="ref-for-pendingevententries">pendingEventEntries</a>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.5" id="sec-dispatch-pending"><span class="secno">3.5. </span><span class="content">Dispatch pending Event Timing entries</span><a class="self-link" href="#sec-dispatch-pending"></a></h3>
@@ -1775,7 +1779,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</dfn> for a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> <var>doc</var>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>window</var> be <var>doc</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>.</p>
+      <p>Let <var>window</var> be <var>doc</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>.</p>
      <li data-md>
       <p>Let <var>rendering-timestamp</var> be the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time②">current high resolution time</a>.</p>
      <li data-md>
@@ -1848,13 +1852,15 @@ This provides user agents with the flexibility to ignore input which never block
      To <em>create an event timing entry</em> outside of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch④">event dispatch algorithm</a>, the user agent must run the following steps: 
     <ol>
      <li data-md>
-      <p>Let <var>event</var> be the event being measured and let <var>target</var> be the target <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code>.</p>
+      <p>Let <var>event</var> be the event being measured and let <var>window</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a> of the target.</p>
+     <li data-md>
+      <p class="assertion">Assert: <var>window</var> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#implements" id="ref-for-implements①">implements</a> <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window④">Window</a></code>.</p>
      <li data-md>
       <p>Run the <a data-link-type="dfn" href="#initialize-event-timing" id="ref-for-initialize-event-timing①">initialize event timing</a> algorithm, passing in <var>event</var> and <code class="highlight"><c- mi>0</c-></code> as inputs.</p>
      <li data-md>
       <p>Let <var>timingEntry</var> be the output from the algorithm.</p>
      <li data-md>
-      <p>Run the <a data-link-type="dfn" href="#finalize-event-timing" id="ref-for-finalize-event-timing①">finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>target</var>, and <code class="highlight"><c- mi>0</c-></code> as inputs.</p>
+      <p>Run the <a data-link-type="dfn" href="#finalize-event-timing" id="ref-for-finalize-event-timing①">finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>window</var>, and <code class="highlight"><c- mi>0</c-></code> as inputs.</p>
     </ol>
    </div>
    <p class="note" role="note"><span>Note:</span> processing the first input entry via the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch⑤">event dispatch algorithm</a> ensures that the first input’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑤">duration</a></code> is calculated accurately.
@@ -2136,7 +2142,8 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#window">https://html.spec.whatwg.org/multipage/window-object.html#window</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-window">3.2. Modifications to the HTML specification</a> <a href="#ref-for-window①">(2)</a> <a href="#ref-for-window②">(3)</a>
-    <li><a href="#ref-for-window③">3.6. Queueing other entries</a>
+    <li><a href="#ref-for-window③">3.4. Finalize event timing</a>
+    <li><a href="#ref-for-window④">3.6. Queueing other entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-loop-processing-model">
@@ -2154,7 +2161,9 @@ Such events are not handled in accordance with the RAIL performance model, which
   <aside class="dfn-panel" data-for="term-for-concept-relevant-global">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-relevant-global">3.5. Dispatch pending Event Timing entries</a>
+    <li><a href="#ref-for-concept-relevant-global">3.4. Finalize event timing</a>
+    <li><a href="#ref-for-concept-relevant-global①">3.5. Dispatch pending Event Timing entries</a>
+    <li><a href="#ref-for-concept-relevant-global②">3.6. Queueing other entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-update-the-rendering">
@@ -2445,6 +2454,13 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-idl-boolean">2.1. PerformanceEventTiming interface</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-implements">
+   <a href="https://heycam.github.io/webidl/#implements">https://heycam.github.io/webidl/#implements</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-implements">3.4. Finalize event timing</a>
+    <li><a href="#ref-for-implements①">3.6. Queueing other entries</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-unsigned-long-long">
    <a href="https://heycam.github.io/webidl/#idl-unsigned-long-long">https://heycam.github.io/webidl/#idl-unsigned-long-long</a><b>Referenced in:</b>
    <ul>
@@ -2559,6 +2575,7 @@ Such events are not handled in accordance with the RAIL performance model, which
      <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
      <li><span class="dfn-paneled" id="term-for-SameObject" style="color:initial">SameObject</span>
      <li><span class="dfn-paneled" id="term-for-idl-boolean" style="color:initial">boolean</span>
+     <li><span class="dfn-paneled" id="term-for-implements" style="color:initial">implements</span>
      <li><span class="dfn-paneled" id="term-for-idl-unsigned-long-long" style="color:initial">unsigned long long</span>
     </ul>
   </ul>
