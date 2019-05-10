@@ -344,8 +344,10 @@ Finalize event timing {#sec-fin-event-timing}
     When asked to to <dfn>finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processing end</var> as inputs, run the following steps:
 
     1. If <var>timingEntry</var> is <code>null</code>, abort these steps.
+    1. Let <var>relevant global</var> be <var>target</var>'s <a>relevant global object</a>.
+    1. If <var>relevant global</var> does not <a>implement</a> {{Window}}, abort these steps.
     1. Set <var>timingEntry</var>'s {{processingEnd}} to <var>processing end</var>.
-    1. Append <var>timingEntry</var> to <var>target</var>’s <a>pendingEventEntries</a>.
+    1. Append <var>timingEntry</var> to <var>relevant global</var>’s <a>pendingEventEntries</a>.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
@@ -391,10 +393,11 @@ This provides user agents with the flexibility to ignore input which never block
 <div algorithm="report outside of event dispatch">
     To <em>create an event timing entry</em> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
 
-    1. Let <var>event</var> be the event being measured and let <var>target</var> be the target {{Window}}.
+    1. Let <var>event</var> be the event being measured and let <var>window</var> be the <a>relevant global object</a> of the target.
+    1. Assert: <var>window</var> <a>implements</a> {{Window}}.
     1. Run the <a>initialize event timing</a> algorithm, passing in <var>event</var> and <code>0</code> as inputs.
     1. Let <var>timingEntry</var> be the output from the algorithm.
-    1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>target</var>, and <code>0</code> as inputs.
+    1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>window</var>, and <code>0</code> as inputs.
 </div>
 
 Note: processing the first input entry via the <a>event dispatch algorithm</a> ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
