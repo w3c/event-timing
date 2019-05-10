@@ -396,7 +396,7 @@ This provides user agents with the flexibility to ignore input which never block
     To <em>create an event timing entry</em> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
 
     1. Let <var>event</var> be the event being measured and let <var>window</var> be the <a>relevant global object</a> of the target.
-    1. Assert that <var>window</var> <a>implements</a> {{Window}}.
+    1. Assert: <var>window</var> <a>implements</a> {{Window}}.
     1. Run the <a>initialize event timing</a> algorithm, passing in <var>event</var> and <code>0</code> as inputs.
     1. Let <var>timingEntry</var> be the output from the algorithm.
     1. Run the <a>finalize event timing</a> algorithm, passing in <var>timingEntry</var>, <var>window</var>, and <code>0</code> as inputs.
