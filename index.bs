@@ -83,8 +83,6 @@ urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
     type: dfn; url: #event-type-compositionstart; text: compositionstart;
     type: dfn; url: #event-type-compositionupdate; text: compositionupdate;
     type: dfn; url: #event-type-compositionend; text: compositionend;
-urlPrefix: https://heycam.github.io/webidl/; spec: WEBIDL;
-    type: dfn; url: #implements; text: implement;
 </pre>
 
 Introduction {#sec-intro}
