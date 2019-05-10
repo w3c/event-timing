@@ -42,48 +42,47 @@ urlPrefix: https://dom.spec.whatwg.org/; spec: DOM;
         text: isTrusted; url: #dom-event-istrusted;
     type: dfn; url: #concept-event-dispatch; text: event dispatch algorithm
 urlPrefix: https://w3c.github.io/pointerevents/; spec: POINTEREVENTS;
-    type: interface; url: #pointerevent-interface; text: PointerEvent;
-    type: dfn; url: #the-pointerover-event; text: pointerover;
-    type: dfn; url: #the-pointerenter-event; text: pointerenter;
-    type: dfn; url: #the-pointerdown-event; text: pointerdown;
-    type: dfn; url: #the-pointermove-event; text: pointermove;
-    type: dfn; url: #the-pointerup-event; text: pointerup;
-    type: dfn; url: #the-pointercancel-event; text: pointercancel;
-    type: dfn; url: #the-pointerout-event; text: pointerout;
-    type: dfn; url: #the-pointerleave-event; text: pointerleave;
-    type: dfn; url: #the-gotpointercapture-event; text: gotpointercapture;
-    type: dfn; url: #the-lostpointercapture-event; text: lostpointercapture;
+    type: event; url: #the-pointerover-event; text: pointerover;
+    type: event; url: #the-pointerenter-event; text: pointerenter;
+    type: event; url: #the-pointerdown-event; text: pointerdown;
+    type: event; url: #the-pointermove-event; text: pointermove;
+    type: event; url: #the-pointerup-event; text: pointerup;
+    type: event; url: #the-pointercancel-event; text: pointercancel;
+    type: event; url: #the-pointerout-event; text: pointerout;
+    type: event; url: #the-pointerleave-event; text: pointerleave;
+    type: event; url: #the-gotpointercapture-event; text: gotpointercapture;
+    type: event; url: #the-lostpointercapture-event; text: lostpointercapture;
 <!-- TODO there does not seem to be a way to link to getCoalescedEvents properly -->
 urlPrefix: https://w3c.github.io/pointerevents/extension.html; spec: POINTEREVENTS-EXTENSION;
     type: method; for: PointerEvent;
         url: #dom-pointerevent-getcoalescedevents; text: getCoalescedEvents();
 urlPrefix: https://w3c.github.io/touch-events/; spec: TOUCH-EVENTS;
     type: interface; url: #touchevent-interface; text: TouchEvent;
-    type: dfn; url: #the-touchstart-event; text: touchstart;
-    type: dfn; url: #the-touchend-event; text: touchend;
-    type: dfn; url: #the-touchmove-event; text: touchmove;
-    type: dfn; url: #the-touchcancel-event; text: touchcancel;
+    type: event; url: #the-touchstart-event; text: touchstart;
+    type: event; url: #the-touchend-event; text: touchend;
+    type: event; url: #the-touchmove-event; text: touchmove;
+    type: event; url: #the-touchcancel-event; text: touchcancel;
 urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
     type: dfn; url: #mark-paint-timing; text: mark paint timing;
 urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
-    type: dfn; url: #event-type-auxclick; text: auxclick;
-    type: dfn; url: #event-type-click; text: click;
-    type: dfn; url: #event-type-dblclick; text: dblclick;
-    type: dfn; url: #event-type-mousedown; text: mousedown;
-    type: dfn; url: #event-type-mouseenter; text: mouseenter;
-    type: dfn; url: #event-type-mouseleave; text: mouseleave;
-    type: dfn; url: #event-type-mousemove; text: mousemove;
-    type: dfn; url: #event-type-mouseout; text: mouseout;
-    type: dfn; url: #event-type-mouseover; text: mouseover;
-    type: dfn; url: #event-type-mouseup; text: mouseup;
-    type: dfn; url: #event-type-keydown; text: keydown;
-    type: dfn; url: #event-type-keyup; text: keyup;
-    type: dfn; url: #event-type-wheel; text: wheel;
-    type: dfn; url: #event-type-beforeinput; text: beforeinput;
-    type: dfn; url: #event-type-input; text: input;
-    type: dfn; url: #event-type-compositionstart; text: compositionstart;
-    type: dfn; url: #event-type-compositionupdate; text: compositionupdate;
-    type: dfn; url: #event-type-compositionend; text: compositionend;
+    type: event; url: #event-type-auxclick; text: auxclick;
+    type: event; url: #event-type-click; text: click;
+    type: event; url: #event-type-dblclick; text: dblclick;
+    type: event; url: #event-type-mousedown; text: mousedown;
+    type: event; url: #event-type-mouseenter; text: mouseenter;
+    type: event; url: #event-type-mouseleave; text: mouseleave;
+    type: event; url: #event-type-mousemove; text: mousemove;
+    type: event; url: #event-type-mouseout; text: mouseout;
+    type: event; url: #event-type-mouseover; text: mouseover;
+    type: event; url: #event-type-mouseup; text: mouseup;
+    type: event; url: #event-type-keydown; text: keydown;
+    type: event; url: #event-type-keyup; text: keyup;
+    type: event; url: #event-type-wheel; text: wheel;
+    type: event; url: #event-type-beforeinput; text: beforeinput;
+    type: event; url: #event-type-input; text: input;
+    type: event; url: #event-type-compositionstart; text: compositionstart;
+    type: event; url: #event-type-compositionupdate; text: compositionupdate;
+    type: event; url: #event-type-compositionend; text: compositionend;
 </pre>
 
 Introduction {#sec-intro}
@@ -140,28 +139,28 @@ Certain types of events are considered, and timing information is exposed when t
     1. If <var>event</var>'s {{Event/isTrusted}} attribute value is set to false, return false.
     1. If <var>event</var>'s {{Event/type}} is one of the following:
     <!-- MouseEvents -->
-        <a>auxclick</a>, <a>click</a>, <a>dblclick</a>, <a>mousedown</a>, <a>mouseenter</a>, <a>mouseleave</a>, <a>mousemove</a>, <a>mouseout</a>, <a>mouseover</a>, <a>mouseup</a>,
+        {{auxclick}}, {{click}}, {{dblclick}}, {{mousedown}}, {{mouseenter}}, {{mouseleave}}, {{mousemove}}, {{mouseout}}, {{mouseover}}, {{mouseup}},
     <!-- PointerEvents -->
-        <a>pointerover</a>, <a>pointerenter</a>, <a>pointerdown</a>, <a>pointermove</a>, <a>pointerup</a>, <a>pointercancel</a>, <a>pointerout</a>, <a>pointerleave</a>, <a>gotpointercapture</a>, <a>lostpointercapture</a>
+        {{pointerover}}, {{pointerenter}}, {{pointerdown}}, {{pointermove}}, {{pointerup}}, {{pointercancel}}, {{pointerout}}, {{pointerleave}}, {{gotpointercapture}}, {{lostpointercapture}}
     <!-- TouchEvents -->
-        <a>touchstart</a>, <a>touchend</a>, <a>touchmove</a>, <a>touchcancel</a>,
+        {{touchstart}}, {{touchend}}, {{touchmove}}, {{touchcancel}},
     <!-- KeyboardEvents -->
-        <a>keydown</a>, <a>keyup</a>,
+        {{keydown}}, {{keyup}},
     <!-- WheelEvents -->
-        <a>wheel</a>,
+        {{wheel}},
     <!-- InputEvents -->
-        <a>beforeinput</a>, <a>input</a>,
+        {{beforeinput}}, {{input}},
     <!-- CompositionEvents -->
-        <a>compositionstart</a>, <a>compositionupdate</a>, <a>compositionend</a>,
+        {{compositionstart}}, {{compositionupdate}}, {{compositionend}},
         return true.
     1. Return false.
 </div>
 
 The Event Timing API also exposes timing information about the first user interaction among the following:
-* <a>keydown</a>
-* <a>mousedown</a>
-* <a>pointerdown</a> which is followed by <a>pointerup</a>
-* <a>click</a>
+* {{keydown}}
+* {{mousedown}}
+* {{pointerdown}} which is followed by {{pointerup}}
+* {{click}}
 
 Usage example {#sec-example}
 ------------------------
