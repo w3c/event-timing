@@ -344,9 +344,11 @@ Finalize event timing {#sec-fin-event-timing}
 <div algorithm="finalize event timing">
     When asked to to <dfn export>finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processing end</var> as inputs, run the following steps:
 
-    1. If <var>timingEntry</var> is null, return.
+    1. If <var>timingEntry</var> is <code>null</code>, return.
+    1. Let <var>relevant global</var> be <var>target</var>'s <a>relevant global object</a>.
+    1. If <var>relevant global</var> does not <a>implement</a> {{Window}}, return.
     1. Set <var>timingEntry</var>'s {{processingEnd}} to <var>processing end</var>.
-    1. Append <var>timingEntry</var> to <var>target</var>’s <a>pending event entries</a>.
+    1. Append <var>timingEntry</var> to <var>relevant global</var>’s <a>pending event entries</a>.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
@@ -392,7 +394,8 @@ This provides user agents with the flexibility to ignore input which never block
 <div algorithm="report outside of event dispatch">
     To <dfn export>create an event timing entry</dfn> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
 
-    1. Let <var>event</var> be the event being measured and let <var>target</var> be the target {{Window}}.
+    1. Let <var>event</var> be the event being measured and let <var>window</var> be the <a>relevant global object</a> of the target.
+    1. Assert: <var>window</var> <a>implements</a> {{Window}}.
     1. Let <var>timingEntry</var> be the result of <a lt='initialize event timing'>initializing event timing</a>, given <var>event</var> and <code>0</code>.
     1. <a>Finalize event timing</a> passing in <var>timingEntry</var>, <var>target</var>, and <code>0</code> as inputs.
 </div>
