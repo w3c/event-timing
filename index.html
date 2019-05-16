@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ee4d7efc3ed6155392d49e10a542e2351fd5792d" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="557c00bf13d19262bcc5255abc89428a9851fbe7" name="document-revision">
+  <meta content="521c0a553b18ceb1b4d8def6e49e50031deab832" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-10">10 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-16">16 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1703,8 +1703,8 @@ Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.sp
     [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SameObject" id="ref-for-SameObject"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#eventcounts" id="ref-for-eventcounts②"><c- n>EventCounts</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Performance" data-dfn-type="attribute" data-export data-readonly data-type="EventCounts" id="dom-performance-eventcounts"><code class="highlight"><c- g>eventCounts</c-></code></dfn>;
 };
 </pre>
-   <p>The <code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts">eventCounts</a></code> attribute’s getter returns a map with entries of the form <var>type</var> → <var>num-events</var>.
-This means that there have been <var>num-events</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code> attribute value is equal to <var>type</var>.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts">eventCounts</a></code> attribute’s getter returns a map with entries of the form <var>type</var> → <var>numEvents</var>.
+This means that there have been <var>numEvents</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code> attribute value is equal to <var>type</var>.</p>
    <h2 class="heading settled" data-level="3" id="sec-processing-model"><span class="secno">3. </span><span class="content">Processing model</span><a class="self-link" href="#sec-processing-model"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="sec-modifications-DOM"><span class="secno">3.1. </span><span class="content">Modifications to the DOM specification</span><a class="self-link" href="#sec-modifications-DOM"></a></h3>
    <p><em>This section will be removed once the <a href="https://dom.spec.whatwg.org">DOM specification</a> has been modified.</em></p>
@@ -1735,7 +1735,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
    </div>
    <h3 class="heading settled" data-level="3.3" id="sec-init-event-timing"><span class="secno">3.3. </span><span class="content">Initialize event timing</span><a class="self-link" href="#sec-init-event-timing"></a></h3>
    <div class="algorithm" data-algorithm="initialize event timing">
-     When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="initialize-event-timing">initialize event timing</dfn>, with <var>event</var> and <var>processing start</var> as inputs, run the following steps: 
+     When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="initialize-event-timing">initialize event timing</dfn>, with <var>event</var> and <var>processingStart</var> as inputs, run the following steps: 
     <ol>
      <li data-md>
       <p>If the algorithm to determine if <var>event</var> should be <a data-link-type="dfn" href="#considered-for-event-timing" id="ref-for-considered-for-event-timing">considered for Event Timing</a> returns false, then return null.</p>
@@ -1749,12 +1749,12 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime③">startTime</a></code> as follows:</p>
       <ol>
        <li data-md>
-        <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value is equal to "<code class="highlight">pointermove</code>", set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> to <code class="highlight"><var>event</var><c- p>.</c-><a data-link-type="functionish" href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents" id="ref-for-dom-pointerevent-getcoalescedevents">getCoalescedEvents<c- p>()</c-></a><c- p>[</c-><c- mi>0</c-><c- p>].</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑤">startTime</a></code></code>.</p>
+        <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value is equal to "<code class="highlight">pointermove</code>", set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> to the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code> attribute value of the first entry of the list returned by the <a data-link-type="functionish" href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents" id="ref-for-dom-pointerevent-getcoalescedevents">getCoalescedEvents()</a> algorithm applied to <var>event</var>.</p>
        <li data-md>
-        <p>Otherwise, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑥">startTime</a></code> to <code class="highlight"><var>event</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code></code>.</p>
+        <p>Otherwise, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑤">startTime</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp③">timeStamp</a></code> attribute value.</p>
       </ol>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart②">processingStart</a></code> to <var>processing start</var>.</p>
+      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart②">processingStart</a></code> to <var>processingStart</var>.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-cancelable" id="ref-for-dom-performanceeventtiming-cancelable②">cancelable</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-cancelable" id="ref-for-dom-event-cancelable①">cancelable</a></code> attribute value.</p>
      <li data-md>
@@ -1763,18 +1763,18 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
    </div>
    <h3 class="heading settled" data-level="3.4" id="sec-fin-event-timing"><span class="secno">3.4. </span><span class="content">Finalize event timing</span><a class="self-link" href="#sec-fin-event-timing"></a></h3>
    <div class="algorithm" data-algorithm="finalize event timing">
-     When asked to to <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="finalize-event-timing">finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processing end</var> as inputs, run the following steps: 
+     When asked to to <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="finalize-event-timing">finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processingEnd</var> as inputs, run the following steps: 
     <ol>
      <li data-md>
       <p>If <var>timingEntry</var> is null, return.</p>
      <li data-md>
-      <p>Let <var>relevant global</var> be <var>target</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>.</p>
+      <p>Let <var>relevantGlobal</var> be <var>target</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>.</p>
      <li data-md>
-      <p>If <var>relevant global</var> does not <a data-link-type="dfn" href="https://heycam.github.io/webidl/#implements" id="ref-for-implements">implement</a> <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code>, return.</p>
+      <p>If <var>relevantGlobal</var> does not <a data-link-type="dfn" href="https://heycam.github.io/webidl/#implements" id="ref-for-implements">implement</a> <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code>, return.</p>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend②">processingEnd</a></code> to <var>processing end</var>.</p>
+      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend②">processingEnd</a></code> to <var>processingEnd</var>.</p>
      <li data-md>
-      <p>Append <var>timingEntry</var> to <var>relevant global</var>’s <a data-link-type="dfn" href="#pending-event-entries" id="ref-for-pending-event-entries">pending event entries</a>.</p>
+      <p>Append <var>timingEntry</var> to <var>relevantGlobal</var>’s <a data-link-type="dfn" href="#pending-event-entries" id="ref-for-pending-event-entries">pending event entries</a>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.5" id="sec-dispatch-pending"><span class="secno">3.5. </span><span class="content">Dispatch pending Event Timing entries</span><a class="self-link" href="#sec-dispatch-pending"></a></h3>
@@ -1784,25 +1784,37 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      <li data-md>
       <p>Let <var>window</var> be <var>doc</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>.</p>
      <li data-md>
-      <p>Let <var>rendering-timestamp</var> be the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time②">current high resolution time</a>.</p>
+      <p>Let <var>renderingTimestamp</var> be the <a data-link-type="dfn" href="https://w3c.github.io/hr-time/#dfn-current-high-resolution-time" id="ref-for-dfn-current-high-resolution-time②">current high resolution time</a>.</p>
      <li data-md>
       <p>For each <var>timingEntry</var> in <var>window</var>’s <a data-link-type="dfn" href="#pending-event-entries" id="ref-for-pending-event-entries①">pending event entries</a>:</p>
       <ol>
        <li data-md>
+        <p>Let <var>start</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑥">startTime</a></code> attribute value.</p>
+       <li data-md>
         <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration②">duration</a></code> by running the following steps:</p>
         <ol>
          <li data-md>
-          <p>Let <var>difference</var> be <code class="highlight"><var>rendering<c- o>-</c->timestamp</var> <c- o>-</c-> <var>timingEntry</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑦">startTime</a></code></code>.</p>
+          <p>Let <var>difference</var> be <code class="highlight"><var>renderingTimestamp</var> <c- o>-</c-> <var>start</var></code>.</p>
          <li data-md>
-          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to <code class="highlight"><a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-math.round" id="ref-for-sec-math.round">Math<c- p>.</c->round</a><c- p>(</c-><var>difference</var><c- o>/</c-><c- mi>8</c-><c- p>)</c-><c- o>*</c-><c- mi>8</c-></code>.</p>
+          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to the result of rounding <var>difference</var> to the nearest multiple of 8.</p>
         </ol>
+       <li data-md>
+        <p>Let <var>name</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name③">name</a></code> attribute value.</p>
        <li data-md>
         <p>Perform the following steps to update the event counts:</p>
         <ol>
          <li data-md>
-          <p>If <code class="highlight"><var>window</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance" id="ref-for-dom-windoworworkerglobalscope-performance">performance</a></code><c- p>.</c-><code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts①">eventCounts</a></code></code> does not contain a key <code class="highlight"><var>timingEntry</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name③">name</a></code></code>, then set <code class="highlight"><var>window</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance" id="ref-for-dom-windoworworkerglobalscope-performance①">performance</a></code><c- p>.</c-><code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts②">eventCounts</a></code><c- p>[</c-><var>timingEntry</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name④">name</a></code><c- p>]</c-></code> to 1.</p>
+          <p>Let <var>performance</var> be <var>window</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance" id="ref-for-dom-windoworworkerglobalscope-performance">performance</a></code> attribute value.</p>
          <li data-md>
-          <p>Otherwise, increase <code class="highlight"><var>window</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance" id="ref-for-dom-windoworworkerglobalscope-performance②">performance</a></code><c- p>.</c-><code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts③">eventCounts</a></code><c- p>[</c-><var>timingEntry</var><c- p>.</c-><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name⑤">name</a></code><c- p>]</c-></code> by 1.</p>
+          <p>If <var>performance</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts①">eventCounts</a></code> attribute value does not contain a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-map-entries" id="ref-for-dfn-map-entries">map entry</a> whose key is <var>name</var>, then:</p>
+          <ol>
+           <li data-md>
+            <p>Let <var>mapEntry</var> be a new <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-map-entries" id="ref-for-dfn-map-entries①">map entry</a> with key equal to <var>name</var> and value equal to 1.</p>
+           <li data-md>
+            <p>Add <var>mapEntry</var> to <var>performance</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performance-eventcounts" id="ref-for-dom-performance-eventcounts②">eventCounts</a></code> attribute value.</p>
+          </ol>
+         <li data-md>
+          <p>Otherwise, increase the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-map-entries" id="ref-for-dfn-map-entries②">map entry</a>’s value by 1.</p>
         </ol>
        <li data-md>
         <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> attribute value is greater than or equal to 104, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue</a> <var>timingEntry</var>.</p>
@@ -1810,7 +1822,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
         <p>If <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-event" id="ref-for-has-dispatched-event">has dispatched event</a> is false, run the following steps:</p>
         <ol>
          <li data-md>
-          <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name⑥">name</a></code> attribute value is "<code class="highlight">pointerdown</code>", run the following steps:</p>
+          <p>If <var>name</var> is "<code class="highlight">pointerdown</code>", run the following steps:</p>
           <ol>
            <li data-md>
             <p>Set <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down">pending pointer down</a> to a copy of <var>timingEntry</var>.</p>
@@ -1821,7 +1833,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
           <p>Otherwise, run the following steps:</p>
           <ol>
            <li data-md>
-            <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name⑦">name</a></code> attribute value is "<code class="highlight">pointerup</code>" AND if <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down②">pending pointer down</a> is not null, then:</p>
+            <p>If <var>name</var> is "<code class="highlight">pointerup</code>" AND if <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down②">pending pointer down</a> is not null, then:</p>
             <ol>
              <li data-md>
               <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-event" id="ref-for-has-dispatched-event①">has dispatched event</a> to true.</p>
@@ -1829,7 +1841,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
               <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry①">Queue</a> <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down③">pending pointer down</a>.</p>
             </ol>
            <li data-md>
-            <p>Otherwise, if <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name⑧">name</a></code> attribute value is one of "<code class="highlight">click</code>", "<code class="highlight">keydown</code>" or "<code class="highlight">mousedown</code>", then:</p>
+            <p>Otherwise, if <var>name</var> is one of "<code class="highlight">click</code>", "<code class="highlight">keydown</code>" or "<code class="highlight">mousedown</code>", then:</p>
             <ol>
              <li data-md>
               <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-event" id="ref-for-has-dispatched-event②">has dispatched event</a> to true.</p>
@@ -2089,7 +2101,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <ul>
     <li><a href="#ref-for-dom-event-timestamp">1. Introduction</a>
     <li><a href="#ref-for-dom-event-timestamp①">2.1. PerformanceEventTiming interface</a>
-    <li><a href="#ref-for-dom-event-timestamp②">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-dom-event-timestamp②">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-timestamp③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-type">
@@ -2100,12 +2112,6 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-dom-event-type②">2.2. EventCounts interface</a> <a href="#ref-for-dom-event-type③">(2)</a>
     <li><a href="#ref-for-dom-event-type④">2.3. Extensions to the Performance interface</a>
     <li><a href="#ref-for-dom-event-type⑤">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-type⑥">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-sec-math.round">
-   <a href="https://tc39.github.io/ecma262/#sec-math.round">https://tc39.github.io/ecma262/#sec-math.round</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sec-math.round">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-def-domhighrestimestamp">
@@ -2137,7 +2143,7 @@ Such events are not handled in accordance with the RAIL performance model, which
   <aside class="dfn-panel" data-for="term-for-dom-windoworworkerglobalscope-performance">
    <a href="https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance">https://w3c.github.io/hr-time/#dom-windoworworkerglobalscope-performance</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-windoworworkerglobalscope-performance">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-windoworworkerglobalscope-performance①">(2)</a> <a href="#ref-for-dom-windoworworkerglobalscope-performance②">(3)</a>
+    <li><a href="#ref-for-dom-windoworworkerglobalscope-performance">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-window">
@@ -2209,7 +2215,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <ul>
     <li><a href="#ref-for-dom-performanceentry-name">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-name①">(2)</a>
     <li><a href="#ref-for-dom-performanceentry-name②">3.3. Initialize event timing</a>
-    <li><a href="#ref-for-dom-performanceentry-name③">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-name④">(2)</a> <a href="#ref-for-dom-performanceentry-name⑤">(3)</a> <a href="#ref-for-dom-performanceentry-name⑥">(4)</a> <a href="#ref-for-dom-performanceentry-name⑦">(5)</a> <a href="#ref-for-dom-performanceentry-name⑧">(6)</a>
+    <li><a href="#ref-for-dom-performanceentry-name③">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-queue-a-performanceentry">
@@ -2228,8 +2234,8 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime">https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-starttime">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-starttime①">(2)</a> <a href="#ref-for-dom-performanceentry-starttime②">(3)</a>
-    <li><a href="#ref-for-dom-performanceentry-starttime③">3.3. Initialize event timing</a> <a href="#ref-for-dom-performanceentry-starttime④">(2)</a> <a href="#ref-for-dom-performanceentry-starttime⑤">(3)</a> <a href="#ref-for-dom-performanceentry-starttime⑥">(4)</a>
-    <li><a href="#ref-for-dom-performanceentry-starttime⑦">3.5. Dispatch pending Event Timing entries</a>
+    <li><a href="#ref-for-dom-performanceentry-starttime③">3.3. Initialize event timing</a> <a href="#ref-for-dom-performanceentry-starttime④">(2)</a> <a href="#ref-for-dom-performanceentry-starttime⑤">(3)</a>
+    <li><a href="#ref-for-dom-performanceentry-starttime⑥">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-the-gotpointercapture-event">
@@ -2463,6 +2469,12 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-implements①">3.6. Queueing other entries</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-map-entries">
+   <a href="https://heycam.github.io/webidl/#dfn-map-entries">https://heycam.github.io/webidl/#dfn-map-entries</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-map-entries">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dfn-map-entries①">(2)</a> <a href="#ref-for-dfn-map-entries②">(3)</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-unsigned-long-long">
    <a href="https://heycam.github.io/webidl/#idl-unsigned-long-long">https://heycam.github.io/webidl/#idl-unsigned-long-long</a><b>Referenced in:</b>
    <ul>
@@ -2481,11 +2493,6 @@ Such events are not handled in accordance with the RAIL performance model, which
      <li><span class="dfn-paneled" id="term-for-dom-event-istrusted" style="color:initial">isTrusted</span>
      <li><span class="dfn-paneled" id="term-for-dom-event-timestamp" style="color:initial">timeStamp</span>
      <li><span class="dfn-paneled" id="term-for-dom-event-type" style="color:initial">type</span>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[ECMASCRIPT]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="term-for-sec-math.round" style="color:initial">math.round</span>
     </ul>
    <li>
     <a data-link-type="biblio">[hr-time-2]</a> defines the following terms:
@@ -2578,6 +2585,7 @@ Such events are not handled in accordance with the RAIL performance model, which
      <li><span class="dfn-paneled" id="term-for-SameObject" style="color:initial">SameObject</span>
      <li><span class="dfn-paneled" id="term-for-idl-boolean" style="color:initial">boolean</span>
      <li><span class="dfn-paneled" id="term-for-implements" style="color:initial">implements</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-map-entries" style="color:initial">map entries</span>
      <li><span class="dfn-paneled" id="term-for-idl-unsigned-long-long" style="color:initial">unsigned long long</span>
     </ul>
   </ul>
@@ -2586,8 +2594,6 @@ Such events are not handled in accordance with the RAIL performance model, which
   <dl>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
-   <dt id="biblio-ecmascript">[ECMASCRIPT]
-   <dd><a href="https://tc39.github.io/ecma262/">ECMAScript Language Specification</a>. URL: <a href="https://tc39.github.io/ecma262/">https://tc39.github.io/ecma262/</a>
    <dt id="biblio-hr-time-2">[HR-TIME-2]
    <dd>Ilya Grigorik; James Simonsen; Jatinder Mann. <a href="https://www.w3.org/TR/hr-time-2/">High Resolution Time Level 2</a>. 1 March 2018. CR. URL: <a href="https://www.w3.org/TR/hr-time-2/">https://www.w3.org/TR/hr-time-2/</a>
    <dt id="biblio-html">[HTML]
@@ -2681,7 +2687,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <b><a href="#dom-performance-eventcounts">#dom-performance-eventcounts</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performance-eventcounts">2.3. Extensions to the Performance interface</a>
-    <li><a href="#ref-for-dom-performance-eventcounts①">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performance-eventcounts②">(2)</a> <a href="#ref-for-dom-performance-eventcounts③">(3)</a>
+    <li><a href="#ref-for-dom-performance-eventcounts①">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performance-eventcounts②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="pending-event-entries">
