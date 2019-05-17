@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ee4d7efc3ed6155392d49e10a542e2351fd5792d" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="521c0a553b18ceb1b4d8def6e49e50031deab832" name="document-revision">
+  <meta content="27fa12d150c53755ca685e866df810e5531d5650" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-16">16 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-17">17 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1895,7 +1895,7 @@ We do not find security or privacy concerns on exposing the timestamp, especiall
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.</p>
    <p>The choice of 104ms as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①⓪">duration</a></code> is just the first multiple of 8 greater than 100ms.
-An event whose rounded duration is greater than or equal to 104 ms will have its pre-rounded duration greater than or equal to 100ms.
+An event whose rounded duration is greater than or equal to 104ms will have its pre-rounded duration greater than or equal to 100ms.
 Such events are not handled in accordance with the RAIL performance model, which suggests applications respond within 100ms to user input.</p>
   </main>
   <div data-fill-with="conformance">
