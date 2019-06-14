@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 6dcfb71280c822ba1243caec7a720fa926b21c7e" name="generator">
+  <meta content="Bikeshed version 872cce6d3026423d677f3bd5837f1a1a46299a04" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="26c746bfce8aca211979baaf936c0227152d4ebb" name="document-revision">
+  <meta content="23f1f8e9aa956ffb165cba87e5cfea636ab7dc65" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-23">23 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-06-14">14 June 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1652,16 +1652,11 @@ return true.</p>
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="boolean" href="#dom-performanceeventtiming-cancelable" id="ref-for-dom-performanceeventtiming-cancelable"><c- g>cancelable</c-></a>;
 };
 </pre>
-   <p>A user agent implementing the Event Timing API must perform the following steps:</p>
-   <ol>
-    <li data-md>
-     <p>Run the <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-register-a-performance-entry-type" id="ref-for-dfn-register-a-performance-entry-type">register a performance entry type</a> algorithm  with "<code class="highlight">firstInput</code>" as input.</p>
-    <li data-md>
-     <p>Run the <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-register-a-performance-entry-type" id="ref-for-dfn-register-a-performance-entry-type①">register a performance entry type</a> algorithm  with "<code class="highlight">event</code>" as input.</p>
-   </ol>
+   <p class="note" role="note"><span>Note:</span> A user agent implementing the Event Timing API would need to include "<code class="highlight">firstInput</code>" and "<code class="highlight">event</code>" in <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute" id="ref-for-supportedentrytypes-attribute">supportedEntryTypes</a></code>.
+This allows developers to detect support for event timing.</p>
    <div class="non-normative">
     <p><em> This remainder of this section is non-normative.
-    The values of the attributes of <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①">PerformanceEventTiming</a></code> are set in the processing model in <a href="#sec-processing-model">§3 Processing model</a>.
+    The values of the attributes of <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①">PerformanceEventTiming</a></code> are set in the processing model in <a href="#sec-processing-model">§ 3 Processing model</a>.
     This section provides an informative summary of how they will be set. </em></p>
     <p>Each <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming②">PerformanceEventTiming</a></code> object reports timing information about an <dfn class="dfn-paneled" data-dfn-for="PerformanceEventTiming" data-dfn-type="dfn" data-noexport id="performanceeventtiming-associated-event">associated <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event">Event</a></code></dfn>.</p>
     <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming③">PerformanceEventTiming</a></code> extends the following attributes of the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface" id="ref-for-the-performanceentry-interface①">PerformanceEntry</a></code> interface:</p>
@@ -1696,7 +1691,7 @@ return true.</p>
 };
 </pre>
    <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <a href="Event/type">types</a> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type②">type</a></code>.
-Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type③">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑤">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§1.1 Events exposed</a>) are counted via this map.</p>
+Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type③">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑤">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§ 1.1 Events exposed</a>) are counted via this map.</p>
    <h3 class="heading settled" data-level="2.3" id="sec-extensions"><span class="secno">2.3. </span><span class="content">Extensions to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance">Performance</a></code> interface</span><a class="self-link" href="#sec-extensions"></a></h3>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance①"><c- g>Performance</c-></a> {
@@ -2224,18 +2219,18 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-dfn-queue-a-performanceentry">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dfn-queue-a-performanceentry①">(2)</a> <a href="#ref-for-dfn-queue-a-performanceentry②">(3)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-register-a-performance-entry-type">
-   <a href="https://w3c.github.io/performance-timeline/#dfn-register-a-performance-entry-type">https://w3c.github.io/performance-timeline/#dfn-register-a-performance-entry-type</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-register-a-performance-entry-type">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dfn-register-a-performance-entry-type①">(2)</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-starttime">
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime">https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-starttime">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-starttime①">(2)</a> <a href="#ref-for-dom-performanceentry-starttime②">(3)</a>
     <li><a href="#ref-for-dom-performanceentry-starttime③">3.3. Initialize event timing</a> <a href="#ref-for-dom-performanceentry-starttime④">(2)</a> <a href="#ref-for-dom-performanceentry-starttime⑤">(3)</a>
     <li><a href="#ref-for-dom-performanceentry-starttime⑥">3.5. Dispatch pending Event Timing entries</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-supportedentrytypes-attribute">
+   <a href="https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute">https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-supportedentrytypes-attribute">2.1. PerformanceEventTiming interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-the-gotpointercapture-event">
@@ -2525,8 +2520,8 @@ Such events are not handled in accordance with the RAIL performance model, which
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-entrytype" style="color:initial">entryType</span>
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-name" style="color:initial">name</span>
      <li><span class="dfn-paneled" id="term-for-dfn-queue-a-performanceentry" style="color:initial">queue the entry</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-register-a-performance-entry-type" style="color:initial">register a performance entry type</span>
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-starttime" style="color:initial">startTime</span>
+     <li><span class="dfn-paneled" id="term-for-supportedentrytypes-attribute" style="color:initial">supportedEntryTypes</span>
     </ul>
    <li>
     <a data-link-type="biblio">[pointerevents]</a> defines the following terms:
@@ -2609,7 +2604,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <dt id="biblio-touch-events">[TOUCH-EVENTS]
    <dd>Doug Schepers; et al. <a href="https://www.w3.org/TR/touch-events/">Touch Events</a>. 10 October 2013. REC. URL: <a href="https://www.w3.org/TR/touch-events/">https://www.w3.org/TR/touch-events/</a>
    <dt id="biblio-uievents">[UIEVENTS]
-   <dd>Gary Kacmarcik; Travis Leithead; Doug Schepers. <a href="https://www.w3.org/TR/uievents/">UI Events</a>. 8 November 2018. WD. URL: <a href="https://www.w3.org/TR/uievents/">https://www.w3.org/TR/uievents/</a>
+   <dd>Gary Kacmarcik; Travis Leithead; Doug Schepers. <a href="https://www.w3.org/TR/uievents/">UI Events</a>. 30 May 2019. WD. URL: <a href="https://www.w3.org/TR/uievents/">https://www.w3.org/TR/uievents/</a>
    <dt id="biblio-webidl">[WebIDL]
    <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/">Web IDL</a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
   </dl>
