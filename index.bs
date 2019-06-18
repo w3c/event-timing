@@ -307,6 +307,9 @@ Modifications to the DOM specification {#sec-modifications-DOM}
     * <a>Finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 </div>
 
+Note: If the user agent skips the <a>event dispatch algorithm</a>, it can still choose to include an entry for that {{Event}}.
+In this case, it will estimate the value of {{PerformanceEventTiming/processingStart}} and set the {{PerformanceEventTiming/processingEnd}} to the same value.
+
 Modifications to the HTML specification {#sec-modifications-HTML}
 --------------------------------------------------------
 
@@ -388,31 +391,6 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
                     1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>firstInput</code>".
                     1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
 </div>
-
-Queueing other entries {#sec-queue-other}
---------------------------------------------------------
-
-Some user agents skip some steps of the <a>event dispatch algorithm</a> for some events.
-In fact, this is theoretically possible for any event which does not have associated event handlers or cause user agent defined behavior.
-If the input is the first input, then the user agent MUST always queue the corresponding "<code>firstInput</code>" entry and it MUST do so via the <a>event dispatch algorithm</a>.
-Otherwise, the user agent MAY opt not to queue the entry when there are no event handlers associated to the event.
-This provides user agents with the flexibility to ignore input which never blocks on the main thread and for which <a>event dispatch algorithm</a> is skipped.
-
-<div algorithm="report outside of event dispatch">
-    To <dfn export>create an event timing entry</dfn> outside of the <a>event dispatch algorithm</a>, the user agent must run the following steps:
-
-    1. Let <var>event</var> be the event being measured and let <var>window</var> be the <a>relevant global object</a> of the target.
-    1. Assert: <var>window</var> <a>implements</a> {{Window}}.
-    1. Let <var>timingEntry</var> be the result of <a lt='initialize event timing'>initializing event timing</a>, given <var>event</var> and <code>0</code>.
-    1. <a>Finalize event timing</a> passing in <var>timingEntry</var>, <var>window</var>, and <code>0</code> as inputs.
-</div>
-
-Note: processing the first input entry via the <a>event dispatch algorithm</a> ensures that the first input's {{PerformanceEntry/duration}} is calculated accurately.
-If skipping first inputs without event handlers was allowed, or if they were processed outside of <a>event dispatch algorithm</a>, then statistical biases could be introduced.
-For example, consider a website which initially only has a few event handlers.
-This website would only receive first input entries for events targetting those event handlers, so the first input's {{PerformanceEntry/duration}} would be large on average.
-If the website then added a trivial event handler for the page, the average first input {{PerformanceEntry/duration}} would decrease because it would now receive many first inputs from events that do not trigger the non-trivial event handlers.
-But, in practice, the website having the trivial event handler will handle input more slowly.
 
 Security & privacy considerations {#priv-sec}
 ===============================================
