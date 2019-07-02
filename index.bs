@@ -181,7 +181,7 @@ Usage example {#sec-example}
     observer.observe({entryTypes: ["event"]});
     ...
     // Later on, we can also directly query the first input information.
-    const firstArray = performance.getEntriesByType('firstInput');
+    const firstArray = performance.getEntriesByType('first-input');
     if (firstArray.length !== 0) {
         const firstInput = firstArray[0];
         // Process the first input event and report back...
@@ -212,7 +212,7 @@ interface PerformanceEventTiming : PerformanceEntry {
 };
 </pre>
 
-Note: A user agent implementing the Event Timing API would need to include "<code>firstInput</code>" and "<code>event</code>" in {{PerformanceObserver/supportedEntryTypes}} for {{Window}} contexts.
+Note: A user agent implementing the Event Timing API would need to include "<code>first-input</code>" and "<code>event</code>" in {{PerformanceObserver/supportedEntryTypes}} for {{Window}} contexts.
 This allows developers to detect support for event timing.
 
 <div class="non-normative">
@@ -231,7 +231,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dt>{{PerformanceEntry/name}}</dt>
     <dd>The {{PerformanceEntry/name}} attribute's getter provides the <a>associated event</a>'s {{Event/type}}.</dd>
     <dt>{{PerformanceEntry/entryType}}</dt>
-    <dd>The {{PerformanceEntry/entryType}} attribute's getter returns "<code>event</code>" (for long events) or "<code>firstInput</code>" (for the first user interaction).</dd>
+    <dd>The {{PerformanceEntry/entryType}} attribute's getter returns "<code>event</code>" (for long events) or "<code>first-input</code>" (for the first user interaction).</dd>
     <dt>{{PerformanceEntry/startTime}}</dt>
     <dd>The {{PerformanceEntry/startTime}} attribute's getter returns the <a>associated event</a>'s {{Event/timeStamp}}.</dd>
     <dt>{{PerformanceEntry/duration}}</dt>
@@ -380,7 +380,7 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. If <var>window</var>'s <a>has dispatched event</a> is false, run the following steps:
             1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
                 1. Set <var>window</var>'s <a>pending pointer down</a> to a copy of <var>timingEntry</var>.
-                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending pointer down</a> to "<code>firstInput</code>".
+                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending pointer down</a> to "<code>first-input</code>".
             1. Otherwise, run the following steps:
                 1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending pointer down</a> is not null, then:
                     1. Set <var>window</var>'s <a>has dispatched event</a> to true.
@@ -388,7 +388,7 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
                 1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
                     1. Set <var>window</var>'s <a>has dispatched event</a> to true.
                     1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
-                    1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>firstInput</code>".
+                    1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
                     1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
 </div>
 
