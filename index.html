@@ -1029,7 +1029,7 @@ Possible extra rowspan handling
 		}
 	/* } */
 
-	@supports (display:grid) {
+	@supports (display:grid) and (display:contents) {
 		/* Use #toc over .toc to override non-@supports rules. */
 		#toc {
 			display: grid;
@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 872cce6d3026423d677f3bd5837f1a1a46299a04" name="generator">
+  <meta content="Bikeshed version 30aa90d768746168deba12493f1f3622df2814b6" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="7068fb1c8142912fb1ee4fb0e145bb2568442fc2" name="document-revision">
+  <meta content="b1f361f32be3ca2cee6bcb83597b6cda61cbc3b9" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-06-18">18 June 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-07-03">3 July 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1610,7 +1610,7 @@ return true.</p>
      <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click①">click</a></code></p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="sec-example"><span class="secno">1.2. </span><span class="content">Usage example</span><a class="self-link" href="#sec-example"></a></h3>
-<pre class="example highlight" id="example-031ada12"><a class="self-link" href="#example-031ada12"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
+<pre class="example highlight" id="example-fab5e5f9"><a class="self-link" href="#example-fab5e5f9"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
         <c- kr>const</c-> perfEntries <c- o>=</c-> list<c- p>.</c->getEntries<c- p>().</c->forEach<c- p>(</c->entry <c- p>=></c-> <c- p>{</c->
             <c- k>if</c-> <c- p>(</c->entry<c- p>.</c->processingStart <c- o>!==</c-> <c- mi>0</c-><c- p>)</c-> <c- p>{</c->
                 <c- kr>const</c-> inputDelay <c- o>=</c-> entry<c- p>.</c->processingStart <c- o>-</c-> entry<c- p>.</c->startTime<c- p>;</c->
@@ -1623,7 +1623,7 @@ return true.</p>
     observer<c- p>.</c->observe<c- p>({</c->entryTypes<c- o>:</c-> <c- p>[</c-><c- u>"event"</c-><c- p>]});</c->
     <c- p>...</c->
     <c- c1>// Later on, we can also directly query the first input information.</c->
-    <c- kr>const</c-> firstArray <c- o>=</c-> performance<c- p>.</c->getEntriesByType<c- p>(</c-><c- t>'firstInput'</c-><c- p>);</c->
+    <c- kr>const</c-> firstArray <c- o>=</c-> performance<c- p>.</c->getEntriesByType<c- p>(</c-><c- t>'first-input'</c-><c- p>);</c->
     <c- k>if</c-> <c- p>(</c->firstArray<c- p>.</c->length <c- o>!==</c-> <c- mi>0</c-><c- p>)</c-> <c- p>{</c->
         <c- kr>const</c-> firstInput <c- o>=</c-> firstArray<c- p>[</c-><c- mi>0</c-><c- p>];</c->
         <c- c1>// Process the first input event and report back...</c->
@@ -1651,7 +1651,7 @@ return true.</p>
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="boolean" href="#dom-performanceeventtiming-cancelable" id="ref-for-dom-performanceeventtiming-cancelable"><c- g>cancelable</c-></a>;
 };
 </pre>
-   <p class="note" role="note"><span>Note:</span> A user agent implementing the Event Timing API would need to include "<code class="highlight">firstInput</code>" and "<code class="highlight">event</code>" in <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute" id="ref-for-supportedentrytypes-attribute">supportedEntryTypes</a></code> for <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> contexts.
+   <p class="note" role="note"><span>Note:</span> A user agent implementing the Event Timing API would need to include "<code class="highlight">first<c- o>-</c->input</code>" and "<code class="highlight">event</code>" in <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute" id="ref-for-supportedentrytypes-attribute">supportedEntryTypes</a></code> for <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> contexts.
 This allows developers to detect support for event timing.</p>
    <div class="non-normative">
     <p><em> This remainder of this section is non-normative.
@@ -1663,7 +1663,7 @@ This allows developers to detect support for event timing.</p>
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name">name</a></code>
      <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name①">name</a></code> attribute’s getter provides the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①">type</a></code>.
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype">entryType</a></code>
-     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype①">entryType</a></code> attribute’s getter returns "<code class="highlight">event</code>" (for long events) or "<code class="highlight">firstInput</code>" (for the first user interaction).
+     <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype①">entryType</a></code> attribute’s getter returns "<code class="highlight">event</code>" (for long events) or "<code class="highlight">first<c- o>-</c->input</code>" (for the first user interaction).
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime">startTime</a></code>
      <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime①">startTime</a></code> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event①">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp①">timeStamp</a></code>.
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration">duration</a></code>
@@ -1823,7 +1823,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
            <li data-md>
             <p>Set <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down">pending pointer down</a> to a copy of <var>timingEntry</var>.</p>
            <li data-md>
-            <p>Set the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype③">entryType</a></code> of <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down①">pending pointer down</a> to "<code class="highlight">firstInput</code>".</p>
+            <p>Set the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype③">entryType</a></code> of <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down①">pending pointer down</a> to "<code class="highlight">first<c- o>-</c->input</code>".</p>
           </ol>
          <li data-md>
           <p>Otherwise, run the following steps:</p>
@@ -1844,7 +1844,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
              <li data-md>
               <p>Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.</p>
              <li data-md>
-              <p>Set <var>newFirstInputDelayEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype④">entryType</a></code> to "<code class="highlight">firstInput</code>".</p>
+              <p>Set <var>newFirstInputDelayEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype④">entryType</a></code> to "<code class="highlight">first<c- o>-</c->input</code>".</p>
              <li data-md>
               <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry②">Queue the entry</a> <var>newFirstInputDelayEntry</var>.</p>
             </ol>
@@ -2562,13 +2562,13 @@ Such events are not handled in accordance with the RAIL performance model, which
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-hr-time-2">[HR-TIME-2]
-   <dd>Ilya Grigorik; James Simonsen; Jatinder Mann. <a href="https://www.w3.org/TR/hr-time-2/">High Resolution Time Level 2</a>. 1 March 2018. CR. URL: <a href="https://www.w3.org/TR/hr-time-2/">https://www.w3.org/TR/hr-time-2/</a>
+   <dd>Ilya Grigorik; James Simonsen; Jatinder Mann. <a href="https://www.w3.org/TR/hr-time-2/">High Resolution Time Level 2</a>. 26 June 2019. CR. URL: <a href="https://www.w3.org/TR/hr-time-2/">https://www.w3.org/TR/hr-time-2/</a>
    <dt id="biblio-html">[HTML]
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-paint-timing">[PAINT-TIMING]
    <dd>Shubhie Panicker. <a href="https://www.w3.org/TR/paint-timing/">Paint Timing 1</a>. 7 September 2017. WD. URL: <a href="https://www.w3.org/TR/paint-timing/">https://www.w3.org/TR/paint-timing/</a>
    <dt id="biblio-performance-timeline-2">[PERFORMANCE-TIMELINE-2]
-   <dd>Ilya Grigorik. <a href="https://www.w3.org/TR/performance-timeline-2/">Performance Timeline Level 2</a>. 23 April 2019. WD. URL: <a href="https://www.w3.org/TR/performance-timeline-2/">https://www.w3.org/TR/performance-timeline-2/</a>
+   <dd>Ilya Grigorik. <a href="https://www.w3.org/TR/performance-timeline-2/">Performance Timeline Level 2</a>. 26 June 2019. WD. URL: <a href="https://www.w3.org/TR/performance-timeline-2/">https://www.w3.org/TR/performance-timeline-2/</a>
    <dt id="biblio-pointerevents">[POINTEREVENTS]
    <dd>Jacob Rossi; Matt Brubeck. <a href="https://www.w3.org/TR/pointerevents/">Pointer Events</a>. 4 April 2019. REC. URL: <a href="https://www.w3.org/TR/pointerevents/">https://www.w3.org/TR/pointerevents/</a>
    <dt id="biblio-rfc2119">[RFC2119]
