@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 30aa90d768746168deba12493f1f3622df2814b6" name="generator">
+  <meta content="Bikeshed version a3b64e58e069c2e8a9ffcadffb76601231663a47" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="b1f361f32be3ca2cee6bcb83597b6cda61cbc3b9" name="document-revision">
+  <meta content="63de466552d17546a495d19f3b72d27dea92d0af" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1473,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-07-03">3 July 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-07-16">16 July 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1721,7 +1721,7 @@ In this case, it will estimate the value of <code class="idl"><a data-link-type=
    <p><em>This section will be removed once the <a href="https://html.spec.whatwg.org/multipage">HTML specification</a> has been modified.</em></p>
    <p>Each <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①">Window</a></code> has <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="pending-event-entries">pending event entries</dfn>, a list that stores <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑥">PerformanceEventTiming</a></code> objects, which will initially be empty.
 Each <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②">Window</a></code> also has <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="pending-pointer-down">pending pointer down</dfn>, a pointer to a <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑦">PerformanceEventTiming</a></code> entry which is initially null.
-Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code> has <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="has-dispatched-event">has dispatched event</dfn>, a boolean which is initially set to false.</p>
+Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code> has <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="has-dispatched-input-event">has dispatched input event</dfn>, a boolean which is initially set to false.</p>
    <div class="algorithm" data-algorithm="additions to update rendering">
      In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering①">update the rendering</a> step of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model">event loop processing model</a>, add a step right after the step that calls <a data-link-type="dfn" href="https://w3c.github.io/paint-timing/#mark-paint-timing" id="ref-for-mark-paint-timing">mark paint timing</a>: 
     <ol>
@@ -1815,7 +1815,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
        <li data-md>
         <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> attribute value is greater than or equal to 104, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue</a> <var>timingEntry</var>.</p>
        <li data-md>
-        <p>If <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-event" id="ref-for-has-dispatched-event">has dispatched event</a> is false, run the following steps:</p>
+        <p>If <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-input-event" id="ref-for-has-dispatched-input-event">has dispatched input event</a> is false, run the following steps:</p>
         <ol>
          <li data-md>
           <p>If <var>name</var> is "<code class="highlight">pointerdown</code>", run the following steps:</p>
@@ -1832,7 +1832,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
             <p>If <var>name</var> is "<code class="highlight">pointerup</code>" AND if <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down②">pending pointer down</a> is not null, then:</p>
             <ol>
              <li data-md>
-              <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-event" id="ref-for-has-dispatched-event①">has dispatched event</a> to true.</p>
+              <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-input-event" id="ref-for-has-dispatched-input-event①">has dispatched input event</a> to true.</p>
              <li data-md>
               <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry①">Queue</a> <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down③">pending pointer down</a>.</p>
             </ol>
@@ -1840,7 +1840,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
             <p>Otherwise, if <var>name</var> is one of "<code class="highlight">click</code>", "<code class="highlight">keydown</code>" or "<code class="highlight">mousedown</code>", then:</p>
             <ol>
              <li data-md>
-              <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-event" id="ref-for-has-dispatched-event②">has dispatched event</a> to true.</p>
+              <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-input-event" id="ref-for-has-dispatched-input-event②">has dispatched input event</a> to true.</p>
              <li data-md>
               <p>Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.</p>
              <li data-md>
@@ -2025,7 +2025,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <li><a href="#dom-performance-eventcounts">eventCounts</a><span>, in §2.3</span>
    <li><a href="#eventcounts">EventCounts</a><span>, in §2.2</span>
    <li><a href="#finalize-event-timing">finalize event timing</a><span>, in §3.4</span>
-   <li><a href="#has-dispatched-event">has dispatched event</a><span>, in §3.2</span>
+   <li><a href="#has-dispatched-input-event">has dispatched input event</a><span>, in §3.2</span>
    <li><a href="#initialize-event-timing">initialize event timing</a><span>, in §3.3</span>
    <li><a href="#pending-event-entries">pending event entries</a><span>, in §3.2</span>
    <li><a href="#pending-pointer-down">pending pointer down</a><span>, in §3.2</span>
@@ -2672,10 +2672,10 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-pending-pointer-down">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-pending-pointer-down①">(2)</a> <a href="#ref-for-pending-pointer-down②">(3)</a> <a href="#ref-for-pending-pointer-down③">(4)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="has-dispatched-event">
-   <b><a href="#has-dispatched-event">#has-dispatched-event</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="has-dispatched-input-event">
+   <b><a href="#has-dispatched-input-event">#has-dispatched-input-event</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-has-dispatched-event">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-has-dispatched-event①">(2)</a> <a href="#ref-for-has-dispatched-event②">(3)</a>
+    <li><a href="#ref-for-has-dispatched-input-event">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-has-dispatched-input-event①">(2)</a> <a href="#ref-for-has-dispatched-input-event②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="initialize-event-timing">
