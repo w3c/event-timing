@@ -317,7 +317,7 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
-Finally, each {{Window}} has <dfn>has dispatched event</dfn>, a boolean which is initially set to false.
+Finally, each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -377,16 +377,16 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
                 1. Add <var>mapEntry</var> to <var>performance</var>'s {{Performance/eventCounts}} attribute value.
             1. Otherwise, increase the <a>map entry</a>'s value by 1.
         1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 104, then <a lt='queue the entry'>queue</a> <var>timingEntry</var>.
-        1. If <var>window</var>'s <a>has dispatched event</a> is false, run the following steps:
+        1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
             1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
                 1. Set <var>window</var>'s <a>pending pointer down</a> to a copy of <var>timingEntry</var>.
                 1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending pointer down</a> to "<code>first-input</code>".
             1. Otherwise, run the following steps:
                 1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending pointer down</a> is not null, then:
-                    1. Set <var>window</var>'s <a>has dispatched event</a> to true.
+                    1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
                     1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending pointer down</a>.
                 1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
-                    1. Set <var>window</var>'s <a>has dispatched event</a> to true.
+                    1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
                     1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
                     1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
                     1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
