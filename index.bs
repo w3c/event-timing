@@ -170,11 +170,9 @@ Usage example {#sec-example}
 <pre class="example highlight">
     const observer = new PerformanceObserver(function(list) {
         const perfEntries = list.getEntries().forEach(entry => {
-            if (entry.processingStart !== 0) {
-                const inputDelay = entry.processingStart - entry.startTime;
-                // Report the input delay when the processing start was provided.
-            }
-            // Report full input duration via entry.duration.
+            const inputDelay = entry.processingStart - entry.startTime;
+            // Report the input delay when the processing start was provided.
+            // Also report the full input duration via entry.duration.
         });
     });
     // Register observer for event.
@@ -246,13 +244,11 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
 <dl dfn-type=attribute dfn-for=PerformanceEventTiming link-for=PerformanceEventTiming>
     <dt>{{processingStart}}</dt>
     <dd>
-        The <dfn export>processingStart</dfn> attribute's getter returns the time when event handlers start to execute, or
-        0 if the event dispatching logic is skipped (this can happen when there are no event handlers).
+        The <dfn export>processingStart</dfn> attribute's getter returns the time when event handlers start to execute.
     </dd>
     <dt>{{processingEnd}}</dt>
     <dd>
-        The <dfn export>processingEnd</dfn> attribute's getter returns the time when event handlers have finished executing, or
-        0 if the event dispatching logic is skipped (this can happen when there are no event handlers).
+        The <dfn export>processingEnd</dfn> attribute's getter returns the time when event handlers have finished executing. It could be equal to {{processingStart}} when there are no such event handlers.
     </dd>
     <dt>{{cancelable}}</dt>
     <dd>
@@ -308,7 +304,7 @@ Modifications to the DOM specification {#sec-modifications-DOM}
     * <a>Finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 </div>
 
-Note: If the user agent skips the <a>event dispatch algorithm</a>, it can still choose to include an entry for that {{Event}}.
+Note: If a user agent skips the <a>event dispatch algorithm</a>, it can still choose to include an entry for that {{Event}}.
 In this case, it will estimate the value of {{PerformanceEventTiming/processingStart}} and set the {{PerformanceEventTiming/processingEnd}} to the same value.
 
 Modifications to the HTML specification {#sec-modifications-HTML}
