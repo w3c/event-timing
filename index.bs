@@ -244,11 +244,11 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
 <dl dfn-type=attribute dfn-for=PerformanceEventTiming link-for=PerformanceEventTiming>
     <dt>{{processingStart}}</dt>
     <dd>
-        The <dfn export>processingStart</dfn> attribute's getter returns the time when event handlers start to execute.
+        The <dfn export>processingStart</dfn> attribute's getter returns a timestamp captured at the beginning of the <a link-for=''>event dispatch algorithm</a>. This is when event handlers are about to be executed.
     </dd>
     <dt>{{processingEnd}}</dt>
     <dd>
-        The <dfn export>processingEnd</dfn> attribute's getter returns the time when event handlers have finished executing. It could be equal to {{processingStart}} when there are no such event handlers.
+        The <dfn export>processingEnd</dfn> attribute's getter returns a timestamp captured at the end of the <a link-for=''>event dispatch algorithm</a>. This is when event handlers have finished executing. It's equal to {{processingStart}} when there are no such event handlers.
     </dd>
     <dt>{{cancelable}}</dt>
     <dd>
