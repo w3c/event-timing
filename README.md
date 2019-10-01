@@ -43,10 +43,8 @@ interface PerformanceEventTiming : PerformanceEntry {
     // The event timestamp.
     readonly attribute DOMHighResTimeStamp startTime;
     // The time the first event handler started to execute.
-    // |startTime| if no event handlers executed.
     readonly attribute DOMHighResTimeStamp processingStart;
     // The time the last event handler finished executing.
-    // |startTime| if no event handlers executed.
     readonly attribute DOMHighResTimeStamp processingEnd;    
     // The duration between |startTime| and the next time we "update the rendering 
     // or user interface of that Document and its browsing context to reflect the 
