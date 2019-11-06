@@ -84,23 +84,40 @@ performanceObserver.observe({entryTypes:['event']});
 ```
 
 ## First Input Timing
+User interactions are not processed instantly because the browser needs to complete at least its current task before it can begin processing the interaction.
+We define the input delay as the difference between the time at which an input begins being processed and the input event's hardware timestamp.
+The input delay can be computed via EventTiming: it is `entry.processingStart` - `entry.startTime`.
+
 The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
-In Chrome, the 99'th percentile of the `entry.processingStart` - `entry.startTime` for the following events is over 1 second:
+We define the First Input Delay (FID) as the delay for the first among the following events:
 * Key down
 * Mouse down
 * Pointer down which is followed by a pointer up
 * Click
 
-This is ~4x the 99'th percentile of these events overall.
-In the median, we see ~10ms for the first event, and ~2.5ms for subsequent events.
+In Chrome, the 99'th percentile of FID is over 1 second.
+This is ~4x the 99'th percentile of the input delay of these events overall.
+In the median, we see a delay of ~10ms for the first event, and ~2.5ms for subsequent events.
 
 This list intentionally excludes scrolls, which are often not blocked on javascript execution.
 
-In order to address capture user pain caused by slow initial interactions, we propose always reporting first input timing within the event timing API specific to this use-case.
-      
-FirstInputDelay can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example.
-However, this requires registering analytics JS before any events are processed, which is often not possible.
-First Input Delay can also be polyfilled on top of the event timing API, but it isn't very ergonomic, and due to the asynchrony of `performance.eventCounts` can sometimes incorrectly report an event as the first event when there was a prior event less than 100ms.
+In order to address capture user pain caused by slow initial interactions, we propose always reporting first input timing within the Event Timing API.
+We do this by exposing a `PerformanceEventTiming` whose `entryType` is `first-input`.
+This event does not have the `duration` requirement, it just needs to be one among the event types described above.
+Thus, FID can be computed via the Event Timing API as follows:
+
+```javascript
+new PerformanceObserver((entries, observer) => {
+  // There should be a single entry.
+  const firstInput = entries().getEntries()[0];
+  const inputDelay = firstInput.processingStart - firstInput.startTime;
+  // Report inputDelay to analytics.
+  observer.disconnect();
+}).observe({type: 'first-input', buffered: true]});
+```
+
+FID can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example.
+However, this requires registering analytics JS before any events are processed, which is often impossible or undesirable.
 
 ## Specific Use Cases
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
