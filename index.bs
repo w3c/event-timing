@@ -102,9 +102,10 @@ A common way to monitor event latency consists of registering an event listener.
 The timestamp at which the event was created can be obtained via the event's {{Event/timeStamp}}.
 In addition, {{Performance/now()|performance.now()}} could be called both at the beginning and at the end of the event handler logic.
 By subtracting the hardware timestamp from the timestamp obtained at the beginning of the event handler,
-the developer can compute the input delay: the time it takes for an input to start being processed.
+the developer can compute the <b>input delay</b>: the time it takes for an input to start being processed.
 By subtracting the timestamp obtained at the beginning of the event handler from the timestamp obtained at the end of the event handler,
 the developer can compute the amount of synchronous work performed in the event handler.
+Finally, when inputs are handled synchronously, the duration from event hardware timestamp to the next paint after the event is handled is a useful user experience metric.
 
 This approach has several fundamental flaws.
 First, requiring event listeners precludes measuring event latency very early in the page load because
@@ -127,6 +128,7 @@ It's slow because it's often blocked on JavaScript execution that is not properl
 The latency of the website's response to the first user interaction can be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
 This allows developers to measure percentiles and improvements without having to register event handlers.
+In particular, this API enables measuring the <b>first input delay (FID)</b>, the delay in processing for the first "discrete" input event.
 
 </div>
 
@@ -178,16 +180,26 @@ Usage example {#sec-example}
     // Register observer for event.
     observer.observe({entryTypes: ["event"]});
     ...
-    // Later on, we can also directly query the first input information.
-    const firstArray = performance.getEntriesByType('first-input');
-    if (firstArray.length !== 0) {
-        const firstInput = firstArray[0];
-        // Process the first input event and report back...
-    }
+    // We can also directly query the first input information.
+    new PerformanceObserver(function(list, obs) {
+        const firstInput = list.getEntries()[0];
+
+        // Measure the delay to begin processing the first input event.
+        const firstInputDelay = firstInput.processingStart - firstInput.startTime;
+        // Measure the duration of processing the first input event.
+        // Only use when the important event handling work is done synchronously in the handlers.
+        const firstInputDuration = firstInput.duration;
+        // Process the first input delay and perhaps its duration...
+
+        // Disconnect this observer since callback is only triggered once.
+        obs.disconnect();
+    }).observe({type: 'first-input', buffered: true});
+
 }
 </pre>
 
 The following are sample use cases that could be achieved by using this API:
+* Gather FID data (see <code>firstInputDelay</code> on the example above) on a website and track its performance over time.
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
 * A user drags a slider to control volume. Measure the latency to drag the slider.
 * Hovering a menu item triggers a flyout menu. Measure the latency for the flyout to appear.
