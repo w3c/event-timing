@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 2dbd5e1f0bb11704a5d90167ddaef9475f9c26b3" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="93ec45ca50d27559864f8af03626746b095c795b" name="document-revision">
+  <meta content="64d9b1f1fbbe6e802dd9030c3a3f7a9aa4dd6b66" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1560,9 +1560,10 @@ Therefore, it is important to surface input events that could not achieve those 
 The timestamp at which the event was created can be obtained via the event’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp">timeStamp</a></code>.
 In addition, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-performance-now" id="ref-for-dom-performance-now">performance.now()</a></code> could be called both at the beginning and at the end of the event handler logic.
 By subtracting the hardware timestamp from the timestamp obtained at the beginning of the event handler,
-the developer can compute the input delay: the time it takes for an input to start being processed.
+the developer can compute the <b>input delay</b>: the time it takes for an input to start being processed.
 By subtracting the timestamp obtained at the beginning of the event handler from the timestamp obtained at the end of the event handler,
-the developer can compute the amount of synchronous work performed in the event handler.</p>
+the developer can compute the amount of synchronous work performed in the event handler.
+Finally, when inputs are handled synchronously, the duration from event hardware timestamp to the next paint after the event is handled is a useful user experience metric.</p>
     <p>This approach has several fundamental flaws.
 First, requiring event listeners precludes measuring event latency very early in the page load because
 listeners will likely not be registered yet at that point in time.
@@ -1581,7 +1582,8 @@ This can be useful to measure the overhead of website modifications that are tri
 It’s slow because it’s often blocked on JavaScript execution that is not properly split into chunks during page load.
 The latency of the website’s response to the first user interaction can be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
-This allows developers to measure percentiles and improvements without having to register event handlers.</p>
+This allows developers to measure percentiles and improvements without having to register event handlers.
+In particular, this API enables measuring the <b>first input delay (FID)</b>, the delay in processing for the first "discrete" input event.</p>
    </div>
    <h3 class="heading settled" data-level="1.1" id="sec-events-exposed"><span class="secno">1.1. </span><span class="content">Events exposed</span><a class="self-link" href="#sec-events-exposed"></a></h3>
    <p>The Event Timing API exposes timing information for certain events.
@@ -1610,7 +1612,7 @@ return true.</p>
      <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click①">click</a></code></p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="sec-example"><span class="secno">1.2. </span><span class="content">Usage example</span><a class="self-link" href="#sec-example"></a></h3>
-<pre class="example highlight" id="example-9f9bfc61"><a class="self-link" href="#example-9f9bfc61"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
+<pre class="example highlight" id="example-c36e2dd7"><a class="self-link" href="#example-c36e2dd7"></a>    <c- kr>const</c-> observer <c- o>=</c-> <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>)</c-> <c- p>{</c->
         <c- kr>const</c-> perfEntries <c- o>=</c-> list<c- p>.</c->getEntries<c- p>().</c->forEach<c- p>(</c->entry <c- p>=></c-> <c- p>{</c->
             <c- kr>const</c-> inputDelay <c- o>=</c-> entry<c- p>.</c->processingStart <c- o>-</c-> entry<c- p>.</c->startTime<c- p>;</c->
             <c- c1>// Report the input delay when the processing start was provided.</c->
@@ -1620,16 +1622,27 @@ return true.</p>
     <c- c1>// Register observer for event.</c->
     observer<c- p>.</c->observe<c- p>({</c->entryTypes<c- o>:</c-> <c- p>[</c-><c- u>"event"</c-><c- p>]});</c->
     <c- p>...</c->
-    <c- c1>// Later on, we can also directly query the first input information.</c->
-    <c- kr>const</c-> firstArray <c- o>=</c-> performance<c- p>.</c->getEntriesByType<c- p>(</c-><c- t>'first-input'</c-><c- p>);</c->
-    <c- k>if</c-> <c- p>(</c->firstArray<c- p>.</c->length <c- o>!==</c-> <c- mi>0</c-><c- p>)</c-> <c- p>{</c->
-        <c- kr>const</c-> firstInput <c- o>=</c-> firstArray<c- p>[</c-><c- mi>0</c-><c- p>];</c->
-        <c- c1>// Process the first input event and report back...</c->
-    <c- p>}</c->
+    <c- c1>// We can also directly query the first input information.</c->
+    <c- k>new</c-> PerformanceObserver<c- p>(</c-><c- a>function</c-><c- p>(</c->list<c- p>,</c-> obs<c- p>)</c-> <c- p>{</c->
+        <c- kr>const</c-> firstInput <c- o>=</c-> list<c- p>.</c->getEntries<c- p>()[</c-><c- mi>0</c-><c- p>];</c->
+
+        <c- c1>// Measure the delay to begin processing the first input event.</c->
+        <c- kr>const</c-> firstInputDelay <c- o>=</c-> firstInput<c- p>.</c->processingStart <c- o>-</c-> firstInput<c- p>.</c->startTime<c- p>;</c->
+        <c- c1>// Measure the duration of processing the first input event.</c->
+        <c- c1>// Only use when the important event handling work is done synchronously in the handlers.</c->
+        <c- kr>const</c-> firstInputDuration <c- o>=</c-> firstInput<c- p>.</c->duration<c- p>;</c->
+        <c- c1>// Process the first input delay and perhaps its duration...</c->
+
+        <c- c1>// Disconnect this observer since callback is only triggered once.</c->
+        obs<c- p>.</c->disconnect<c- p>();</c->
+    <c- p>}).</c->observe<c- p>({</c->type<c- o>:</c-> <c- t>'first-input'</c-><c- p>,</c-> buffered<c- o>:</c-> <c- kc>true</c-><c- p>});</c->
+
 <c- p>}</c->
 </pre>
    <p>The following are sample use cases that could be achieved by using this API:</p>
    <ul>
+    <li data-md>
+     <p>Gather FID data (see <code class="highlight">firstInputDelay</code> on the example above) on a website and track its performance over time.</p>
     <li data-md>
      <p>Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.</p>
     <li data-md>
