@@ -95,13 +95,13 @@ We define the First Input Delay (FID) as the delay for the first among the follo
 * Pointer down which is followed by a pointer up
 * Click
 
+This list intentionally excludes scrolls, which are often not blocked on javascript execution.
+
 In Chrome, the 99'th percentile of FID is over 1 second.
 This is ~4x the 99'th percentile of the input delay of these events overall.
 In the median, we see a delay of ~10ms for the first event, and ~2.5ms for subsequent events.
 
-This list intentionally excludes scrolls, which are often not blocked on javascript execution.
-
-In order to address capture user pain caused by slow initial interactions, we propose always reporting first input timing within the Event Timing API.
+In order to understand and address user pain caused by slow initial interactions, we propose always reporting first input timing within the Event Timing API.
 We do this by exposing a `PerformanceEventTiming` whose `entryType` is `first-input`.
 This event does not have the `duration` requirement, it just needs to be one among the event types described above.
 Thus, FID can be computed via the Event Timing API as follows:
@@ -117,7 +117,7 @@ new PerformanceObserver((entries, observer) => {
 ```
 
 FID can be polyfilled today: see [here](https://github.com/GoogleChromeLabs/first-input-delay) for an example.
-However, this requires registering analytics JS before any events are processed, which is often impossible or undesirable.
+However, this requires registering analytics JS before any events are processed, which is often impossible or undesirable for third party analytics providers, who do not have control over how their scripts are loaded and would like to be able to load them asynchronously to minimize their impact on page load speed.
 
 ## Specific Use Cases
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
