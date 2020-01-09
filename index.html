@@ -1167,6 +1167,18 @@ Possible extra rowspan handling
 		margin-left: auto;
 		margin-right: auto;
 	}
+	.overlarge {
+		/* Magic to create good table positioning:
+		   "content column" is 50ems wide at max; less on smaller screens.
+		   Extra space (after ToC + content) is empty on the right.
+
+		   1. When table < content column, centers table in column.
+		   2. When content < table < available, left-aligns.
+		   3. When table > available, fills available + scroll bar.
+		*/ 
+		display: grid;
+		grid-template-columns: minmax(0, 50em);
+	}
 	.overlarge > table {
 		/* limit preferred width of table */
 		max-width: 50em;
@@ -1176,7 +1188,6 @@ Possible extra rowspan handling
 
 	@media (min-width: 55em) {
 		.overlarge {
-			margin-left: calc(13px + 26.5rem - 50vw);
 			margin-right: calc(13px + 26.5rem - 50vw);
 			max-width: none;
 		}
@@ -1184,14 +1195,12 @@ Possible extra rowspan handling
 	@media screen and (min-width: 78em) {
 		body:not(.toc-inline) .overlarge {
 			/* 30.5em body padding 50em content area */
-			margin-left: calc(40em - 50vw) !important;
 			margin-right: calc(40em - 50vw) !important;
 		}
 	}
 	@media screen and (min-width: 90em) {
 		body:not(.toc-inline) .overlarge {
 			/* 4em html margin 30.5em body padding 50em content area */
-			margin-left: 0 !important;
 			margin-right: calc(84.5em - 100vw) !important;
 		}
 	}
@@ -1213,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 2dbd5e1f0bb11704a5d90167ddaef9475f9c26b3" name="generator">
+  <meta content="Bikeshed version 6a4c097ae8b731ee02752a258e8ac5ffbb752299" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="64d9b1f1fbbe6e802dd9030c3a3f7a9aa4dd6b66" name="document-revision">
+  <meta content="674b9803288e667685e3265651173cc42e126d23" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1473,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-11-07">7 November 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-01-09">9 January 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1488,7 +1497,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2019 the Contributors to the Event Timing API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2020 the Contributors to the Event Timing API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -1594,12 +1603,15 @@ Certain types of events are considered, and timing information is exposed when t
      <li data-md>
       <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-istrusted" id="ref-for-dom-event-istrusted">isTrusted</a></code> attribute value is set to false, return false.</p>
      <li data-md>
-      <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code> is one of the following: <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-auxclick" id="ref-for-event-type-auxclick">auxclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click">click</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-dblclick" id="ref-for-event-type-dblclick">dblclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousedown" id="ref-for-event-type-mousedown">mousedown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseenter" id="ref-for-event-type-mouseenter">mouseenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseleave" id="ref-for-event-type-mouseleave">mouseleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousemove" id="ref-for-event-type-mousemove">mousemove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseout" id="ref-for-event-type-mouseout">mouseout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseover" id="ref-for-event-type-mouseover">mouseover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseup" id="ref-for-event-type-mouseup">mouseup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerover-event" id="ref-for-the-pointerover-event">pointerover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerenter-event" id="ref-for-the-pointerenter-event">pointerenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event">pointerdown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointermove-event" id="ref-for-the-pointermove-event">pointermove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerout-event" id="ref-for-the-pointerout-event">pointerout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerleave-event" id="ref-for-the-pointerleave-event">pointerleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-gotpointercapture-event" id="ref-for-the-gotpointercapture-event">gotpointercapture</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-lostpointercapture-event" id="ref-for-the-lostpointercapture-event">lostpointercapture</a></code> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchstart-event" id="ref-for-the-touchstart-event">touchstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchend-event" id="ref-for-the-touchend-event">touchend</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchmove-event" id="ref-for-the-touchmove-event">touchmove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchcancel-event" id="ref-for-the-touchcancel-event">touchcancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown">keydown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup">keyup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-wheel" id="ref-for-event-type-wheel">wheel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-beforeinput" id="ref-for-event-type-beforeinput">beforeinput</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input">input</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionstart" id="ref-for-event-type-compositionstart">compositionstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionupdate" id="ref-for-event-type-compositionupdate">compositionupdate</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionend" id="ref-for-event-type-compositionend">compositionend</a></code>,
+      <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code> is one of the following: <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-auxclick" id="ref-for-event-type-auxclick">auxclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click">click</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-dblclick" id="ref-for-event-type-dblclick">dblclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousedown" id="ref-for-event-type-mousedown">mousedown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseenter" id="ref-for-event-type-mouseenter">mouseenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseleave" id="ref-for-event-type-mouseleave">mouseleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseout" id="ref-for-event-type-mouseout">mouseout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseover" id="ref-for-event-type-mouseover">mouseover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseup" id="ref-for-event-type-mouseup">mouseup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerover-event" id="ref-for-the-pointerover-event">pointerover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerenter-event" id="ref-for-the-pointerenter-event">pointerenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event">pointerdown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerout-event" id="ref-for-the-pointerout-event">pointerout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerleave-event" id="ref-for-the-pointerleave-event">pointerleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-gotpointercapture-event" id="ref-for-the-gotpointercapture-event">gotpointercapture</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-lostpointercapture-event" id="ref-for-the-lostpointercapture-event">lostpointercapture</a></code> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchstart-event" id="ref-for-the-touchstart-event">touchstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchend-event" id="ref-for-the-touchend-event">touchend</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchcancel-event" id="ref-for-the-touchcancel-event">touchcancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown">keydown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup">keyup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-wheel" id="ref-for-event-type-wheel">wheel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-beforeinput" id="ref-for-event-type-beforeinput">beforeinput</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input">input</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionstart" id="ref-for-event-type-compositionstart">compositionstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionupdate" id="ref-for-event-type-compositionupdate">compositionupdate</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionend" id="ref-for-event-type-compositionend">compositionend</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragstart" id="ref-for-event-dnd-dragstart">dragstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragend" id="ref-for-event-dnd-dragend">dragend</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragenter" id="ref-for-event-dnd-dragenter">dragenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragexit" id="ref-for-event-dnd-dragexit">dragexit</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragleave" id="ref-for-event-dnd-dragleave">dragleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragover" id="ref-for-event-dnd-dragover">dragover</a></code>, <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-drop" id="ref-for-event-dnd-drop">drop</a></code>,
 return true.</p>
      <li data-md>
       <p>Return false.</p>
     </ol>
    </div>
+   <p class="note" role="note"><span>Note:</span> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousemove" id="ref-for-event-type-mousemove">mousemove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointermove-event" id="ref-for-the-pointermove-event">pointermove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchmove-event" id="ref-for-the-touchmove-event">touchmove</a></code>, and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-drag" id="ref-for-event-dnd-drag">drag</a></code> are excluded because these are "continuous" events.
+The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
+Therefore, these event types are not exposed.</p>
    <p>The Event Timing API also exposes timing information about the first user interaction among the following:</p>
    <ul>
     <li data-md>
@@ -1752,13 +1764,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype②">entryType</a></code> to "<code class="highlight">event</code>".</p>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime③">startTime</a></code> as follows:</p>
-      <ol>
-       <li data-md>
-        <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value is equal to "<code class="highlight">pointermove</code>", set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> to the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code> attribute value of the first entry of the list returned by the <a data-link-type="functionish" href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents" id="ref-for-dom-pointerevent-getcoalescedevents">getCoalescedEvents()</a> algorithm applied to <var>event</var>.</p>
-       <li data-md>
-        <p>Otherwise, set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑤">startTime</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp③">timeStamp</a></code> attribute value.</p>
-      </ol>
+      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime③">startTime</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code> attribute value.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart④">processingStart</a></code> to <var>processingStart</var>.</p>
      <li data-md>
@@ -1795,7 +1801,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
       <p>For each <var>timingEntry</var> in <var>window</var>’s <a data-link-type="dfn" href="#pending-event-entries" id="ref-for-pending-event-entries①">pending event entries</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>start</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime⑥">startTime</a></code> attribute value.</p>
+        <p>Let <var>start</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> attribute value.</p>
        <li data-md>
         <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration②">duration</a></code> by running the following steps:</p>
         <ol>
@@ -2083,7 +2089,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <ul>
     <li><a href="#ref-for-dom-event-timestamp">1. Introduction</a>
     <li><a href="#ref-for-dom-event-timestamp①">2.1. PerformanceEventTiming interface</a>
-    <li><a href="#ref-for-dom-event-timestamp②">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-timestamp③">(2)</a>
+    <li><a href="#ref-for-dom-event-timestamp②">3.3. Initialize event timing</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-type">
@@ -2093,7 +2099,7 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-dom-event-type①">2.1. PerformanceEventTiming interface</a>
     <li><a href="#ref-for-dom-event-type②">2.2. EventCounts interface</a> <a href="#ref-for-dom-event-type③">(2)</a>
     <li><a href="#ref-for-dom-event-type④">2.3. Extensions to the Performance interface</a>
-    <li><a href="#ref-for-dom-event-type⑤">3.3. Initialize event timing</a> <a href="#ref-for-dom-event-type⑥">(2)</a>
+    <li><a href="#ref-for-dom-event-type⑤">3.3. Initialize event timing</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-def-domhighrestimestamp">
@@ -2134,6 +2140,54 @@ Such events are not handled in accordance with the RAIL performance model, which
     <li><a href="#ref-for-window">2.1. PerformanceEventTiming interface</a>
     <li><a href="#ref-for-window①">3.2. Modifications to the HTML specification</a> <a href="#ref-for-window②">(2)</a> <a href="#ref-for-window③">(3)</a>
     <li><a href="#ref-for-window④">3.4. Finalize event timing</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-drag">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-drag">https://html.spec.whatwg.org/multipage/#event-dnd-drag</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-drag">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-dragend">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragend">https://html.spec.whatwg.org/multipage/#event-dnd-dragend</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-dragend">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-dragenter">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragenter">https://html.spec.whatwg.org/multipage/#event-dnd-dragenter</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-dragenter">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-dragexit">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragexit">https://html.spec.whatwg.org/multipage/#event-dnd-dragexit</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-dragexit">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-dragleave">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragleave">https://html.spec.whatwg.org/multipage/#event-dnd-dragleave</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-dragleave">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-dragover">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragover">https://html.spec.whatwg.org/multipage/#event-dnd-dragover</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-dragover">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-dragstart">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragstart">https://html.spec.whatwg.org/multipage/#event-dnd-dragstart</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-dragstart">1.1. Events exposed</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-dnd-drop">
+   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-drop">https://html.spec.whatwg.org/multipage/#event-dnd-drop</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-dnd-drop">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-loop-processing-model">
@@ -2208,8 +2262,8 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime">https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-starttime">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-starttime①">(2)</a> <a href="#ref-for-dom-performanceentry-starttime②">(3)</a>
-    <li><a href="#ref-for-dom-performanceentry-starttime③">3.3. Initialize event timing</a> <a href="#ref-for-dom-performanceentry-starttime④">(2)</a> <a href="#ref-for-dom-performanceentry-starttime⑤">(3)</a>
-    <li><a href="#ref-for-dom-performanceentry-starttime⑥">3.5. Dispatch pending Event Timing entries</a>
+    <li><a href="#ref-for-dom-performanceentry-starttime③">3.3. Initialize event timing</a>
+    <li><a href="#ref-for-dom-performanceentry-starttime④">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-supportedentrytypes-attribute">
@@ -2276,12 +2330,6 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://w3c.github.io/pointerevents/#the-pointerup-event">https://w3c.github.io/pointerevents/#the-pointerup-event</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-the-pointerup-event">1.1. Events exposed</a> <a href="#ref-for-the-pointerup-event①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dom-pointerevent-getcoalescedevents">
-   <a href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents">https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-pointerevent-getcoalescedevents">3.3. Initialize event timing</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-the-touchcancel-event">
@@ -2498,6 +2546,14 @@ Such events are not handled in accordance with the RAIL performance model, which
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-window" style="color:initial">Window</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-drag" style="color:initial">drag</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-dragend" style="color:initial">dragend</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-dragenter" style="color:initial">dragenter</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-dragexit" style="color:initial">dragexit</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-dragleave" style="color:initial">dragleave</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-dragover" style="color:initial">dragover</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-dragstart" style="color:initial">dragstart</span>
+     <li><span class="dfn-paneled" id="term-for-event-dnd-drop" style="color:initial">drop</span>
      <li><span class="dfn-paneled" id="term-for-event-loop-processing-model" style="color:initial">event loop processing model</span>
      <li><span class="dfn-paneled" id="term-for-fully-active" style="color:initial">fully active</span>
      <li><span class="dfn-paneled" id="term-for-concept-relevant-global" style="color:initial">relevant global object</span>
@@ -2532,11 +2588,6 @@ Such events are not handled in accordance with the RAIL performance model, which
      <li><span class="dfn-paneled" id="term-for-the-pointerout-event" style="color:initial">pointerout</span>
      <li><span class="dfn-paneled" id="term-for-the-pointerover-event" style="color:initial">pointerover</span>
      <li><span class="dfn-paneled" id="term-for-the-pointerup-event" style="color:initial">pointerup</span>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[pointerevents-extension]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="term-for-dom-pointerevent-getcoalescedevents" style="color:initial">getCoalescedEvents()</span>
     </ul>
    <li>
     <a data-link-type="biblio">[touch-events]</a> defines the following terms:
@@ -2588,7 +2639,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-hr-time-2">[HR-TIME-2]
-   <dd>Ilya Grigorik. <a href="https://www.w3.org/TR/hr-time-2/">High Resolution Time Level 2</a>. 15 October 2019. PR. URL: <a href="https://www.w3.org/TR/hr-time-2/">https://www.w3.org/TR/hr-time-2/</a>
+   <dd>Ilya Grigorik. <a href="https://www.w3.org/TR/hr-time-2/">High Resolution Time Level 2</a>. 21 November 2019. REC. URL: <a href="https://www.w3.org/TR/hr-time-2/">https://www.w3.org/TR/hr-time-2/</a>
    <dt id="biblio-html">[HTML]
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-paint-timing">[PAINT-TIMING]
