@@ -54,10 +54,6 @@ urlPrefix: https://w3c.github.io/pointerevents/; spec: POINTEREVENTS;
     type: event; url: #the-pointerleave-event; text: pointerleave;
     type: event; url: #the-gotpointercapture-event; text: gotpointercapture;
     type: event; url: #the-lostpointercapture-event; text: lostpointercapture;
-<!-- TODO there does not seem to be a way to link to getCoalescedEvents properly -->
-urlPrefix: https://w3c.github.io/pointerevents/extension.html; spec: POINTEREVENTS-EXTENSION;
-    type: method; for: PointerEvent;
-        url: #dom-pointerevent-getcoalescedevents; text: getCoalescedEvents();
 urlPrefix: https://w3c.github.io/touch-events/; spec: TOUCH-EVENTS;
     type: interface; url: #touchevent-interface; text: TouchEvent;
     type: event; url: #the-touchstart-event; text: touchstart;
@@ -85,6 +81,15 @@ urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
     type: event; url: #event-type-compositionstart; text: compositionstart;
     type: event; url: #event-type-compositionupdate; text: compositionupdate;
     type: event; url: #event-type-compositionend; text: compositionend;
+urlPrefix: https://html.spec.whatwg.org/multipage/; spec: HTML;
+    type: event; url: #event-dnd-drag; text: drag;
+    type: event; url: #event-dnd-dragstart; text: dragstart;
+    type: event; url: #event-dnd-dragenter; text: dragenter;
+    type: event; url: #event-dnd-dragexit; text: dragexit;
+    type: event; url: #event-dnd-dragleave; text: dragleave;
+    type: event; url: #event-dnd-dragover; text: dragover;
+    type: event; url: #event-dnd-drop; text: drop;
+    type: event; url: #event-dnd-dragend; text: dragend;
 </pre>
 
 Introduction {#sec-intro}
@@ -143,11 +148,11 @@ Certain types of events are considered, and timing information is exposed when t
     1. If <var>event</var>'s {{Event/isTrusted}} attribute value is set to false, return false.
     1. If <var>event</var>'s {{Event/type}} is one of the following:
     <!-- MouseEvents -->
-        {{auxclick}}, {{click}}, {{dblclick}}, {{mousedown}}, {{mouseenter}}, {{mouseleave}}, {{mousemove}}, {{mouseout}}, {{mouseover}}, {{mouseup}},
+        {{auxclick}}, {{click}}, {{dblclick}}, {{mousedown}}, {{mouseenter}}, {{mouseleave}}, {{mouseout}}, {{mouseover}}, {{mouseup}},
     <!-- PointerEvents -->
-        {{pointerover}}, {{pointerenter}}, {{pointerdown}}, {{pointermove}}, {{pointerup}}, {{pointercancel}}, {{pointerout}}, {{pointerleave}}, {{gotpointercapture}}, {{lostpointercapture}}
+        {{pointerover}}, {{pointerenter}}, {{pointerdown}}, {{pointerup}}, {{pointercancel}}, {{pointerout}}, {{pointerleave}}, {{gotpointercapture}}, {{lostpointercapture}}
     <!-- TouchEvents -->
-        {{touchstart}}, {{touchend}}, {{touchmove}}, {{touchcancel}},
+        {{touchstart}}, {{touchend}}, {{touchcancel}},
     <!-- KeyboardEvents -->
         {{keydown}}, {{keyup}},
     <!-- WheelEvents -->
@@ -156,9 +161,15 @@ Certain types of events are considered, and timing information is exposed when t
         {{beforeinput}}, {{input}},
     <!-- CompositionEvents -->
         {{compositionstart}}, {{compositionupdate}}, {{compositionend}},
+    <!-- Drag and Drop -->
+         {{dragstart}}, {{dragend}}, {{dragenter}}, {{dragexit}}, {{dragleave}}, {{dragover}}, {{drop}},
         return true.
     1. Return false.
 </div>
+
+Note: {{mousemove}}, {{pointermove}}, {{touchmove}}, and {{drag}} are excluded because these are "continuous" events.
+The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
+Therefore, these event types are not exposed.
 
 The Event Timing API also exposes timing information about the first user interaction among the following:
 * {{keydown}}
@@ -344,9 +355,7 @@ Initialize event timing {#sec-init-event-timing}
     1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object.
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/name}} to <var>event</var>'s {{Event/type}} attribute value.
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/entryType}} to "<code>event</code>".
-    1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} as follows:
-        1. If <var>event</var>'s {{Event/type}} attribute value is equal to "<code>pointermove</code>", set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to the {{Event/timeStamp}} attribute value of the first entry of the list returned by the <a>getCoalescedEvents()</a> algorithm applied to <var>event</var>.
-        1. Otherwise, set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <var>event</var>'s {{Event/timeStamp}} attribute value.
+    1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <var>event</var>'s {{Event/timeStamp}} attribute value.
     1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processingStart</var>.
     1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
     1. Return <var>timingEntry</var>.
