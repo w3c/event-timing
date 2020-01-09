@@ -17,7 +17,7 @@ We propose exposing performance information for events of the following types wh
 * CompositionEvents
 * Drag and Drop Events
 
-Of the above, <code>mousemove</code>, <code>pointermove</code>, <code>touchmove</code>, and <code>drag</code> are excluded for now because these are "continuous" events.
+Of the above, <code>mousemove</code>, <code>pointermove</code>, <code>touchmove</code>, <code>wheel</code>, and <code>drag</code> are excluded for now because these are "continuous" events.
 Analyzing the performance of these is trickier, so the current API does not expose these types of events.
 This proposal defines an API addressing the following use cases:
 
