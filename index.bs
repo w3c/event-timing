@@ -155,8 +155,7 @@ Certain types of events are considered, and timing information is exposed when t
         {{touchstart}}, {{touchend}}, {{touchcancel}},
     <!-- KeyboardEvents -->
         {{keydown}}, {{keyup}},
-    <!-- WheelEvents -->
-        {{wheel}},
+    <!-- WheelEvents excluded for now since they can be continuous. -->
     <!-- InputEvents -->
         {{beforeinput}}, {{input}},
     <!-- CompositionEvents -->
@@ -167,7 +166,7 @@ Certain types of events are considered, and timing information is exposed when t
     1. Return false.
 </div>
 
-Note: {{mousemove}}, {{pointermove}}, {{touchmove}}, and {{drag}} are excluded because these are "continuous" events.
+Note: {{mousemove}}, {{pointermove}}, {{touchmove}}, {{wheel}}, and {{drag}} are excluded because these are "continuous" events.
 The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
 Therefore, these event types are not exposed.
 
