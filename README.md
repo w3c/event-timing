@@ -2,7 +2,6 @@
 
 Monitoring event latency today requires an event listener.
 This precludes measuring event latency early in page load, and adds unnecessary performance overhead.
-
 This document provides a proposal for giving developers insight into the latency of a subset of events triggered by user interaction.
 
 ## Minimal Proposal
@@ -21,12 +20,12 @@ Of the above, <code>mousemove</code>, <code>pointermove</code>, <code>touchmove<
 Analyzing the performance of these is trickier, so the current API does not expose these types of events.
 This proposal defines an API addressing the following use cases:
 
-1.  Observe the queueing delay of input events before performance observers are registered.
+1.  Observe the queueing delay of input events.
 The queueing delay of an event is defined as the difference between the time in which event handlers start being executed minus the event's [timeStamp](https://dom.spec.whatwg.org/#dom-event-timestamp).
 
 2.  Measure combined event handler duration, including browser event handling logic.
 
-See more specific use cases [here](#specific-use-cases).
+See specific sample use cases [here](#specific-use-cases).
 
 A polyfill approximately implementing this API can be found [here](https://github.com/tdresser/input-latency-web-perf-polyfill/tree/gh-pages).
 
@@ -61,7 +60,7 @@ interface PerformanceEventTiming : PerformanceEntry {
 interface EventCounts {
   readonly attribute unsigned long click;
   ...
-  readonly attribute unsigned long touchmove;
+  readonly attribute unsigned long touchend;
   ...
 };
 
