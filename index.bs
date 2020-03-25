@@ -427,4 +427,4 @@ This allows relatively precise timing even for 120Hz displays.
 
 The choice of 104ms as the cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 100ms.
 An event whose rounded duration is greater than or equal to 104ms will have its pre-rounded duration greater than or equal to 100ms.
-Such events are not handled in accordance with the RAIL performance model, which suggests applications respond within 100ms to user input.
+Such events are not handled within 100ms and will likely negatively impact user experience.
