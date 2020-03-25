@@ -385,7 +385,7 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. Let <var>start</var> be <var>timingEntry</var>'s {{PerformanceEntry/startTime}} attribute value.
         1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} by running the following steps:
             1. Let <var>difference</var> be <code><var>renderingTimestamp</var> - <var>start</var></code>.
-            1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to the [=DOMHighResTimeStamp=] resulting from rounding <var>difference</var> to the nearest multiple of 8ms.
+            1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to the {{DOMHighResTimeStamp}} resulting from rounding <var>difference</var> to the nearest multiple of 8ms.
         1. Let <var>name</var> be <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value.
         1. Perform the following steps to update the event counts:
             1. Let <var>performance</var> be <var>window</var>'s {{WindowOrWorkerGlobalScope/performance}} attribute value.
