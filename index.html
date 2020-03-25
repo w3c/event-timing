@@ -1224,7 +1224,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 61a6136a, updated Wed Mar 25 07:38:53 2020 -0700" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="cf62c71e37ecfab0e8f4280e41b42e82e91cf148" name="document-revision">
+  <meta content="5c80ccb22d7c675a42f0c1ad336f34b9daff2bcf" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1808,7 +1808,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
          <li data-md>
           <p>Let <var>difference</var> be <code class="highlight"><var>renderingTimestamp</var> <c- o>-</c-> <var>start</var></code>.</p>
          <li data-md>
-          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to the result of rounding <var>difference</var> to the nearest multiple of 8.</p>
+          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp②">DOMHighResTimeStamp</a></code> resulting from rounding <var>difference</var> to the nearest multiple of 8ms.</p>
         </ol>
        <li data-md>
         <p>Let <var>name</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name③">name</a></code> attribute value.</p>
@@ -2106,6 +2106,7 @@ Such events are not handled in accordance with the RAIL performance model, which
    <a href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp">https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-idl-def-domhighrestimestamp">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-idl-def-domhighrestimestamp①">(2)</a>
+    <li><a href="#ref-for-idl-def-domhighrestimestamp②">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-performance">
