@@ -58,10 +58,7 @@ interface PerformanceEventTiming : PerformanceEntry {
 
 // Contains the number of events which have been dispatched, per event type.
 interface EventCounts {
-  readonly attribute unsigned long click;
-  ...
-  readonly attribute unsigned long touchend;
-  ...
+    readonly maplike<DOMString, unsigned long long>;
 };
 
 partial interface Performance {
