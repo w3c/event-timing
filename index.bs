@@ -351,7 +351,7 @@ Initialize event timing {#sec-init-event-timing}
     When asked to <dfn export>initialize event timing</dfn>, with <var>event</var> and <var>processingStart</var> as inputs, run the following steps:
 
     1. If the algorithm to determine if <var>event</var> should be <a>considered for Event Timing</a> returns false, then return null.
-    1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object.
+    1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object with |event|'s [=relevant realm=].
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/name}} to <var>event</var>'s {{Event/type}} attribute value.
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/entryType}} to "<code>event</code>".
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <var>event</var>'s {{Event/timeStamp}} attribute value.
