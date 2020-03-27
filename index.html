@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 61a6136a, updated Wed Mar 25 07:38:53 2020 -0700" name="generator">
+  <meta content="Bikeshed version 3453c843, updated Thu Mar 26 19:10:58 2020 -0700" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="5c80ccb22d7c675a42f0c1ad336f34b9daff2bcf" name="document-revision">
+  <meta content="7da68a2d3a9dbf5dd29c2d8ddbf0e299059c9958" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1482,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-03-25">25 March 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-03-27">27 March 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1883,7 +1883,7 @@ In an effort to expose the minimal amount of new information that is useful, we 
 This allows relatively precise timing even for 120Hz displays.</p>
    <p>The choice of 104ms as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑦">duration</a></code> is just the first multiple of 8 greater than 100ms.
 An event whose rounded duration is greater than or equal to 104ms will have its pre-rounded duration greater than or equal to 100ms.
-Such events are not handled in accordance with the RAIL performance model, which suggests applications respond within 100ms to user input.</p>
+Such events are not handled within 100ms and will likely negatively impact user experience.</p>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
