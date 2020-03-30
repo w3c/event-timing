@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 3453c843, updated Thu Mar 26 19:10:58 2020 -0700" name="generator">
+  <meta content="Bikeshed version 959d006d, updated Sat Mar 28 12:38:37 2020 -0700" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="7da68a2d3a9dbf5dd29c2d8ddbf0e299059c9958" name="document-revision">
+  <meta content="7c9a4d8d4fff9c29eb53d18f2fd01fbe1167ec67" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1482,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-03-27">27 March 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-03-30">30 March 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1758,7 +1758,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      <li data-md>
       <p>If the algorithm to determine if <var>event</var> should be <a data-link-type="dfn" href="#considered-for-event-timing" id="ref-for-considered-for-event-timing">considered for Event Timing</a> returns false, then return null.</p>
      <li data-md>
-      <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑧">PerformanceEventTiming</a></code> object.</p>
+      <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑧">PerformanceEventTiming</a></code> object with <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm" id="ref-for-concept-relevant-realm">relevant realm</a>.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> attribute value.</p>
      <li data-md>
@@ -1803,13 +1803,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
        <li data-md>
         <p>Let <var>start</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime④">startTime</a></code> attribute value.</p>
        <li data-md>
-        <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration②">duration</a></code> by running the following steps:</p>
-        <ol>
-         <li data-md>
-          <p>Let <var>difference</var> be <code class="highlight"><var>renderingTimestamp</var> <c- o>-</c-> <var>start</var></code>.</p>
-         <li data-md>
-          <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp②">DOMHighResTimeStamp</a></code> resulting from rounding <var>difference</var> to the nearest multiple of 8ms.</p>
-        </ol>
+        <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration②">duration</a></code> to a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp②">DOMHighResTimeStamp</a></code> resulting from <code class="highlight"><var>renderingTimestamp</var> <c- o>-</c-> <var>start</var></code>, with granularity of 8ms or less.</p>
        <li data-md>
         <p>Let <var>name</var> be <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name③">name</a></code> attribute value.</p>
        <li data-md>
@@ -1829,7 +1823,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
           <p>Otherwise, increase the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-map-entries" id="ref-for-dfn-map-entries②">map entry</a>’s value by 1.</p>
         </ol>
        <li data-md>
-        <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> attribute value is greater than or equal to 104, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue</a> <var>timingEntry</var>.</p>
+        <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration③">duration</a></code> attribute value is greater than or equal to 104, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue</a> <var>timingEntry</var>.</p>
        <li data-md>
         <p>If <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-input-event" id="ref-for-has-dispatched-input-event">has dispatched input event</a> is false, run the following steps:</p>
         <ol>
@@ -1874,14 +1868,14 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
 Event handler timestamps have the same accuracy as <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-performance-now" id="ref-for-dom-performance-now①">performance.now()</a></code>.
 Since <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart⑤">processingStart</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend④">processingEnd</a></code> could be computed without using this API,
 exposing these attributes does not produce new attack surfaces.
-Thus, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑤">duration</a></code> is the only one which requires further consideration.</p>
-   <p>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑥">duration</a></code> has an 8 millisecond granularity (it is computed as such by performing rounding).
+Thus, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> is the only one which requires further consideration.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑤">duration</a></code> has an 8 millisecond granularity (it is computed as such by performing rounding).
 Thus, a high resolution timer cannot be produced from this timestamps.
 However, it does introduce new information that is not readily available to web developers: the time pixels draw after an event has been processed.
 We do not find security or privacy concerns on exposing the timestamp, especially given its granularity.
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.</p>
-   <p>The choice of 104ms as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑦">duration</a></code> is just the first multiple of 8 greater than 100ms.
+   <p>The choice of 104ms as the cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑥">duration</a></code> is just the first multiple of 8 greater than 100ms.
 An event whose rounded duration is greater than or equal to 104ms will have its pre-rounded duration greater than or equal to 100ms.
 Such events are not handled within 100ms and will likely negatively impact user experience.</p>
   </main>
@@ -2210,6 +2204,12 @@ Such events are not handled within 100ms and will likely negatively impact user 
     <li><a href="#ref-for-concept-relevant-global①">3.5. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-relevant-realm">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-relevant-realm">3.3. Initialize event timing</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-update-the-rendering">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering">https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering</a><b>Referenced in:</b>
    <ul>
@@ -2233,8 +2233,8 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration">https://w3c.github.io/performance-timeline/#dom-performanceentry-duration</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-duration">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-duration①">(2)</a>
-    <li><a href="#ref-for-dom-performanceentry-duration②">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-duration③">(2)</a> <a href="#ref-for-dom-performanceentry-duration④">(3)</a>
-    <li><a href="#ref-for-dom-performanceentry-duration⑤">4. Security &amp; privacy considerations</a> <a href="#ref-for-dom-performanceentry-duration⑥">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑦">(3)</a>
+    <li><a href="#ref-for-dom-performanceentry-duration②">3.5. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-duration③">(2)</a>
+    <li><a href="#ref-for-dom-performanceentry-duration④">4. Security &amp; privacy considerations</a> <a href="#ref-for-dom-performanceentry-duration⑤">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑥">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-entrytype">
@@ -2558,6 +2558,7 @@ Such events are not handled within 100ms and will likely negatively impact user 
      <li><span class="dfn-paneled" id="term-for-event-loop-processing-model" style="color:initial">event loop processing model</span>
      <li><span class="dfn-paneled" id="term-for-fully-active" style="color:initial">fully active</span>
      <li><span class="dfn-paneled" id="term-for-concept-relevant-global" style="color:initial">relevant global object</span>
+     <li><span class="dfn-paneled" id="term-for-concept-relevant-realm" style="color:initial">relevant realm</span>
      <li><span class="dfn-paneled" id="term-for-update-the-rendering" style="color:initial">update the rendering</span>
     </ul>
    <li>
