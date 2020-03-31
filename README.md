@@ -75,7 +75,12 @@ Event handler duration inherits it's precision from `performance.now()`, and cou
 ```javascript
 const performanceObserver = new PerformanceObserver((entries) => {
   for (const entry of entries.getEntries()) {
-      console.log(entry);
+      // Report slow event to analytics.
+  }
+  for (entry of performance.eventCounts.entries()) {
+      const type = entry[0];
+      const count = entry[1];
+      // Report the event type and count to analytics.
   }
 });
 
