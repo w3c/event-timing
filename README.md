@@ -81,7 +81,7 @@ const performanceObserver = new PerformanceObserver((entries) => {
       // Include the input delay: delta between hardware timestamp and when event handlers start being executed.
       const delay = entry.processingStart - entry.startTime;
       // Include the amount of time that it takes for all event handlers of this event to run.
-      const handlers = entry.processingEnd
+      const handlersDuration = entry.processingEnd - entry.processingStart;
       // Include the event 'duration', which captures from hardware timestamp to next paint after handlers run.
       // Note that this duration can be misleading if the event handlers trigger asynchronous work.
       // This could be fairly common, for instance by using a synthetic scheduler or fetching a new resource.
