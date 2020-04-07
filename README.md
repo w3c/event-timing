@@ -54,6 +54,8 @@ interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute DOMHighResTimeStamp duration;
     // Whether or not the event was cancelable.
     readonly attribute boolean cancelable;
+    // The last EventTarget of the event (i.e. the closest one to the root of the DOM tree).
+    readonly attribute Node? target;
 };
 
 // Contains the number of events which have been dispatched, per event type.
@@ -76,6 +78,17 @@ Event handler duration inherits it's precision from `performance.now()`, and cou
 const performanceObserver = new PerformanceObserver((entries) => {
   for (const entry of entries.getEntries()) {
       // Report slow event to analytics.
+      // Include the input delay: delta between hardware timestamp and when event handlers start being executed.
+      const delay = entry.processingStart - entry.startTime;
+      // Include the amount of time that it takes for all event handlers of this event to run.
+      const handlersDuration = entry.processingEnd - entry.processingStart;
+      // Include the event 'duration', which captures from hardware timestamp to next paint after handlers run.
+      // Note that this duration can be misleading if the event handlers trigger asynchronous work.
+      // This could be fairly common, for instance by using a synthetic scheduler or fetching a new resource.
+      const duration = entry.duration;
+      // Include attribution information such as the ID of the |target|.
+      // Note that target could be null, for instance for events that only have shadow DOM targets.
+      const id = entry.target ? entry.target.id : 'unknown target id';
   }
   for (entry of performance.eventCounts.entries()) {
       const type = entry[0];
