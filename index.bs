@@ -238,7 +238,9 @@ interface PerformanceEventTiming : PerformanceEntry {
 };
 </pre>
 
-Each {{PerformanceEventTiming}} object has an associated <dfn for=PerformanceEventTiming>target</dfn>, which is initially set to null.
+Each {{PerformanceEventTiming}} object has an associated <dfn for=PerformanceEventTiming>eventTarget</dfn>, which is initially set to null.
+
+The <dfn export>target</dfn> attribute's getter returns the result of the <a link-for=''>get an element</a> algorithm, passing the <a link-for=''>context object</a>'s <a>eventTarget</a> and null as inputs.
 
 Note: A user agent implementing the Event Timing API would need to include "<code>first-input</code>" and "<code>event</code>" in {{PerformanceObserver/supportedEntryTypes}} for {{Window}} contexts.
 This allows developers to detect support for event timing.
@@ -285,7 +287,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     </dd>
     <dt>{{target}}</dt>
     <dd>
-        The <dfn export>target</dfn> attribute's getter returns the result of the <a link-for=''>get an element</a> algorithm, passing the <a link-for=''>context object</a>'s <a>target</a> and null as inputs.
+        The {{target}} attribute's getter returns the <a>associated event</a>'s last {{Event/target}} when such {{/Node}} is not disconnected nor in the shadow DOM.
     </dd>
 </dl>
 
@@ -385,9 +387,9 @@ Finalize event timing {#sec-fin-event-timing}
 
     Note: this assertion holds due to the types of events supported by the Event Timing API.
 
-    1. Set <var>timingEntry</var>'s <a for=PerformanceEventTiming>target</a> to the result of calling the <a>get an element</a> algorithm with <var>target</var> and <var>relevantGlobal</var>'s <a>associated document</a> as inputs.
+    1. Set <var>timingEntry</var>'s <a for=PerformanceEventTiming>eventTarget</a> to the result of calling the <a>get an element</a> algorithm with <var>target</var> and <var>relevantGlobal</var>'s <a>associated document</a> as inputs.
 
-    Note: This will set <a for=PerformanceEventTiming>target</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
+    Note: This will set <a for=PerformanceEventTiming>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
     Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
