@@ -48,6 +48,7 @@ urlPrefix: https://w3c.github.io/pointerevents/; spec: POINTEREVENTS;
     type: event; url: #the-pointerenter-event; text: pointerenter;
     type: event; url: #the-pointerdown-event; text: pointerdown;
     type: event; url: #the-pointermove-event; text: pointermove;
+    type: event; url: #the-pointerrawupdate-event; text: pointerrawupdate;
     type: event; url: #the-pointerup-event; text: pointerup;
     type: event; url: #the-pointercancel-event; text: pointercancel;
     type: event; url: #the-pointerout-event; text: pointerout;
@@ -74,6 +75,7 @@ urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
     type: event; url: #event-type-mouseover; text: mouseover;
     type: event; url: #event-type-mouseup; text: mouseup;
     type: event; url: #event-type-keydown; text: keydown;
+    type: event; url: #event-type-keypress; text: keypress;
     type: event; url: #event-type-keyup; text: keyup;
     type: event; url: #event-type-wheel; text: wheel;
     type: event; url: #event-type-beforeinput; text: beforeinput;
@@ -150,27 +152,29 @@ Certain types of events are considered, and timing information is exposed when t
     1. If <var>event</var>'s {{Event/isTrusted}} attribute value is set to false, return false.
     1. If <var>event</var>'s {{Event/type}} is one of the following:
     <!-- MouseEvents -->
-        {{auxclick}}, {{click}}, {{dblclick}}, {{mousedown}}, {{mouseenter}}, {{mouseleave}}, {{mouseout}}, {{mouseover}}, {{mouseup}},
+        {{auxclick}}, {{click}}, {{contextmenu}}, {{dblclick}}, {{mousedown}}, {{mouseenter}}, {{mouseleave}}, {{mouseout}}, {{mouseover}}, {{mouseup}},
     <!-- PointerEvents -->
         {{pointerover}}, {{pointerenter}}, {{pointerdown}}, {{pointerup}}, {{pointercancel}}, {{pointerout}}, {{pointerleave}}, {{gotpointercapture}}, {{lostpointercapture}},
     <!-- TouchEvents -->
         {{touchstart}}, {{touchend}}, {{touchcancel}},
     <!-- KeyboardEvents -->
-        {{keydown}}, {{keyup}},
+        {{keydown}}, {{keypress}}, {{keyup}},
     <!-- WheelEvents excluded for now since they can be continuous. -->
     <!-- InputEvents -->
         {{beforeinput}}, {{input}},
     <!-- CompositionEvents -->
         {{compositionstart}}, {{compositionupdate}}, {{compositionend}},
     <!-- Drag and Drop -->
-         {{dragstart}}, {{dragend}}, {{dragenter}}, {{dragexit}}, {{dragleave}}, {{dragover}}, {{drop}},
+         {{dragstart}}, {{dragend}}, {{dragenter}}, {{dragleave}}, {{dragover}}, {{drop}},
         return true.
     1. Return false.
 </div>
 
-Note: {{mousemove}}, {{pointermove}}, {{touchmove}}, {{wheel}}, and {{drag}} are excluded because these are "continuous" events.
+Note: {{mousemove}}, {{pointermove}}, {{pointerrawupdate}}, {{touchmove}}, {{wheel}}, and {{drag}} are excluded because these are "continuous" events.
 The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
 Therefore, these event types are not exposed.
+
+Issue: it's unclear whether {{dragexit}} should be on the list. It may be deprecated and removed.
 
 The Event Timing API also exposes timing information about the first user interaction among the following:
 * {{keydown}}
