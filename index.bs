@@ -26,6 +26,18 @@ urlPrefix: https://w3c.github.io/performance-timeline/; spec: PERFORMANCE-TIMELI
     type: dfn; url: #dfn-queue-a-performanceentry; text: queue the entry;
     type: attribute; for: PerformanceObserver;
         text: supportedEntryTypes; url: #supportedentrytypes-attribute;
+    type: method; for: PerformanceObserver;
+        text: observe(); url: #observe-method;
+    type: dictionary; url: #performanceobserverinit-dictionary; text: PerformanceObserverInit;
+    type: attribute; for: PerformanceObserverInit;
+        text: entryTypes; url: #dom-performanceobserverinit-entrytypes;
+        text: type; url: #dom-performanceobserverinit-type;
+    type: dfn; url: #dfn-performance-entry-buffer; text: performance entry buffer;
+    type: interface; url: #the-performanceobserver-interface; text: PerformanceObserver;
+    type: dfn; for: PerformanceObserver; text: observer buffer; url: #dfn-observer-buffer;
+    type: dfn; for: registered performance observer;
+        text: options list; url: #dfn-options-list;
+        text: observer; url: #dfn-observer;
 urlPrefix: https://w3c.github.io/hr-time/; spec: HR-TIME-2;
     type: typedef; url: #idl-def-domhighrestimestamp; text: DOMHighResTimeStamp;
     type: interface; url: #dfn-performance; text: Performance;
@@ -331,7 +343,7 @@ Processing model {#sec-processing-model}
 Modifications to the DOM specification {#sec-modifications-DOM}
 --------------------------------------------------------
 
-<em>This section will be removed once the <a href=https://dom.spec.whatwg.org>DOM specification</a> has been modified.</em>
+<em>This section will be removed once [[DOM]] has been modified.</em>
 
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
@@ -351,7 +363,7 @@ In this case, it will estimate the value of {{PerformanceEventTiming/processingS
 Modifications to the HTML specification {#sec-modifications-HTML}
 --------------------------------------------------------
 
-<em>This section will be removed once the <a href=https://html.spec.whatwg.org/multipage>HTML specification</a> has been modified.</em>
+<em>This section will be removed once [[HTML]] has been modified.</em>
 
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
@@ -361,6 +373,59 @@ Finally, each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean wh
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
 
     1. For each <a>fully active</a> {{Document}} in <em>docs</em>, invoke the algorithm to <a>dispatch pending Event Timing entries</a> for that {{Document}}.
+</div>
+
+Modifications to the Performance Timeline specification {#sec-modifications-perf-timeline}
+--------------------------------------------------------
+
+<em>This section will be removed once [[PERFORMANCE-TIMELINE-2]] had been modified.</em>
+
+The {{PerformanceObserverInit}} dictionary is augmented:
+
+<pre class="idl">
+partial dictionary PerformanceObserverInit {
+    DOMHighResTimeStamp durationThreshold;
+};
+</pre>
+
+In the {{PerformanceObserver/observe()}} method, replace
+
+```text
+For each entry in tuple's performance entry buffer append entry to the observer buffer.
+```
+
+with the following:
+
+<div class=algorithm>
+For each |entry| in <var ignore=''>tuple</var>'s [=performance entry buffer=], if [=should add entry to observer=] returns true for |entry| and <var ignore=''>options</var>, [=list/append=] |entry| to the [=context object=]'s [=observer buffer=].
+</div>
+
+In the [=queue the entry=] algorithm, replace
+
+```
+If regObs's options list contains a PerformanceObserverInit item whose entryTypes member
+includes entryType or whose type member equals to entryType, append regObs's observer to
+interested observers.
+```
+
+with the following:
+
+<div class=algorithm>
+If |regObs|'s [=registered performance observer/options list=] contains a {{PerformanceObserverInit}} |item| whose {{PerformanceObserverInit/entryTypes}} member includes |entryType| or whose {{PerformanceObserverInit/type}} member equals to |entryType|:
+    1. Append |regObs|'s [=registered performance observer/observer=] to <var ignore=''>interested observers</var> if [=should add entry to observer=] returns true for |entry| and |item|.
+</div>
+
+Should add entry to observer {#sec-should-add-entry}
+--------------------------------------------------------
+
+<div algorithm="should add entry to observer"/>
+    Given a {{PerformanceEntry}} |entry| and a {{PerformanceObserverInit}} |options|, to determine if we <dfn>should add entry to observer</dfn>, run the following steps:
+
+    1. If |entry|'s {{PerformanceEntry/entryType}} attribute value is not equal to "event", return true.
+    1. Let |minDuration| be |options|'s {{PerformanceObserverInit/durationThreshold}} value if it's present, or 104 otherwise.
+    1. If |minDuration| is less than 16, set |minDuration| to 16.
+    1. If |entry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to |minDuration|, return true.
+    1. Otherwise, return false.
 </div>
 
 Initialize event timing {#sec-init-event-timing}
@@ -420,7 +485,7 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
                 1. Let <var>mapEntry</var> be a new <a>map entry</a> with key equal to <var>name</var> and value equal to 1.
                 1. Add <var>mapEntry</var> to <var>performance</var>'s {{Performance/eventCounts}} attribute value.
             1. Otherwise, increase the <a>map entry</a>'s value by 1.
-        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 104, then <a lt='queue the entry'>queue</a> <var>timingEntry</var>.
+        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> <var>timingEntry</var>.
         1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
             1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
                 1. Set <var>window</var>'s <a>pending pointer down</a> to a copy of <var>timingEntry</var>.
@@ -452,6 +517,6 @@ We do not find security or privacy concerns on exposing the timestamp, especiall
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.
 
-The choice of 104ms as the cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 100ms.
+The choice of 104ms as the default cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 100ms.
 An event whose rounded duration is greater than or equal to 104ms will have its pre-rounded duration greater than or equal to 100ms.
 Such events are not handled within 100ms and will likely negatively impact user experience.
