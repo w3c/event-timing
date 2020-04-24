@@ -388,14 +388,14 @@ partial dictionary PerformanceObserverInit {
 };
 </pre>
 
-Should add entry to observer {#sec-should-add-entry}
+Should add PerformanceEventTiming {#sec-should-add-performanceeventtiming}
 --------------------------------------------------------
 
-<div algorithm="should add entry to observer"/>
+<div algorithm="should add PerformanceEventTiming"/>
     Given a {{PerformanceEventTiming}} |entry| and a {{PerformanceObserverInit}} |options|, to determine if we <dfn export>should add PerformanceEventTiming</dfn>, run the following steps:
 
-    1. If |entry|'s {{PerformanceEntry/entryType}} attribute value equals to "first-input", return true.
-    1. Assert that |entry|'s {{PerformanceEntry/entryType}} attribute value equals "event".
+    1. If |entry|'s {{PerformanceEntry/entryType}} attribute value equals to "<code>first-input</code>", return true.
+    1. Assert that |entry|'s {{PerformanceEntry/entryType}} attribute value equals "<code>event</code>".
     1. Let |minDuration| be |options|'s {{PerformanceObserverInit/durationThreshold}} value if it's present, or 104 otherwise.
     1. If |minDuration| is less than 16, set |minDuration| to 16.
     1. If |entry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to |minDuration|, return true.
