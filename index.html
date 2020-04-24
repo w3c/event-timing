@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version bb42a6af, updated Thu Apr 16 07:15:51 2020 -0700" name="generator">
+  <meta content="Bikeshed version 4ad68f3f, updated Thu Apr 23 14:57:31 2020 -0700" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="6810837bee7293bc7905f61ad21eed6702d246dc" name="document-revision">
+  <meta content="6572d659161703be0701d8ab30cc2fe45a77d52d" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1482,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-04-20">20 April 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-04-24">24 April 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1540,7 +1540,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#sec-modifications-DOM"><span class="secno">3.1</span> <span class="content">Modifications to the DOM specification</span></a>
       <li><a href="#sec-modifications-HTML"><span class="secno">3.2</span> <span class="content">Modifications to the HTML specification</span></a>
       <li><a href="#sec-modifications-perf-timeline"><span class="secno">3.3</span> <span class="content">Modifications to the Performance Timeline specification</span></a>
-      <li><a href="#sec-should-add-entry"><span class="secno">3.4</span> <span class="content">Should add entry to observer</span></a>
+      <li><a href="#sec-should-add-performanceeventtiming"><span class="secno">3.4</span> <span class="content">Should add PerformanceEventTiming</span></a>
       <li><a href="#sec-init-event-timing"><span class="secno">3.5</span> <span class="content">Initialize event timing</span></a>
       <li><a href="#sec-fin-event-timing"><span class="secno">3.6</span> <span class="content">Finalize event timing</span></a>
       <li><a href="#sec-dispatch-pending"><span class="secno">3.7</span> <span class="content">Dispatch pending Event Timing entries</span></a>
@@ -1771,30 +1771,14 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
     <a class="n" data-link-type="idl-name" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp②"><c- n>DOMHighResTimeStamp</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceObserverInit" data-dfn-type="dict-member" data-export data-type="DOMHighResTimeStamp " id="dom-performanceobserverinit-durationthreshold"><code class="highlight"><c- g>durationThreshold</c-></code></dfn>;
 };
 </pre>
-   <p>In the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#observe-method" id="ref-for-observe-method">observe()</a></code> method, replace</p>
-<pre class="language-text highlight">For each entry in tuple’s performance entry buffer append entry to the observer buffer.
-</pre>
-   <p>with the following:</p>
-   <div class="algorithm"> For each <var>entry</var> in <var>tuple</var>’s <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-performance-entry-buffer" id="ref-for-dfn-performance-entry-buffer">performance entry buffer</a>, if <a data-link-type="dfn" href="#should-add-entry-to-observer" id="ref-for-should-add-entry-to-observer">should add entry to observer</a> returns true for <var>entry</var> and <var>options</var>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append">append</a> <var>entry</var> to the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#context-object" id="ref-for-context-object①">context object</a>'s <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-observer-buffer" id="ref-for-dfn-observer-buffer">observer buffer</a>. </div>
-   <p>In the <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue the entry</a> algorithm, replace</p>
-<pre class="highlight">If regObs’s options list contains a PerformanceObserverInit item whose entryTypes member
-includes entryType or whose type member equals to entryType<c- p>,</c-> append regObs’s observer to
-interested observers<c- p>.</c->
-</pre>
-   <p>with the following:</p>
-   <div class="algorithm">
-     If <var>regObs</var>’s <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-options-list" id="ref-for-dfn-options-list">options list</a> contains a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary②">PerformanceObserverInit</a></code> <var>item</var> whose <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-entrytypes" id="ref-for-dom-performanceobserverinit-entrytypes">entryTypes</a></code> member includes <var>entryType</var> or whose <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-type" id="ref-for-dom-performanceobserverinit-type">type</a></code> member equals to <var>entryType</var>: 
+   <h3 class="heading settled" data-level="3.4" id="sec-should-add-performanceeventtiming"><span class="secno">3.4. </span><span class="content">Should add PerformanceEventTiming</span><a class="self-link" href="#sec-should-add-performanceeventtiming"></a></h3>
+   <div class="algorithm" data-algorithm="should add PerformanceEventTiming">
+     Given a <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑨">PerformanceEventTiming</a></code> <var>entry</var> and a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary②">PerformanceObserverInit</a></code> <var>options</var>, to determine if we <dfn data-dfn-type="dfn" data-export id="should-add-performanceeventtiming">should add PerformanceEventTiming<a class="self-link" href="#should-add-performanceeventtiming"></a></dfn>, run the following steps: 
     <ol>
      <li data-md>
-      <p>Append <var>regObs</var>’s <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-observer" id="ref-for-dfn-observer">observer</a> to <var>interested observers</var> if <a data-link-type="dfn" href="#should-add-entry-to-observer" id="ref-for-should-add-entry-to-observer①">should add entry to observer</a> returns true for <var>entry</var> and <var>item</var>.</p>
-    </ol>
-   </div>
-   <h3 class="heading settled" data-level="3.4" id="sec-should-add-entry"><span class="secno">3.4. </span><span class="content">Should add entry to observer</span><a class="self-link" href="#sec-should-add-entry"></a></h3>
-   <div class="algorithm" data-algorithm="should add entry to observer">
-     Given a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface" id="ref-for-the-performanceentry-interface②">PerformanceEntry</a></code> <var>entry</var> and a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary③">PerformanceObserverInit</a></code> <var>options</var>, to determine if we <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="should-add-entry-to-observer">should add entry to observer</dfn>, run the following steps: 
-    <ol>
+      <p>If <var>entry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype②">entryType</a></code> attribute value equals to "<code class="highlight">first<c- o>-</c->input</code>", return true.</p>
      <li data-md>
-      <p>If <var>entry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype②">entryType</a></code> attribute value is not equal to "event", return true.</p>
+      <p>Assert that <var>entry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype③">entryType</a></code> attribute value equals "<code class="highlight">event</code>".</p>
      <li data-md>
       <p>Let <var>minDuration</var> be <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceobserverinit-durationthreshold" id="ref-for-dom-performanceobserverinit-durationthreshold">durationThreshold</a></code> value if it’s present, or 104 otherwise.</p>
      <li data-md>
@@ -1812,11 +1796,11 @@ interested observers<c- p>.</c->
      <li data-md>
       <p>If the algorithm to determine if <var>event</var> should be <a data-link-type="dfn" href="#considered-for-event-timing" id="ref-for-considered-for-event-timing">considered for Event Timing</a> returns false, then return null.</p>
      <li data-md>
-      <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑨">PerformanceEventTiming</a></code> object with <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm" id="ref-for-concept-relevant-realm">relevant realm</a>.</p>
+      <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①⓪">PerformanceEventTiming</a></code> object with <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm" id="ref-for-concept-relevant-realm">relevant realm</a>.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> attribute value.</p>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype③">entryType</a></code> to "<code class="highlight">event</code>".</p>
+      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype④">entryType</a></code> to "<code class="highlight">event</code>".</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime③">startTime</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp②">timeStamp</a></code> attribute value.</p>
      <li data-md>
@@ -1888,7 +1872,7 @@ interested observers<c- p>.</c->
           <p>Otherwise, increase the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-map-entries" id="ref-for-dfn-map-entries②">map entry</a>’s value by 1.</p>
         </ol>
        <li data-md>
-        <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> attribute value is greater than or equal to 16, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry①">queue</a> <var>timingEntry</var>.</p>
+        <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> attribute value is greater than or equal to 16, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue</a> <var>timingEntry</var>.</p>
        <li data-md>
         <p>If <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-input-event" id="ref-for-has-dispatched-input-event">has dispatched input event</a> is false, run the following steps:</p>
         <ol>
@@ -1898,7 +1882,7 @@ interested observers<c- p>.</c->
            <li data-md>
             <p>Set <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down">pending pointer down</a> to a copy of <var>timingEntry</var>.</p>
            <li data-md>
-            <p>Set the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype④">entryType</a></code> of <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down①">pending pointer down</a> to "<code class="highlight">first<c- o>-</c->input</code>".</p>
+            <p>Set the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype⑤">entryType</a></code> of <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down①">pending pointer down</a> to "<code class="highlight">first<c- o>-</c->input</code>".</p>
           </ol>
          <li data-md>
           <p>Otherwise, run the following steps:</p>
@@ -1909,7 +1893,7 @@ interested observers<c- p>.</c->
              <li data-md>
               <p>Set <var>window</var>’s <a data-link-type="dfn" href="#has-dispatched-input-event" id="ref-for-has-dispatched-input-event①">has dispatched input event</a> to true.</p>
              <li data-md>
-              <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry②">Queue</a> <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down③">pending pointer down</a>.</p>
+              <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry①">Queue</a> <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-down" id="ref-for-pending-pointer-down③">pending pointer down</a>.</p>
             </ol>
            <li data-md>
             <p>Otherwise, if <var>name</var> is one of "<code class="highlight">click</code>", "<code class="highlight">keydown</code>" or "<code class="highlight">mousedown</code>", then:</p>
@@ -1919,9 +1903,9 @@ interested observers<c- p>.</c->
              <li data-md>
               <p>Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.</p>
              <li data-md>
-              <p>Set <var>newFirstInputDelayEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype⑤">entryType</a></code> to "<code class="highlight">first<c- o>-</c->input</code>".</p>
+              <p>Set <var>newFirstInputDelayEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype⑥">entryType</a></code> to "<code class="highlight">first<c- o>-</c->input</code>".</p>
              <li data-md>
-              <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry③">Queue the entry</a> <var>newFirstInputDelayEntry</var>.</p>
+              <p><a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry②">Queue the entry</a> <var>newFirstInputDelayEntry</var>.</p>
             </ol>
           </ol>
         </ol>
@@ -2109,7 +2093,7 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <li><a href="#performanceeventtiming">PerformanceEventTiming</a><span>, in §2.1</span>
    <li><a href="#dom-performanceeventtiming-processingend">processingEnd</a><span>, in §2.1</span>
    <li><a href="#dom-performanceeventtiming-processingstart">processingStart</a><span>, in §2.1</span>
-   <li><a href="#should-add-entry-to-observer">should add entry to observer</a><span>, in §3.4</span>
+   <li><a href="#should-add-performanceeventtiming">should add PerformanceEventTiming</a><span>, in §3.4</span>
    <li>
     target
     <ul>
@@ -2150,7 +2134,6 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <a href="https://dom.spec.whatwg.org/#context-object">https://dom.spec.whatwg.org/#context-object</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-context-object">2.1. PerformanceEventTiming interface</a>
-    <li><a href="#ref-for-context-object①">3.3. Modifications to the Performance Timeline specification</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-event-dispatch">
@@ -2345,12 +2328,6 @@ Such events are not handled within 100ms and will likely negatively impact user 
     <li><a href="#ref-for-update-the-rendering①">3.2. Modifications to the HTML specification</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-list-append">
-   <a href="https://infra.spec.whatwg.org/#list-append">https://infra.spec.whatwg.org/#list-append</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-list-append">3.3. Modifications to the Performance Timeline specification</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-mark-paint-timing">
    <a href="https://w3c.github.io/paint-timing/#mark-paint-timing">https://w3c.github.io/paint-timing/#mark-paint-timing</a><b>Referenced in:</b>
    <ul>
@@ -2361,21 +2338,20 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <a href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface">https://w3c.github.io/performance-timeline/#the-performanceentry-interface</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-the-performanceentry-interface">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-the-performanceentry-interface①">(2)</a>
-    <li><a href="#ref-for-the-performanceentry-interface②">3.4. Should add entry to observer</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-performanceobserverinit-dictionary">
    <a href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary">https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-performanceobserverinit-dictionary">3.3. Modifications to the Performance Timeline specification</a> <a href="#ref-for-performanceobserverinit-dictionary①">(2)</a> <a href="#ref-for-performanceobserverinit-dictionary②">(3)</a>
-    <li><a href="#ref-for-performanceobserverinit-dictionary③">3.4. Should add entry to observer</a>
+    <li><a href="#ref-for-performanceobserverinit-dictionary">3.3. Modifications to the Performance Timeline specification</a> <a href="#ref-for-performanceobserverinit-dictionary①">(2)</a>
+    <li><a href="#ref-for-performanceobserverinit-dictionary②">3.4. Should add PerformanceEventTiming</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-duration">
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration">https://w3c.github.io/performance-timeline/#dom-performanceentry-duration</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-duration">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-duration①">(2)</a>
-    <li><a href="#ref-for-dom-performanceentry-duration②">3.4. Should add entry to observer</a>
+    <li><a href="#ref-for-dom-performanceentry-duration②">3.4. Should add PerformanceEventTiming</a>
     <li><a href="#ref-for-dom-performanceentry-duration③">3.7. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-duration④">(2)</a>
     <li><a href="#ref-for-dom-performanceentry-duration⑤">4. Security &amp; privacy considerations</a> <a href="#ref-for-dom-performanceentry-duration⑥">(2)</a> <a href="#ref-for-dom-performanceentry-duration⑦">(3)</a>
    </ul>
@@ -2384,15 +2360,9 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype">https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-performanceentry-entrytype">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-dom-performanceentry-entrytype①">(2)</a>
-    <li><a href="#ref-for-dom-performanceentry-entrytype②">3.4. Should add entry to observer</a>
-    <li><a href="#ref-for-dom-performanceentry-entrytype③">3.5. Initialize event timing</a>
-    <li><a href="#ref-for-dom-performanceentry-entrytype④">3.7. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-entrytype⑤">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dom-performanceobserverinit-entrytypes">
-   <a href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-entrytypes">https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-entrytypes</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-performanceobserverinit-entrytypes">3.3. Modifications to the Performance Timeline specification</a>
+    <li><a href="#ref-for-dom-performanceentry-entrytype②">3.4. Should add PerformanceEventTiming</a> <a href="#ref-for-dom-performanceentry-entrytype③">(2)</a>
+    <li><a href="#ref-for-dom-performanceentry-entrytype④">3.5. Initialize event timing</a>
+    <li><a href="#ref-for-dom-performanceentry-entrytype⑤">3.7. Dispatch pending Event Timing entries</a> <a href="#ref-for-dom-performanceentry-entrytype⑥">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-name">
@@ -2403,41 +2373,10 @@ Such events are not handled within 100ms and will likely negatively impact user 
     <li><a href="#ref-for-dom-performanceentry-name③">3.7. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-observe-method">
-   <a href="https://w3c.github.io/performance-timeline/#observe-method">https://w3c.github.io/performance-timeline/#observe-method</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-observe-method">3.3. Modifications to the Performance Timeline specification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-observer">
-   <a href="https://w3c.github.io/performance-timeline/#dfn-observer">https://w3c.github.io/performance-timeline/#dfn-observer</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-observer">3.3. Modifications to the Performance Timeline specification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-observer-buffer">
-   <a href="https://w3c.github.io/performance-timeline/#dfn-observer-buffer">https://w3c.github.io/performance-timeline/#dfn-observer-buffer</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-observer-buffer">3.3. Modifications to the Performance Timeline specification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-options-list">
-   <a href="https://w3c.github.io/performance-timeline/#dfn-options-list">https://w3c.github.io/performance-timeline/#dfn-options-list</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-options-list">3.3. Modifications to the Performance Timeline specification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-performance-entry-buffer">
-   <a href="https://w3c.github.io/performance-timeline/#dfn-performance-entry-buffer">https://w3c.github.io/performance-timeline/#dfn-performance-entry-buffer</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dfn-performance-entry-buffer">3.3. Modifications to the Performance Timeline specification</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-queue-a-performanceentry">
    <a href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry">https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dfn-queue-a-performanceentry">3.3. Modifications to the Performance Timeline specification</a>
-    <li><a href="#ref-for-dfn-queue-a-performanceentry①">3.7. Dispatch pending Event Timing entries</a> <a href="#ref-for-dfn-queue-a-performanceentry②">(2)</a> <a href="#ref-for-dfn-queue-a-performanceentry③">(3)</a>
+    <li><a href="#ref-for-dfn-queue-a-performanceentry">3.7. Dispatch pending Event Timing entries</a> <a href="#ref-for-dfn-queue-a-performanceentry①">(2)</a> <a href="#ref-for-dfn-queue-a-performanceentry②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-performanceentry-starttime">
@@ -2452,12 +2391,6 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <a href="https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute">https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-supportedentrytypes-attribute">2.1. PerformanceEventTiming interface</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-dom-performanceobserverinit-type">
-   <a href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-type">https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-type</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-performanceobserverinit-type">3.3. Modifications to the Performance Timeline specification</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-the-gotpointercapture-event">
@@ -2773,11 +2706,6 @@ Such events are not handled within 100ms and will likely negatively impact user 
      <li><span class="dfn-paneled" id="term-for-update-the-rendering" style="color:initial">update the rendering</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[INFRA]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="term-for-list-append" style="color:initial">append</span>
-    </ul>
-   <li>
     <a data-link-type="biblio">[paint-timing]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-mark-paint-timing" style="color:initial">mark paint timing</span>
@@ -2789,17 +2717,10 @@ Such events are not handled within 100ms and will likely negatively impact user 
      <li><span class="dfn-paneled" id="term-for-performanceobserverinit-dictionary" style="color:initial">PerformanceObserverInit</span>
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-duration" style="color:initial">duration</span>
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-entrytype" style="color:initial">entryType</span>
-     <li><span class="dfn-paneled" id="term-for-dom-performanceobserverinit-entrytypes" style="color:initial">entryTypes</span>
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-name" style="color:initial">name</span>
-     <li><span class="dfn-paneled" id="term-for-observe-method" style="color:initial">observe()</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-observer" style="color:initial">observer</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-observer-buffer" style="color:initial">observer buffer</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-options-list" style="color:initial">options list</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-performance-entry-buffer" style="color:initial">performance entry buffer</span>
      <li><span class="dfn-paneled" id="term-for-dfn-queue-a-performanceentry" style="color:initial">queue the entry</span>
      <li><span class="dfn-paneled" id="term-for-dom-performanceentry-starttime" style="color:initial">startTime</span>
      <li><span class="dfn-paneled" id="term-for-supportedentrytypes-attribute" style="color:initial">supportedEntryTypes</span>
-     <li><span class="dfn-paneled" id="term-for-dom-performanceobserverinit-type" style="color:initial">type</span>
     </ul>
    <li>
     <a data-link-type="biblio">[pointerevents]</a> defines the following terms:
@@ -2872,8 +2793,6 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <dd>Ilya Grigorik. <a href="https://www.w3.org/TR/hr-time-2/">High Resolution Time Level 2</a>. 21 November 2019. REC. URL: <a href="https://www.w3.org/TR/hr-time-2/">https://www.w3.org/TR/hr-time-2/</a>
    <dt id="biblio-html">[HTML]
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
-   <dt id="biblio-infra">[INFRA]
-   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-paint-timing">[PAINT-TIMING]
    <dd>Shubhie Panicker. <a href="https://www.w3.org/TR/paint-timing/">Paint Timing 1</a>. 7 September 2017. WD. URL: <a href="https://www.w3.org/TR/paint-timing/">https://www.w3.org/TR/paint-timing/</a>
    <dt id="biblio-performance-timeline-2">[PERFORMANCE-TIMELINE-2]
@@ -2931,7 +2850,8 @@ Such events are not handled within 100ms and will likely negatively impact user 
     <li><a href="#ref-for-performanceeventtiming">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-performanceeventtiming①">(2)</a> <a href="#ref-for-performanceeventtiming②">(3)</a> <a href="#ref-for-performanceeventtiming③">(4)</a> <a href="#ref-for-performanceeventtiming④">(5)</a> <a href="#ref-for-performanceeventtiming⑤">(6)</a>
     <li><a href="#ref-for-performanceeventtiming⑥">2.2. EventCounts interface</a>
     <li><a href="#ref-for-performanceeventtiming⑦">3.2. Modifications to the HTML specification</a> <a href="#ref-for-performanceeventtiming⑧">(2)</a>
-    <li><a href="#ref-for-performanceeventtiming⑨">3.5. Initialize event timing</a>
+    <li><a href="#ref-for-performanceeventtiming⑨">3.4. Should add PerformanceEventTiming</a>
+    <li><a href="#ref-for-performanceeventtiming①⓪">3.5. Initialize event timing</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-performanceeventtiming-target">
@@ -3014,13 +2934,7 @@ Such events are not handled within 100ms and will likely negatively impact user 
   <aside class="dfn-panel" data-for="dom-performanceobserverinit-durationthreshold">
    <b><a href="#dom-performanceobserverinit-durationthreshold">#dom-performanceobserverinit-durationthreshold</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-performanceobserverinit-durationthreshold">3.4. Should add entry to observer</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="should-add-entry-to-observer">
-   <b><a href="#should-add-entry-to-observer">#should-add-entry-to-observer</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-should-add-entry-to-observer">3.3. Modifications to the Performance Timeline specification</a> <a href="#ref-for-should-add-entry-to-observer①">(2)</a>
+    <li><a href="#ref-for-dom-performanceobserverinit-durationthreshold">3.4. Should add PerformanceEventTiming</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="initialize-event-timing">
