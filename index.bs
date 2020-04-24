@@ -388,40 +388,14 @@ partial dictionary PerformanceObserverInit {
 };
 </pre>
 
-In the {{PerformanceObserver/observe()}} method, replace
-
-```text
-For each entry in tuple's performance entry buffer append entry to the observer buffer.
-```
-
-with the following:
-
-<div class=algorithm>
-For each |entry| in <var ignore=''>tuple</var>'s [=performance entry buffer=], if [=should add entry to observer=] returns true for |entry| and <var ignore=''>options</var>, [=list/append=] |entry| to the [=context object=]'s [=observer buffer=].
-</div>
-
-In the [=queue the entry=] algorithm, replace
-
-```
-If regObs's options list contains a PerformanceObserverInit item whose entryTypes member
-includes entryType or whose type member equals to entryType, append regObs's observer to
-interested observers.
-```
-
-with the following:
-
-<div class=algorithm>
-If |regObs|'s [=registered performance observer/options list=] contains a {{PerformanceObserverInit}} |item| whose {{PerformanceObserverInit/entryTypes}} member includes |entryType| or whose {{PerformanceObserverInit/type}} member equals to |entryType|:
-    1. Append |regObs|'s [=registered performance observer/observer=] to <var ignore=''>interested observers</var> if [=should add entry to observer=] returns true for |entry| and |item|.
-</div>
-
-Should add entry to observer {#sec-should-add-entry}
+Should add PerformanceEventTiming {#sec-should-add-performanceeventtiming}
 --------------------------------------------------------
 
-<div algorithm="should add entry to observer"/>
-    Given a {{PerformanceEntry}} |entry| and a {{PerformanceObserverInit}} |options|, to determine if we <dfn>should add entry to observer</dfn>, run the following steps:
+<div algorithm="should add PerformanceEventTiming"/>
+    Given a {{PerformanceEventTiming}} |entry| and a {{PerformanceObserverInit}} |options|, to determine if we <dfn export>should add PerformanceEventTiming</dfn>, run the following steps:
 
-    1. If |entry|'s {{PerformanceEntry/entryType}} attribute value is not equal to "event", return true.
+    1. If |entry|'s {{PerformanceEntry/entryType}} attribute value equals to "<code>first-input</code>", return true.
+    1. Assert that |entry|'s {{PerformanceEntry/entryType}} attribute value equals "<code>event</code>".
     1. Let |minDuration| be |options|'s {{PerformanceObserverInit/durationThreshold}} value if it's present, or 104 otherwise.
     1. If |minDuration| is less than 16, set |minDuration| to 16.
     1. If |entry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to |minDuration|, return true.
