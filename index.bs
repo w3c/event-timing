@@ -282,7 +282,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dd>The {{PerformanceEntry/startTime}} attribute's getter returns the <a>associated event</a>'s {{Event/timeStamp}}.</dd>
     <dt>{{PerformanceEntry/duration}}</dt>
     <dd>The {{PerformanceEntry/duration}} attribute's getter returns the difference between
-    the time of the first <a>update the rendering</a> step occurring after <a>associated event</a> has been dispatched
+    the next time the <a>update the rendering</a> steps are completed for the <a>associated event</a>'s {{Document}} after the <a>associated event</a> has been dispatched,
     and the {{PerformanceEntry/startTime}}, rounded to the nearest 8ms.</dd>
 </dl>
 
