@@ -1175,7 +1175,7 @@ Possible extra rowspan handling
 		   1. When table < content column, centers table in column.
 		   2. When content < table < available, left-aligns.
 		   3. When table > available, fills available + scroll bar.
-		*/ 
+		*/
 		display: grid;
 		grid-template-columns: minmax(0, 50em);
 	}
@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 4ad68f3f, updated Thu Apr 23 14:57:31 2020 -0700" name="generator">
+  <meta content="Bikeshed version 792aee41, updated Fri Jun 5 17:22:42 2020 -0700" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="6572d659161703be0701d8ab30cc2fe45a77d52d" name="document-revision">
+  <meta content="02359bb2156c32e31a8957cda28b5cb2ea54c464" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1482,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-04-24">24 April 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-09">9 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1702,7 +1702,7 @@ This allows developers to detect support for event timing.</p>
      <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime①">startTime</a></code> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event①">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp①">timeStamp</a></code>.
      <dt><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration">duration</a></code>
      <dd>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①">duration</a></code> attribute’s getter returns the difference between
-    the time of the first <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering">update the rendering</a> step occurring after <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event②">associated event</a> has been dispatched
+    the next time the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering">update the rendering</a> steps are completed for the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event②">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> after the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event③">associated event</a> has been dispatched,
     and the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-starttime" id="ref-for-dom-performanceentry-starttime②">startTime</a></code>, rounded to the nearest 8ms.
     </dl>
     <p><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑤">PerformanceEventTiming</a></code> has the following additional attributes:</p>
@@ -1712,9 +1712,9 @@ This allows developers to detect support for event timing.</p>
      <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend①">processingEnd</a></code>
      <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-processingend"><code class="highlight">processingEnd</code></dfn> attribute’s getter returns a timestamp captured at the end of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-dispatch" id="ref-for-concept-event-dispatch①">event dispatch algorithm</a>. This is when event handlers have finished executing. It’s equal to <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart②">processingStart</a></code> when there are no such event handlers. 
      <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-cancelable" id="ref-for-dom-performanceeventtiming-cancelable①">cancelable</a></code>
-     <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-cancelable"><code class="highlight">cancelable</code></dfn> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event③">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-cancelable" id="ref-for-dom-event-cancelable">cancelable</a></code> attribute value. 
+     <dd> The <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceEventTiming" data-dfn-type="attribute" data-export id="dom-performanceeventtiming-cancelable"><code class="highlight">cancelable</code></dfn> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event④">associated event</a>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-cancelable" id="ref-for-dom-event-cancelable">cancelable</a></code> attribute value. 
      <dt><code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-target" id="ref-for-dom-performanceeventtiming-target">target</a></code>
-     <dd> The <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-target" id="ref-for-dom-performanceeventtiming-target①">target</a></code> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event④">associated event</a>’s last <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-target" id="ref-for-dom-event-target">target</a></code> when such <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node" id="ref-for-node①">Node</a></code> is not disconnected nor in the shadow DOM. 
+     <dd> The <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-target" id="ref-for-dom-performanceeventtiming-target①">target</a></code> attribute’s getter returns the <a data-link-type="dfn" href="#performanceeventtiming-associated-event" id="ref-for-performanceeventtiming-associated-event⑤">associated event</a>’s last <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-target" id="ref-for-dom-event-target">target</a></code> when such <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node" id="ref-for-node①">Node</a></code> is not disconnected nor in the shadow DOM. 
     </dl>
    </div>
    <h3 class="heading settled" data-level="2.2" id="sec-event-counts"><span class="secno">2.2. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts">EventCounts</a></code> interface</span><a class="self-link" href="#sec-event-counts"></a></h3>
@@ -1761,7 +1761,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering" id="ref-for-update-the-rendering①">update the rendering</a> step of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model">event loop processing model</a>, add a step right after the step that calls <a data-link-type="dfn" href="https://w3c.github.io/paint-timing/#mark-paint-timing" id="ref-for-mark-paint-timing">mark paint timing</a>: 
     <ol>
      <li data-md>
-      <p>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> in <em>docs</em>, invoke the algorithm to <a data-link-type="dfn" href="#dispatch-pending-event-timing-entries" id="ref-for-dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</a> for that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.</p>
+      <p>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> in <em>docs</em>, invoke the algorithm to <a data-link-type="dfn" href="#dispatch-pending-event-timing-entries" id="ref-for-dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</a> for that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.3" id="sec-modifications-perf-timeline"><span class="secno">3.3. </span><span class="content">Modifications to the Performance Timeline specification</span><a class="self-link" href="#sec-modifications-perf-timeline"></a></h3>
@@ -1840,7 +1840,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
    </div>
    <h3 class="heading settled" data-level="3.7" id="sec-dispatch-pending"><span class="secno">3.7. </span><span class="content">Dispatch pending Event Timing entries</span><a class="self-link" href="#sec-dispatch-pending"></a></h3>
    <div class="algorithm" data-algorithm="dispatch pending Event Timing entries">
-     When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</dfn> for a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code> <var>doc</var>, run the following steps: 
+     When asked to <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="dispatch-pending-event-timing-entries">dispatch pending Event Timing entries</dfn> for a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code> <var>doc</var>, run the following steps: 
     <ol>
      <li data-md>
       <p>Let <var>window</var> be <var>doc</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>.</p>
@@ -2105,8 +2105,9 @@ Such events are not handled within 100ms and will likely negatively impact user 
   <aside class="dfn-panel" data-for="term-for-document">
    <a href="https://dom.spec.whatwg.org/#document">https://dom.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-document">3.2. Modifications to the HTML specification</a> <a href="#ref-for-document①">(2)</a>
-    <li><a href="#ref-for-document②">3.7. Dispatch pending Event Timing entries</a>
+    <li><a href="#ref-for-document">2.1. PerformanceEventTiming interface</a>
+    <li><a href="#ref-for-document①">3.2. Modifications to the HTML specification</a> <a href="#ref-for-document②">(2)</a>
+    <li><a href="#ref-for-document③">3.7. Dispatch pending Event Timing entries</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event">
@@ -2870,7 +2871,7 @@ Such events are not handled within 100ms and will likely negatively impact user 
   <aside class="dfn-panel" data-for="performanceeventtiming-associated-event">
    <b><a href="#performanceeventtiming-associated-event">#performanceeventtiming-associated-event</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-performanceeventtiming-associated-event">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-performanceeventtiming-associated-event①">(2)</a> <a href="#ref-for-performanceeventtiming-associated-event②">(3)</a> <a href="#ref-for-performanceeventtiming-associated-event③">(4)</a> <a href="#ref-for-performanceeventtiming-associated-event④">(5)</a>
+    <li><a href="#ref-for-performanceeventtiming-associated-event">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-performanceeventtiming-associated-event①">(2)</a> <a href="#ref-for-performanceeventtiming-associated-event②">(3)</a> <a href="#ref-for-performanceeventtiming-associated-event③">(4)</a> <a href="#ref-for-performanceeventtiming-associated-event④">(5)</a> <a href="#ref-for-performanceeventtiming-associated-event⑤">(6)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-performanceeventtiming-processingstart">
