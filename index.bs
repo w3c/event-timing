@@ -149,7 +149,7 @@ It's slow because it's often blocked on JavaScript execution that is not properl
 The latency of the website's response to the first user interaction can be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
 This allows developers to measure percentiles and improvements without having to register event handlers.
-In particular, this API enables measuring the <b>first input delay (FID)</b>, the delay in processing for the first "discrete" input event.
+In particular, this API enables measuring the <a>first input delay</a>, the delay in processing for the first "discrete" input event.
 
 </div>
 
@@ -188,11 +188,15 @@ Therefore, these event types are not exposed.
 
 Issue: it's unclear whether {{dragexit}} should be on the list. It may be deprecated and removed.
 
-The Event Timing API also exposes timing information about the first user interaction among the following:
+An {{Event}}'s <dfn for=Event>delay</dfn> is the difference between the time when the browser is about to run event handlers for the event and the {{Event}}'s {{Event/timeStamp}}.
+
+The Event Timing API also exposes timing information about the <dfn>first input</dfn>, defined as the first {{Event}} whos {{Event/type}} is one of the following:
 * {{keydown}}
 * {{mousedown}}
 * {{pointerdown}} which is followed by {{pointerup}}
 * {{click}}
+
+This enables computing the <dfn>first input delay</dfn>, the <a>delay</a> of the <a>first input</a>.
 
 Usage example {#sec-example}
 ------------------------
@@ -229,7 +233,7 @@ Usage example {#sec-example}
 </pre>
 
 The following are sample use cases that could be achieved by using this API:
-* Gather FID data (see <code>firstInputDelay</code> on the example above) on a website and track its performance over time.
+* Gather <a>first input delay</a> data on a website and track its performance over time.
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
 * A user drags a slider to control volume. Measure the latency to drag the slider.
 * Hovering a menu item triggers a flyout menu. Measure the latency for the flyout to appear.
@@ -473,6 +477,8 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
                     1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
                     1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
                     1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
+
+                    NOTE: this enables computing the <a>first input delay</a> via <code>newFirstInputDelayEntry.processingStart - newFirstInputDelayEntry.startTime</code>.
 </div>
 
 Security & privacy considerations {#priv-sec}
