@@ -149,7 +149,7 @@ It's slow because it's often blocked on JavaScript execution that is not properl
 The latency of the website's response to the first user interaction can be considered a key responsiveness and loading metric.
 To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
 This allows developers to measure percentiles and improvements without having to register event handlers.
-In particular, this API enables measuring the <a>first input delay</a>, the delay in processing for the first "discrete" input event.
+In particular, this API enables measuring the <b>first input delay</b>, the delay in processing for the first "discrete" input event.
 
 </div>
 
@@ -195,7 +195,7 @@ The remainder of this section is non-normative.
 It explains at a high level the information that is exposed in the [[#sec-processing-model]] section.
 </em>
 
-An {{Event}}'s <dfn for=Event>delay</dfn> is the difference between the time when the browser is about to run event handlers for the event and the {{Event}}'s {{Event/timeStamp}}.
+An {{Event}}'s <b>delay</b> is the difference between the time when the browser is about to run event handlers for the event and the {{Event}}'s {{Event/timeStamp}}.
 The former point in time is exposed as the {{PerformanceEventTiming}}'s {{PerformanceEventTiming/processingStart}},
 whereas the latter is exposed as {{PerformanceEventTiming}}'s {{PerformanceEntry/startTime}}.
 Therefore, an {{Event}}'s delay can be computed as <code>{{PerformanceEventTiming/processingStart}} -  {{PerformanceEntry/startTime}}</code>.
@@ -208,14 +208,14 @@ but a developer can set up a {{PerformanceObserver}} to observe future entries w
 Note that this does not change the entries that are buffered and hence the
 <a href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-buffered">buffered</a> flag only enables receiving past entries with duration greater than or equal to the default threshold.
 
-The Event Timing API also exposes timing information about the <dfn>first input</dfn> of a {{Window}} <var>window</var>,
+The Event Timing API also exposes timing information about the <b>first input</b> of a {{Window}} <var>window</var>,
 defined as the first {{Event}} (with {{Event/isTrusted}} set) whose [=relevant global object=] is <var>window</var> and whose {{Event/type}} is one of the following:
 * {{keydown}}
 * {{mousedown}}
 * {{pointerdown}} which is followed by {{pointerup}}
 * {{click}}
 
-This enables computing the <dfn>first input delay</dfn>, the <a>delay</a> of the <a>first input</a>.
+This enables computing the <b>first input delay</b>, the <b>delay</b> of the <b>first input</b>.
 
 Note that the Event Timing API creates entries for events regardless of whether they have any event listeners.
 In particular, the first click or the first key might not be the user actually trying to interact with the page functionality;
@@ -263,7 +263,7 @@ Usage example {#sec-example}
 </pre>
 
 The following are sample use cases that could be achieved by using this API:
-* Gather <a>first input delay</a> data on a website and track its performance over time.
+* Gather <b>first input delay</b> data on a website and track its performance over time.
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
 * A user drags a slider to control volume. Measure the latency to drag the slider.
 * Hovering a menu item triggers a flyout menu. Measure the latency for the flyout to appear.
@@ -507,8 +507,6 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
                     1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
                     1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
                     1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
-
-                    NOTE: this enables computing the <a>first input delay</a> via <code>newFirstInputDelayEntry.processingStart - newFirstInputDelayEntry.startTime</code>.
 </div>
 
 Security & privacy considerations {#priv-sec}
