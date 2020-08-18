@@ -425,13 +425,21 @@ partial dictionary PerformanceObserverInit {
 Should add PerformanceEventTiming {#sec-should-add-performanceeventtiming}
 --------------------------------------------------------
 
+Note: The following algorithm is used in the [[PERFORMANCE-TIMELINE-2]] specification to determine
+when a {{PerformanceEventTiming}} entry needs to be added to the buffer of a {{PerformanceObserver}}
+or to the performance timeline, as described in the <a href=
+https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry>registry</a>.
+
 <div algorithm="should add PerformanceEventTiming"/>
-    Given a {{PerformanceEventTiming}} |entry| and a {{PerformanceObserverInit}} |options|, to determine if we <dfn export>should add PerformanceEventTiming</dfn>, run the following steps:
+    Given a {{PerformanceEventTiming}} |entry| and a {{PerformanceObserverInit}} |options|, to
+    determine if we <dfn export>should add PerformanceEventTiming</dfn>,  with |entry| and
+    optionally |options| as inputs, run the following steps:
 
     1. If |entry|'s {{PerformanceEntry/entryType}} attribute value equals to "<code>first-input</code>", return true.
     1. Assert that |entry|'s {{PerformanceEntry/entryType}} attribute value equals "<code>event</code>".
-    1. Let |minDuration| be |options|'s {{PerformanceObserverInit/durationThreshold}} value if it's present, or 104 otherwise.
-    1. If |minDuration| is less than 16, set |minDuration| to 16.
+    1. Let |minDuration| be computed as follows:
+        1. If |options| is not present or if |options|'s {{PerformanceObserverInit/durationThreshold}} is not present, let |minDuration| be 104.
+        1. Otherwise, let |minDuration| be the maximum between 16 and |options|'s {{PerformanceObserverInit/durationThreshold}} value.
     1. If |entry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to |minDuration|, return true.
     1. Otherwise, return false.
 </div>
