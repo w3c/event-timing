@@ -1224,7 +1224,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 65c8882a, updated Fri Aug 14 17:43:28 2020 -0700" name="generator">
   <link href="https://wicg.github.io/event-timing" rel="canonical">
-  <meta content="8d8e21eed9910c7bc706a9e0fb4012fbb5f7a38a" name="document-revision">
+  <meta content="dd0be307aa17a782851e3690d2c2c252c8e0a19a" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1482,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-08-17">17 August 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-08-18">18 August 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1795,17 +1795,25 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
 };
 </pre>
    <h3 class="heading settled" data-level="3.4" id="sec-should-add-performanceeventtiming"><span class="secno">3.4. </span><span class="content">Should add PerformanceEventTiming</span><a class="self-link" href="#sec-should-add-performanceeventtiming"></a></h3>
+   <p class="note" role="note"><span>Note:</span> The following algorithm is used in the <a data-link-type="biblio" href="#biblio-performance-timeline-2">[PERFORMANCE-TIMELINE-2]</a> specification to determine
+when a <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①①">PerformanceEventTiming</a></code> entry needs to be added to the buffer of a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceobserver-interface" id="ref-for-the-performanceobserver-interface①">PerformanceObserver</a></code> or to the performance timeline, as described in the <a href="https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry">registry</a>.</p>
    <div class="algorithm" data-algorithm="should add PerformanceEventTiming">
-     Given a <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①①">PerformanceEventTiming</a></code> <var>entry</var> and a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary②">PerformanceObserverInit</a></code> <var>options</var>, to determine if we <dfn data-dfn-type="dfn" data-export id="should-add-performanceeventtiming">should add PerformanceEventTiming<a class="self-link" href="#should-add-performanceeventtiming"></a></dfn>, run the following steps: 
+     Given a <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①②">PerformanceEventTiming</a></code> <var>entry</var> and a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary②">PerformanceObserverInit</a></code> <var>options</var>, to
+    determine if we <dfn data-dfn-type="dfn" data-export id="should-add-performanceeventtiming">should add PerformanceEventTiming<a class="self-link" href="#should-add-performanceeventtiming"></a></dfn>,  with <var>entry</var> and
+    optionally <var>options</var> as inputs, run the following steps: 
     <ol>
      <li data-md>
       <p>If <var>entry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype②">entryType</a></code> attribute value equals to "<code class="highlight">first<c- o>-</c->input</code>", return true.</p>
      <li data-md>
       <p>Assert that <var>entry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype③">entryType</a></code> attribute value equals "<code class="highlight">event</code>".</p>
      <li data-md>
-      <p>Let <var>minDuration</var> be <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceobserverinit-durationthreshold" id="ref-for-dom-performanceobserverinit-durationthreshold">durationThreshold</a></code> value if it’s present, or 104 otherwise.</p>
-     <li data-md>
-      <p>If <var>minDuration</var> is less than 16, set <var>minDuration</var> to 16.</p>
+      <p>Let <var>minDuration</var> be computed as follows:</p>
+      <ol>
+       <li data-md>
+        <p>If <var>options</var> is not present or if <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceobserverinit-durationthreshold" id="ref-for-dom-performanceobserverinit-durationthreshold">durationThreshold</a></code> is not present, let <var>minDuration</var> be 104.</p>
+       <li data-md>
+        <p>Otherwise, let <var>minDuration</var> be the maximum between 16 and <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceobserverinit-durationthreshold" id="ref-for-dom-performanceobserverinit-durationthreshold①">durationThreshold</a></code> value.</p>
+      </ol>
      <li data-md>
       <p>If <var>entry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration④">duration</a></code> attribute value is greater than or equal to <var>minDuration</var>, return true.</p>
      <li data-md>
@@ -1819,7 +1827,7 @@ Finally, each <code class="idl"><a data-link-type="idl" href="https://html.spec.
      <li data-md>
       <p>If the algorithm to determine if <var>event</var> should be <a data-link-type="dfn" href="#considered-for-event-timing" id="ref-for-considered-for-event-timing">considered for Event Timing</a> returns false, then return null.</p>
      <li data-md>
-      <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①②">PerformanceEventTiming</a></code> object with <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm" id="ref-for-concept-relevant-realm">relevant realm</a>.</p>
+      <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①③">PerformanceEventTiming</a></code> object with <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm" id="ref-for-concept-relevant-realm">relevant realm</a>.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value.</p>
      <li data-md>
@@ -2374,6 +2382,7 @@ Such events are not handled within 100ms and will likely negatively impact user 
    <a href="https://w3c.github.io/performance-timeline/#the-performanceobserver-interface">https://w3c.github.io/performance-timeline/#the-performanceobserver-interface</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-the-performanceobserver-interface">1.1. Events exposed</a>
+    <li><a href="#ref-for-the-performanceobserver-interface①">3.4. Should add PerformanceEventTiming</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-performanceobserverinit-dictionary">
@@ -2890,8 +2899,8 @@ Such events are not handled within 100ms and will likely negatively impact user 
     <li><a href="#ref-for-performanceeventtiming②">2.1. PerformanceEventTiming interface</a> <a href="#ref-for-performanceeventtiming③">(2)</a> <a href="#ref-for-performanceeventtiming④">(3)</a> <a href="#ref-for-performanceeventtiming⑤">(4)</a> <a href="#ref-for-performanceeventtiming⑥">(5)</a> <a href="#ref-for-performanceeventtiming⑦">(6)</a>
     <li><a href="#ref-for-performanceeventtiming⑧">2.2. EventCounts interface</a>
     <li><a href="#ref-for-performanceeventtiming⑨">3.2. Modifications to the HTML specification</a> <a href="#ref-for-performanceeventtiming①⓪">(2)</a>
-    <li><a href="#ref-for-performanceeventtiming①①">3.4. Should add PerformanceEventTiming</a>
-    <li><a href="#ref-for-performanceeventtiming①②">3.5. Initialize event timing</a>
+    <li><a href="#ref-for-performanceeventtiming①①">3.4. Should add PerformanceEventTiming</a> <a href="#ref-for-performanceeventtiming①②">(2)</a>
+    <li><a href="#ref-for-performanceeventtiming①③">3.5. Initialize event timing</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-performanceeventtiming-target">
@@ -2976,7 +2985,7 @@ Such events are not handled within 100ms and will likely negatively impact user 
   <aside class="dfn-panel" data-for="dom-performanceobserverinit-durationthreshold">
    <b><a href="#dom-performanceobserverinit-durationthreshold">#dom-performanceobserverinit-durationthreshold</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-performanceobserverinit-durationthreshold">3.4. Should add PerformanceEventTiming</a>
+    <li><a href="#ref-for-dom-performanceobserverinit-durationthreshold">3.4. Should add PerformanceEventTiming</a> <a href="#ref-for-dom-performanceobserverinit-durationthreshold①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="initialize-event-timing">
