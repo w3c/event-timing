@@ -536,3 +536,7 @@ This allows relatively precise timing even for 120Hz displays.
 The choice of 104ms as the default cutoff value for the {{PerformanceEntry/duration}} is just the first multiple of 8 greater than 100ms.
 An event whose rounded duration is greater than or equal to 104ms will have its pre-rounded duration greater than or equal to 100ms.
 Such events are not handled within 100ms and will likely negatively impact user experience.
+
+The choice of 16ms as the minimum value allowed for {{PerformanceObserverInit/durationThreshold}} is because of use-cases: a developer could
+want to make sure that an input is responded smoothly in 120fps screens. No current use-cases are known that require using a lower threshold,
+but this could change in the future.
