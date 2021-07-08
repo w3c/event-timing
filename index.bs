@@ -538,5 +538,5 @@ An event whose rounded duration is greater than or equal to 104ms will have its 
 Such events are not handled within 100ms and will likely negatively impact user experience.
 
 The choice of 16ms as the minimum value allowed for {{PerformanceObserverInit/durationThreshold}} is because it enables the typical use-case of
-making sure that the response is smooth. In 120Hz displays, a response taking more than a single frame will be at least 16ms, so the entry
+making sure that the response is smooth. In 120Hz displays, a response that skips more than a single frame will be at least 16ms, so the entry
 corresponding to this user input will be surfaced in the API under the minimum value.
