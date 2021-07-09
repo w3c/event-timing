@@ -140,8 +140,8 @@ Since the user agent computes the timestamps, there is no need for event listene
 This means that even events that occur very early in the page load can be captured.
 This also enables visibility into slow events without requiring analytics providers to attempt to patch and subscribe to every conceivable event.
 In addition to this, the website's performance will not suffer from the overhead of unneeded event listeners.
-Finally, this specification allows developers to obtain detailed information about the timing of
-the rendering that occurs right after the event has been processed.
+Finally, this specification allows developers to obtain detailed information about the timing of the rendering that occurs right after the event
+has been processed.
 This can be useful to measure the overhead of website modifications that are triggered by events.
 
 The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
