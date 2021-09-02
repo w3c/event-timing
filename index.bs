@@ -262,6 +262,25 @@ Usage example {#sec-example}
 }
 </pre>
 
+The following example computes a dictionary mapping interactionId to the maximum duration of any of its events.
+This dictionary can later be aggregated and reported to analytics.
+
+<pre class="example highlight">
+    let maxDurations = {};
+    new PerformanceObserver(list => {
+        list.getEntries().forEach(entry => {
+              if (entry.interactionId > 0) {
+                  let id = entry.interactionId;
+                  if (!maxDurations[id]) {
+                      maxDurations[id] = entry.duration;
+                  } else {
+                      maxDurations[id] = Math.max(maxDurations[id], entry.duration);
+                  }
+              }
+        })
+    }).observe({type: 'event', buffered: true, durationThreshold: 16});
+</pre>
+
 The following are sample use cases that could be achieved by using this API:
 * Gather <b>first input delay</b> data on a website and track its performance over time.
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
@@ -284,6 +303,7 @@ interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute DOMHighResTimeStamp processingEnd;
     readonly attribute boolean cancelable;
     readonly attribute Node? target;
+    readonly attribute unsigned long long interactionId;
     [Default] object toJSON();
 };
 </pre>
@@ -339,6 +359,10 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dd>
         The {{target}} attribute's getter returns the <a>associated event</a>'s last {{Event/target}} when such {{/Node}} is not disconnected nor in the shadow DOM.
     </dd>
+    <dt>{{interactionId}}</dt>
+    <dd>
+      The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identies the user interaction which triggered the <a>associated event</a>.
+    </dd>
 </dl>
 
 </div>
@@ -379,6 +403,32 @@ Modifications to the DOM specification {#sec-modifications-DOM}
 
 <em>This section will be removed once [[DOM]] has been modified.</em>
 
+A user interaction is one which results from one of the following user actions: tap, click, drag, and key press.
+User interactions may also come from assistive devices which trigger equivalent responses from the user agent.
+
+Each {{Event}} has an associated <dfn>interaction id</dfn>, an integer representing the identifier that corresponds to the user interaction associated with this event.
+An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to a unique identifier.
+
+<div algorith="new user interaction">
+    Upon detecting a new user interaction, perform the following steps:
+    1. Let |window| be the <a>relevant global object</a> targetted by the user interaction.
+    1. Increase |window|'s <a>user interaction count</a> value by 1.
+    1. If the user interaction is a key press from the user, then set the <a>interaction id</a> to |window|'s <a>user interaction count</a> upon creating the following events associated with this user interaction:
+        * {{keydown}}
+        * {{keypress}}
+        * {{keyup}}
+    1. Otherwise:
+        1. Assert that the user interaction results from tap, click, or drag.
+        1. Set the <a>interaction id</a> to |window|'s <a>user interaction count</a> upon creating the following events associated with this user interaction:
+            * {{pointerdown}}
+            * {{touchstart}}
+            * {{mousedown}}
+            * {{pointerup}}
+            * {{touchend}}
+            * {{mouseup}}
+            * {{click}}
+</div>
+
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
 
@@ -401,7 +451,8 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
-Finally, each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
+Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
+Finally, each {{Window}} has <dfn>user interaction count</dfn>, an integer which is initially set to 0.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -457,6 +508,7 @@ Initialize event timing {#sec-init-event-timing}
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <var>event</var>'s {{Event/timeStamp}} attribute value.
     1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processingStart</var>.
     1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
+    1. Set <var>timingEntry</var>'s {{interactionId}} to <var>event</var>'s <a>interaction id</a> value.
     1. Return <var>timingEntry</var>.
 </div>
 
