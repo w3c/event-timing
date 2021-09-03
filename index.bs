@@ -412,7 +412,7 @@ An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to 
 <div algorithm="new user interaction">
     Upon detecting a new user interaction, perform the following steps:
     1. Let |window| be the <a>relevant global object</a> targeted by the user interaction.
-    1. Increase |window|'s <a>user interaction value</a> value by 1.
+    1. Increase |window|'s <a>user interaction value</a> value by 7.
     1. If the user interaction is a key press from the user, then set the <a>interaction id</a> to |window|'s <a>user interaction value</a> upon creating the following events associated with this user interaction:
         * {{keydown}}
         * {{keypress}}
@@ -428,6 +428,7 @@ An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to 
             * {{mouseup}}
             * {{click}}
 </div>
+Note: the <a>user interaction value</a> is increased by 7 instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
 
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
@@ -452,7 +453,7 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
 Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
-Finally, each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer.
+Finally, each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
 
 Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
 By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
