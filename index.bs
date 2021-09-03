@@ -412,14 +412,14 @@ An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to 
 <div algorithm="new user interaction">
     Upon detecting a new user interaction, perform the following steps:
     1. Let |window| be the <a>relevant global object</a> targeted by the user interaction.
-    1. Increase |window|'s <a>user interaction count</a> value by 1.
-    1. If the user interaction is a key press from the user, then set the <a>interaction id</a> to |window|'s <a>user interaction count</a> upon creating the following events associated with this user interaction:
+    1. Increase |window|'s <a>user interaction value</a> value by 1.
+    1. If the user interaction is a key press from the user, then set the <a>interaction id</a> to |window|'s <a>user interaction value</a> upon creating the following events associated with this user interaction:
         * {{keydown}}
         * {{keypress}}
         * {{keyup}}
     1. Otherwise:
         1. Assert that the user interaction results from tap, click, or drag.
-        1. Set the <a>interaction id</a> to |window|'s <a>user interaction count</a> upon creating the following events associated with this user interaction:
+        1. Set the <a>interaction id</a> to |window|'s <a>user interaction value</a> upon creating the following events associated with this user interaction:
             * {{pointerdown}}
             * {{touchstart}}
             * {{mousedown}}
@@ -452,7 +452,10 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
 Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
-Finally, each {{Window}} has <dfn>user interaction count</dfn>, an integer which is initially set to 0.
+Finally, each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer.
+
+Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
+By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
