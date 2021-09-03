@@ -269,14 +269,14 @@ This dictionary can later be aggregated and reported to analytics.
     let maxDurations = {};
     new PerformanceObserver(list => {
         list.getEntries().forEach(entry => {
-              if (entry.interactionId > 0) {
-                  let id = entry.interactionId;
-                  if (!maxDurations[id]) {
-                      maxDurations[id] = entry.duration;
-                  } else {
-                      maxDurations[id] = Math.max(maxDurations[id], entry.duration);
-                  }
-              }
+            if (entry.interactionId > 0) {
+                let id = entry.interactionId;
+                if (!maxDurations[id]) {
+                    maxDurations[id] = entry.duration;
+                } else {
+                    maxDurations[id] = Math.max(maxDurations[id], entry.duration);
+                }
+            }
         })
     }).observe({type: 'event', buffered: true, durationThreshold: 16});
 </pre>
@@ -409,9 +409,9 @@ User interactions may also come from assistive devices which trigger equivalent 
 Each {{Event}} has an associated <dfn>interaction id</dfn>, an integer representing the identifier that corresponds to the user interaction associated with this event.
 An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to a unique identifier.
 
-<div algorith="new user interaction">
+<div algorithm="new user interaction">
     Upon detecting a new user interaction, perform the following steps:
-    1. Let |window| be the <a>relevant global object</a> targetted by the user interaction.
+    1. Let |window| be the <a>relevant global object</a> targeted by the user interaction.
     1. Increase |window|'s <a>user interaction count</a> value by 1.
     1. If the user interaction is a key press from the user, then set the <a>interaction id</a> to |window|'s <a>user interaction count</a> upon creating the following events associated with this user interaction:
         * {{keydown}}
