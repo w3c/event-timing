@@ -416,23 +416,23 @@ An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to 
     1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
     1. Let |userInteractionValue| be |window|'s <a>user interaction value</a>.
     1. If the user interaction is a key press from the user, then:
-      1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
-        1. If |event| is not one among the following, return:
-          * {{keydown}}
-          * {{keypress}}
-          * {{keyup}}
-        1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
+        1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
+            1. If |event| is not one among the following, return:
+                * {{keydown}}
+                * {{keypress}}
+                * {{keyup}}
+            1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
     1. Otherwise:
-      1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
-        1. If |event| is not one among the following, return:
-          * {{pointerdown}}
-          * {{touchstart}}
-          * {{mousedown}}
-          * {{pointerup}}
-          * {{touchend}}
-          * {{mouseup}}
-          * {{click}}
-        1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
+        1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
+            1. If |event| is not one among the following, return:
+                * {{pointerdown}}
+                * {{touchstart}}
+                * {{mousedown}}
+                * {{pointerup}}
+                * {{touchend}}
+                * {{mouseup}}
+                * {{click}}
+            1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
 </div>
 Note: the <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
 
