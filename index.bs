@@ -410,25 +410,31 @@ Each {{Event}} has an associated <dfn>interaction id</dfn>, an integer represent
 An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to a unique identifier.
 
 <div algorithm="new user interaction">
-    Upon detecting a new user interaction, perform the following steps:
+    Upon detecting a new user interaction |userInteraction|, perform the following steps:
+    1. If |userInteraction| is not a tap, click, drag, or key press, return.
     1. Let |window| be the <a>relevant global object</a> targeted by the user interaction.
-    1. Increase |window|'s <a>user interaction value</a> value by 7.
-    1. If the user interaction is a key press from the user, then set the <a>interaction id</a> to |window|'s <a>user interaction value</a> upon creating the following events associated with this user interaction:
-        * {{keydown}}
-        * {{keypress}}
-        * {{keyup}}
+    1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+    1. Let |userInteractionValue| be |window|'s <a>user interaction value</a>.
+    1. If the user interaction is a key press from the user, then:
+      1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
+        1. If |event| is not one among the following, return:
+          * {{keydown}}
+          * {{keypress}}
+          * {{keyup}}
+        1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
     1. Otherwise:
-        1. Assert that the user interaction results from tap, click, or drag.
-        1. Set the <a>interaction id</a> to |window|'s <a>user interaction value</a> upon creating the following events associated with this user interaction:
-            * {{pointerdown}}
-            * {{touchstart}}
-            * {{mousedown}}
-            * {{pointerup}}
-            * {{touchend}}
-            * {{mouseup}}
-            * {{click}}
+      1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
+        1. If |event| is not one among the following, return:
+          * {{pointerdown}}
+          * {{touchstart}}
+          * {{mousedown}}
+          * {{pointerup}}
+          * {{touchend}}
+          * {{mouseup}}
+          * {{click}}
+        1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
 </div>
-Note: the <a>user interaction value</a> is increased by 7 instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
+Note: the <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
 
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
