@@ -403,49 +403,16 @@ Modifications to the DOM specification {#sec-modifications-DOM}
 
 <em>This section will be removed once [[DOM]] has been modified.</em>
 
-A user interaction is one which results from one of the following user actions: tap, click, drag, and key press.
-User interactions may also come from assistive devices which trigger equivalent responses from the user agent.
-
-Each {{Event}} has an associated <dfn>interaction id</dfn>, an integer representing the identifier that corresponds to the user interaction associated with this event.
-An {{Event}}'s <a>interaction id</a> is initialized to 0, and may be changed to a unique identifier.
-
-<div algorithm="new user interaction">
-    Upon detecting a new user interaction |userInteraction|, perform the following steps:
-    1. If |userInteraction| is not a tap, click, drag, or key press, return.
-    1. Let |window| be the <a>relevant global object</a> targeted by the user interaction.
-    1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-    1. Let |userInteractionValue| be |window|'s <a>user interaction value</a>.
-    1. If the user interaction is a key press from the user, then:
-        1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
-            1. If |event| is not one among the following, return:
-                * {{keydown}}
-                * {{keypress}}
-                * {{keyup}}
-            1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
-    1. Otherwise:
-        1. For every {{Event}} |event| that is associated with |userInteraction|, perform the following steps:
-            1. If |event| is not one among the following, return:
-                * {{pointerdown}}
-                * {{touchstart}}
-                * {{mousedown}}
-                * {{pointerup}}
-                * {{touchend}}
-                * {{mouseup}}
-                * {{click}}
-            1. Set |event|'s <a>interaction id</a> to |userInteractionValue|.
-</div>
-Note: the <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
-
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
 
-    Right after step 1, we add the following step:
-
-    * Let <var>timingEntry</var> be the result of <a lt='initialize event timing'>initializing event timing</a> given <em>event</em> and the <a>current high resolution time</a>.
+    Right after step 1, we add the following steps:
+    1. Let |interactionId| be the result of <a lt='compute interactionId'>computing interactionId</a> given |event|.
+    1. Let |timingEntry| be the result of <a lt='initialize event timing'>initializing event timing</a> given |event|, the <a>current high resolution time</a>, and |interactionId|.
 
     Right before the returning step of that algorithm, add the following step:
 
-    * <a>Finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a>current high resolution time</a> as inputs.
+    1. <a>Finalize event timing</a> passing |timingEntry|, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 </div>
 
 Note: If a user agent skips the <a>event dispatch algorithm</a>, it can still choose to include an entry for that {{Event}}.
@@ -459,7 +426,9 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
 Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
-Finally, each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
+Each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
+Each {{Window}} has <dfn>key press interaction value map</dfn>, a <a>map</a> which is initially empty.
+Finally, each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> which is initially empty.
 
 Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
 By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
@@ -505,11 +474,48 @@ https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry>registry<
     1. Otherwise, return false.
 </div>
 
+Computing interactionId {#sec-computing-interactionid}
+--------------------------------------------------------
+
+<div algorithm="computing interactionId">
+    When asked to <dfn export>compute interactionId</dfn> with |event| as input, run the following steps:
+
+    1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
+    1. If |event| is not one among {{keydown}}, {{keyup}}, {{pointerdown}}, {{pointerup}}, or {{click}}, return 0.
+    1. Let |window| be |event|'s <a>relevant global object</a>.
+    1. Let |keyMap| be |window|'s <a>key press interaction value map</a>.
+    1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
+    1. If |event| is a {{keydown}}:
+        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
+        1. Set |keyMap|[|code|] to |window|'s <a>user interaction value</a>.
+        1. Return |keyMap|[|code|].
+    1. Otherwise, if |event| is a {{keyup}}:
+        1. If |keyMap|[|code|] does not exist, return 0.
+        1. Let |value| be |keyMap|[|code|].
+        1. Remove |keyMap|[|code|].
+        1. Return |value|.
+    1. Otherwise, if |event| is a {{pointerdown}}:
+        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
+        1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
+        1. Return |pointerMap|[|pointerId|].
+    1. Otherwise, if |event| is a {{pointerup}} or a {{click}}:
+        1. If |pointerMap|[|pointerId|] does not exist, return 0.
+        1. Let |value| be |pointerMap|[|pointerId|].
+        1. If |event| is a {{click}}, remove |pointerMap|[|pointerId|].
+        1. Return |value|.
+</div>
+
+The <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
+A user agent may choose to increase it by a small random integer every time.
+A user agent may not pick a global random integer and increase the <a>user interaction value</a>s of all {{Window|Windows}} by that amount because this could introduce cross origin leaks.
+
 Initialize event timing {#sec-init-event-timing}
 --------------------------------------------------------
 
 <div algorithm="initialize event timing">
-    When asked to <dfn export>initialize event timing</dfn>, with <var>event</var> and <var>processingStart</var> as inputs, run the following steps:
+    When asked to <dfn export>initialize event timing</dfn>, with <var>event</var>, <var>processingStart</var>, and |interactionId| as inputs, run the following steps:
 
     1. If the algorithm to determine if <var>event</var> should be <a>considered for Event Timing</a> returns false, then return null.
     1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object with |event|'s [=relevant realm=].
@@ -518,7 +524,7 @@ Initialize event timing {#sec-init-event-timing}
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <var>event</var>'s {{Event/timeStamp}} attribute value.
     1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processingStart</var>.
     1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
-    1. Set <var>timingEntry</var>'s {{interactionId}} to <var>event</var>'s <a>interaction id</a> value.
+    1. Set <var>timingEntry</var>'s {{interactionId}} to |interactionId|.
     1. Return <var>timingEntry</var>.
 </div>
 
