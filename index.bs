@@ -361,7 +361,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     </dd>
     <dt>{{interactionId}}</dt>
     <dd>
-      The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identies the user interaction which triggered the <a>associated event</a>.
+      The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identifies the user interaction which triggered the <a>associated event</a>.
     </dd>
 </dl>
 
@@ -424,11 +424,18 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 <em>This section will be removed once [[HTML]] has been modified.</em>
 
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
-Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
+
+Each {{Window}} also has <dfn>pending first pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
+
 Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
+
 Each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
-Each {{Window}} has <dfn>key press interaction value map</dfn>, a <a>map</a> which is initially empty.
-Finally, each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> which is initially empty.
+
+Each {{Window}} has <dfn>key press interaction value map</dfn>, a <a>map</a> of strings to integers which is initially empty.
+
+Each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
+
+Finally, each {{Window}} has <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
 
 Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
 By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
@@ -481,30 +488,44 @@ Computing interactionId {#sec-computing-interactionid}
     When asked to <dfn export>compute interactionId</dfn> with |event| as input, run the following steps:
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
-    1. If |event| is not one among {{keydown}}, {{keyup}}, {{pointerdown}}, {{pointerup}}, or {{click}}, return 0.
+    1. If |event| is not one among {{keydown}}, {{keyup}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
     1. Let |window| be |event|'s <a>relevant global object</a>.
     1. Let |keyMap| be |window|'s <a>key press interaction value map</a>.
     1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
-    1. If |event| is a {{keydown}}:
-        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+    1. Let |pendingDowns| be |window|'s <a>pending pointer downs</a>.
+    1. If |event| is a {{keydown}} or {{keyup}}:
         1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
-        1. Set |keyMap|[|code|] to |window|'s <a>user interaction value</a>.
-        1. Return |keyMap|[|code|].
-    1. Otherwise, if |event| is a {{keyup}}:
-        1. If |keyMap|[|code|] does not exist, return 0.
-        1. Let |value| be |keyMap|[|code|].
-        1. Remove |keyMap|[|code|].
-        1. Return |value|.
-    1. Otherwise, if |event| is a {{pointerdown}}:
-        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. If |event| is a {{keydown}}:
+            1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+            1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
+            1. Set |keyMap|[|code|] to |window|'s <a>user interaction value</a>.
+            1. Return |keyMap|[|code|].
+        1. Otherwise (|event| is a {{keyup}}):
+            1. If |keyMap|[|code|] does not exist, return 0.
+            1. Let |value| be |keyMap|[|code|].
+            1. Remove |keyMap|[|code|].
+            1. Return |value|.
+    1. Otherwise (event is {{pointercancel}}, {{pointerup}}, or {{click}}):
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
-        1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
+        1. If |event| is a {{click}}:
+            1. If |pointerMap|[|pointerId|] does not exist, return 0.
+            1. Let |value| be |pointerMap|[|pointerId|].
+            1. Remove |pointerMap|[|pointerId|].
+            1. Return |value|.
+        1. Assert that |event| is a {{pointerup}} or a {{pointercancel}}.
+        1. If |pendingDowns|[|pointerId|] does not exist:
+            1. If |pointerMap|[|pointerId|] exists, remove |pointerMap|[|pointerId|].
+            1. Return 0.
+        1. Let |pointerDown| be |pendingDowns|[|pointerId|].
+        1. If |event| is a {{pointerup}}:
+            1. Let |value| be 0.
+            1. If |pointerMap|[|pointerId|] does not exist:
+                1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+                1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
+            1. Set |pointerDown|'s {{PerformanceEventTiming/interactionId}} to |pointerMap][|pointerMap|].
+        1. Append |pointerDown| to |window|’s <a>pending event entries</a>.
+        1. Remove |pendingDowns|[|pointerId|].
         1. Return |pointerMap|[|pointerId|].
-    1. Otherwise, if |event| is a {{pointerup}} or a {{click}}:
-        1. If |pointerMap|[|pointerId|] does not exist, return 0.
-        1. Let |value| be |pointerMap|[|pointerId|].
-        1. If |event| is a {{click}}, remove |pointerMap|[|pointerId|].
-        1. Return |value|.
 </div>
 
 The <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
@@ -548,7 +569,7 @@ Finalize event timing {#sec-fin-event-timing}
 
     Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
-    1. Append <var>timingEntry</var> to <var>relevantGlobal</var>’s <a>pending event entries</a>.
+    1. If |timingEntry|'s {{PerformanceEntry/name}} is not "pointerdown", append <var>timingEntry</var> to <var>relevantGlobal</var>’s <a>pending event entries</a>.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
@@ -572,12 +593,12 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> <var>timingEntry</var>.
         1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
             1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
-                1. Set <var>window</var>'s <a>pending pointer down</a> to a copy of <var>timingEntry</var>.
-                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending pointer down</a> to "<code>first-input</code>".
+                1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
+                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending first pointer down</a> to "<code>first-input</code>".
             1. Otherwise, run the following steps:
-                1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending pointer down</a> is not null, then:
+                1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending first pointer down</a> is not null, then:
                     1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
-                    1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending pointer down</a>.
+                    1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending first pointer down</a>.
                 1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
                     1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
                     1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
