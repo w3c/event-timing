@@ -412,7 +412,7 @@ Modifications to the DOM specification {#sec-modifications-DOM}
 
     Right before the returning step of that algorithm, add the following step:
 
-    1. <a>Finalize event timing</a> passing |timingEntry|, <em>target</em>, and the <a>current high resolution time</a> as inputs.
+    1. <a>Finalize event timing</a> passing |timingEntry|, |event|, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 </div>
 
 Note: If a user agent skips the <a>event dispatch algorithm</a>, it can still choose to include an entry for that {{Event}}.
@@ -568,7 +568,7 @@ Finalize event timing {#sec-fin-event-timing}
 
     Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
-    1. If |timingEntry|'s {{PerformanceEntry/name}} is not "pointerdown", append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
+    1. If |event| is not a {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
     1. Otherwise:
         1. Let |pendingDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
