@@ -431,14 +431,14 @@ Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is in
 
 Each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
 
+Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
+By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
+
 Each {{Window}} has <dfn>key press interaction value map</dfn>, a <a>map</a> of strings to integers which is initially empty.
 
 Each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
 
 Finally, each {{Window}} has <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
-
-Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
-By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -518,13 +518,12 @@ Computing interactionId {#sec-computing-interactionid}
             1. Return 0.
         1. Let |pointerDown| be |pendingDowns|[|pointerId|].
         1. If |event| is a {{pointerup}}:
-            1. Let |value| be 0.
-            1. If |pointerMap|[|pointerId|] does not exist:
-                1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-                1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
-            1. Set |pointerDown|'s {{PerformanceEventTiming/interactionId}} to |pointerMap][|pointerMap|].
+            1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+            1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
+            1. Set |pointerDown|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
         1. Append |pointerDown| to |window|’s <a>pending event entries</a>.
         1. Remove |pendingDowns|[|pointerId|].
+        1. If |event| is a {{pointercancel}}, return 0.
         1. Return |pointerMap|[|pointerId|].
 </div>
 
