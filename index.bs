@@ -553,7 +553,7 @@ Finalize event timing {#sec-fin-event-timing}
 --------------------------------------------------------
 
 <div algorithm="finalize event timing">
-    When asked to to <dfn export>finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processingEnd</var> as inputs, run the following steps:
+    When asked to to <dfn export>finalize event timing</dfn>, with |timingEntry|, |event|, |target|, and |processingEnd| as inputs, run the following steps:
 
     1. If <var>timingEntry</var> is null, return.
     1. Let <var>relevantGlobal</var> be <var>target</var>'s <a>relevant global object</a>.
@@ -569,7 +569,11 @@ Finalize event timing {#sec-fin-event-timing}
 
     Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
-    1. If |timingEntry|'s {{PerformanceEntry/name}} is not "pointerdown", append <var>timingEntry</var> to <var>relevantGlobal</var>’s <a>pending event entries</a>.
+    1. If |timingEntry|'s {{PerformanceEntry/name}} is not "pointerdown", append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
+    1. Otherwise:
+        1. Let |pendingDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
+        1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
+        1. Set |pendingDowns|[|pointerId|] to |timingEntry|.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
