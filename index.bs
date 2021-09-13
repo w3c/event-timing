@@ -491,6 +491,9 @@ Computing interactionId {#sec-computing-interactionid}
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. If |event| is not one among {{keydown}}, {{keyup}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
+
+    Note: {{pointerdown}} is handled in <a>finalize event timing</a>, where an entry is added to <a>pending pointer downs</a>.
+
     1. Let |window| be |event|'s <a>relevant global object</a>.
     1. Let |keyMap| be |window|'s <a>key press interaction value map</a>.
     1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
@@ -529,9 +532,17 @@ Computing interactionId {#sec-computing-interactionid}
         1. Return |pointerMap|[|pointerId|].
 </div>
 
+Note: the algorithm attempts to assign events to the corresponding interactiond IDs.
+For keyboard events, a {{keydown}} triggers a new interaction ID, whereas a {{keyup}} has to match its ID with a previous {{keydown}}.
+For pointer events, when we get a {{pointerdown}} we have to wait until {{pointercancel}} or {{pointerup}} occur to know its {{PerformanceEventTiming/interactionId}}.
+We try to match {{click}} with a previous interaction ID from a {{pointerdown}}.
+If {{pointercancel}} or {{pointerup}} happens, we'll be ready to set the {{PerformanceEventTiming/interactionId}} for the stored entry corresponding to {{pointerdown}}.
+If it is {{pointercancel}}, this means we do not want to assign a new interaction ID to the {{pointerdown}}.
+If it is {{pointerup}}, we compute a new interaction ID and set it on both the {{pointerdown}} and the {{pointerup}} (and later, the {{click}} if it occurs).
+
 The <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
 A user agent may choose to increase it by a small random integer every time.
-A user agent may not pick a global random integer and increase the <a>user interaction value</a>s of all {{Window|Windows}} by that amount because this could introduce cross origin leaks.
+A user agent must not pick a global random integer and increase the <a>user interaction value</a>s of all {{Window|Windows}} by that amount because this could introduce cross origin leaks.
 
 Initialize event timing {#sec-init-event-timing}
 --------------------------------------------------------
@@ -574,6 +585,7 @@ Finalize event timing {#sec-fin-event-timing}
     1. Otherwise:
         1. Let |pendingDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
+        1. If |pendingDowns|[|pointerId|] exists, append |pendingDowns|[|pointerId|] to |relevantGlobal|'s <a>pending event entries</a>.
         1. Set |pendingDowns|[|pointerId|] to |timingEntry|.
 </div>
 
