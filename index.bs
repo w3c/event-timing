@@ -262,6 +262,25 @@ Usage example {#sec-example}
 }
 </pre>
 
+The following example computes a dictionary mapping interactionId to the maximum duration of any of its events.
+This dictionary can later be aggregated and reported to analytics.
+
+<pre class="example highlight">
+    let maxDurations = {};
+    new PerformanceObserver(list => {
+        list.getEntries().forEach(entry => {
+            if (entry.interactionId > 0) {
+                let id = entry.interactionId;
+                if (!maxDurations[id]) {
+                    maxDurations[id] = entry.duration;
+                } else {
+                    maxDurations[id] = Math.max(maxDurations[id], entry.duration);
+                }
+            }
+        })
+    }).observe({type: 'event', buffered: true, durationThreshold: 16});
+</pre>
+
 The following are sample use cases that could be achieved by using this API:
 * Gather <b>first input delay</b> data on a website and track its performance over time.
 * Clicking a button changes the sorting order on a table. Measure how long it takes from the click until we display reordered content.
@@ -284,6 +303,7 @@ interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute DOMHighResTimeStamp processingEnd;
     readonly attribute boolean cancelable;
     readonly attribute Node? target;
+    readonly attribute unsigned long long interactionId;
     [Default] object toJSON();
 };
 </pre>
@@ -339,6 +359,12 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
     <dd>
         The {{target}} attribute's getter returns the <a>associated event</a>'s last {{Event/target}} when such {{/Node}} is not disconnected nor in the shadow DOM.
     </dd>
+    <dt>{{interactionId}}</dt>
+    <dd link-for=>
+      The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identifies the user interaction which triggered the <a>associated event</a>. This attribute is 0 unless the <a>associated event</a> is one of:
+          * A {{pointerdown}}, {{pointerup}}, or {{click}} belonging to a user tap or drag. Note that {{pointerdown}} that ends in scroll is excluded.
+          * A {{keydown}} or {{keyup}} belonging to a user key press.
+    </dd>
 </dl>
 
 </div>
@@ -382,13 +408,13 @@ Modifications to the DOM specification {#sec-modifications-DOM}
 <div algorithm="additions to event dispatch">
     We modify the <a>event dispatch algorithm</a> as follows.
 
-    Right after step 1, we add the following step:
-
-    * Let <var>timingEntry</var> be the result of <a lt='initialize event timing'>initializing event timing</a> given <em>event</em> and the <a>current high resolution time</a>.
+    Right after step 1, we add the following steps:
+    1. Let |interactionId| be the result of <a lt='compute interactionId'>computing interactionId</a> given |event|.
+    1. Let |timingEntry| be the result of <a lt='initialize event timing'>initializing event timing</a> given |event|, the <a>current high resolution time</a>, and |interactionId|.
 
     Right before the returning step of that algorithm, add the following step:
 
-    * <a>Finalize event timing</a> passing <var>timingEntry</var>, <em>target</em>, and the <a>current high resolution time</a> as inputs.
+    1. <a>Finalize event timing</a> passing |timingEntry|, |event|, <em>target</em>, and the <a>current high resolution time</a> as inputs.
 </div>
 
 Note: If a user agent skips the <a>event dispatch algorithm</a>, it can still choose to include an entry for that {{Event}}.
@@ -400,8 +426,21 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 <em>This section will be removed once [[HTML]] has been modified.</em>
 
 Each {{Window}} has <dfn>pending event entries</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
-Each {{Window}} also has <dfn>pending pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
-Finally, each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
+
+Each {{Window}} also has <dfn>pending first pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
+
+Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
+
+Each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
+
+Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
+By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
+
+Each {{Window}} has <dfn>key press interaction value map</dfn>, a <a>map</a> of strings to integers which is initially empty.
+
+Each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
+
+Finally, each {{Window}} has <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -444,11 +483,71 @@ https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry>registry<
     1. Otherwise, return false.
 </div>
 
+Computing interactionId {#sec-computing-interactionid}
+--------------------------------------------------------
+
+<div algorithm="computing interactionId">
+    When asked to <dfn export>compute interactionId</dfn> with |event| as input, run the following steps:
+
+    1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
+    1. If |event| is not one among {{keydown}}, {{keyup}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
+
+        Note: {{pointerdown}} is handled in <a>finalize event timing</a>, where an entry is added to <a>pending pointer downs</a>.
+
+    1. Let |window| be |event|'s <a>relevant global object</a>.
+    1. Let |keyMap| be |window|'s <a>key press interaction value map</a>.
+    1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
+    1. Let |pendingDowns| be |window|'s <a>pending pointer downs</a>.
+    1. If |event| is a {{keydown}} or {{keyup}}:
+        1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
+        1. If |event| is a {{keydown}}:
+            1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+            1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
+            1. Set |keyMap|[|code|] to |window|'s <a>user interaction value</a>.
+            1. Return |keyMap|[|code|].
+        1. Otherwise (|event| is a {{keyup}}):
+            1. If |keyMap|[|code|] does not exist, return 0.
+            1. Let |value| be |keyMap|[|code|].
+            1. Remove |keyMap|[|code|].
+            1. Return |value|.
+    1. Otherwise (event is {{pointercancel}}, {{pointerup}}, or {{click}}):
+        1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
+        1. If |event| is a {{click}}:
+            1. If |pointerMap|[|pointerId|] does not exist, return 0.
+            1. Let |value| be |pointerMap|[|pointerId|].
+            1. Remove |pointerMap|[|pointerId|].
+            1. Return |value|.
+        1. Assert that |event| is a {{pointerup}} or a {{pointercancel}}.
+        1. If |pendingDowns|[|pointerId|] does not exist, return 0.
+        1. Let |pointerDownEntry| be |pendingDowns|[|pointerId|].
+        1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
+        1. If |event| is a {{pointerup}}:
+            1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+            1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
+            1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
+        1. Append |pointerDownEntry| to |window|’s <a>pending event entries</a>.
+        1. Remove |pendingDowns|[|pointerId|].
+        1. If |event| is a {{pointercancel}}, return 0.
+        1. Return |pointerMap|[|pointerId|].
+</div>
+
+Note: the algorithm attempts to assign events to the corresponding interactiond IDs.
+For keyboard events, a {{keydown}} triggers a new interaction ID, whereas a {{keyup}} has to match its ID with a previous {{keydown}}.
+For pointer events, when we get a {{pointerdown}} we have to wait until {{pointercancel}} or {{pointerup}} occur to know its {{PerformanceEventTiming/interactionId}}.
+We try to match {{click}} with a previous interaction ID from a {{pointerdown}}.
+If {{pointercancel}} or {{pointerup}} happens, we'll be ready to set the {{PerformanceEventTiming/interactionId}} for the stored entry corresponding to {{pointerdown}}.
+If it is {{pointercancel}}, this means we do not want to assign a new interaction ID to the {{pointerdown}}.
+If it is {{pointerup}}, we compute a new interaction ID and set it on both the {{pointerdown}} and the {{pointerup}} (and later, the {{click}} if it occurs).
+
+The <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
+A user agent may choose to increase it by a small random integer every time.
+A user agent must not pick a global random integer and increase the <a>user interaction value</a>s of all {{Window|Windows}} by that amount because this could introduce cross origin leaks.
+
 Initialize event timing {#sec-init-event-timing}
 --------------------------------------------------------
 
 <div algorithm="initialize event timing">
-    When asked to <dfn export>initialize event timing</dfn>, with <var>event</var> and <var>processingStart</var> as inputs, run the following steps:
+    When asked to <dfn export>initialize event timing</dfn>, with <var>event</var>, <var>processingStart</var>, and |interactionId| as inputs, run the following steps:
 
     1. If the algorithm to determine if <var>event</var> should be <a>considered for Event Timing</a> returns false, then return null.
     1. Let <var>timingEntry</var> be a new {{PerformanceEventTiming}} object with |event|'s [=relevant realm=].
@@ -457,6 +556,7 @@ Initialize event timing {#sec-init-event-timing}
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/startTime}} to <var>event</var>'s {{Event/timeStamp}} attribute value.
     1. Set <var>timingEntry</var>'s {{processingStart}} to <var>processingStart</var>.
     1. Set <var>timingEntry</var>'s {{cancelable}} to <var>event</var>'s {{Event/cancelable}} attribute value.
+    1. Set <var>timingEntry</var>'s {{interactionId}} to |interactionId|.
     1. Return <var>timingEntry</var>.
 </div>
 
@@ -464,7 +564,7 @@ Finalize event timing {#sec-fin-event-timing}
 --------------------------------------------------------
 
 <div algorithm="finalize event timing">
-    When asked to to <dfn export>finalize event timing</dfn>, with <var>timingEntry</var>, <var>target</var>, and <var>processingEnd</var> as inputs, run the following steps:
+    When asked to to <dfn export>finalize event timing</dfn>, with |timingEntry|, |event|, |target|, and |processingEnd| as inputs, run the following steps:
 
     1. If <var>timingEntry</var> is null, return.
     1. Let <var>relevantGlobal</var> be <var>target</var>'s <a>relevant global object</a>.
@@ -472,15 +572,20 @@ Finalize event timing {#sec-fin-event-timing}
     1. Set <var>timingEntry</var>'s {{processingEnd}} to <var>processingEnd</var>.
     1. Assert that <var>target</var> <a>implements</a> {{Node}}.
 
-    Note: this assertion holds due to the types of events supported by the Event Timing API.
+        Note: this assertion holds due to the types of events supported by the Event Timing API.
 
     1. Set <var>timingEntry</var>'s <a for=PerformanceEventTiming>eventTarget</a> to the result of calling the <a>get an element</a> algorithm with <var>target</var> and <var>relevantGlobal</var>'s <a>associated document</a> as inputs.
 
-    Note: This will set <a for=PerformanceEventTiming>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
+        Note: This will set <a for=PerformanceEventTiming>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
-    Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
+        Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
-    1. Append <var>timingEntry</var> to <var>relevantGlobal</var>’s <a>pending event entries</a>.
+    1. If |event| is not a {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
+    1. Otherwise:
+        1. Let |pendingDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
+        1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
+        1. If |pendingDowns|[|pointerId|] exists, append |pendingDowns|[|pointerId|] to |relevantGlobal|'s <a>pending event entries</a>.
+        1. Set |pendingDowns|[|pointerId|] to |timingEntry|.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
@@ -504,12 +609,12 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> <var>timingEntry</var>.
         1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
             1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
-                1. Set <var>window</var>'s <a>pending pointer down</a> to a copy of <var>timingEntry</var>.
-                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending pointer down</a> to "<code>first-input</code>".
+                1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
+                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending first pointer down</a> to "<code>first-input</code>".
             1. Otherwise, run the following steps:
-                1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending pointer down</a> is not null, then:
+                1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending first pointer down</a> is not null, then:
                     1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
-                    1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending pointer down</a>.
+                    1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending first pointer down</a>.
                 1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
                     1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
                     1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
