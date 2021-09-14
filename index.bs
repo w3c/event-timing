@@ -492,7 +492,7 @@ Computing interactionId {#sec-computing-interactionid}
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. If |event| is not one among {{keydown}}, {{keyup}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
 
-    Note: {{pointerdown}} is handled in <a>finalize event timing</a>, where an entry is added to <a>pending pointer downs</a>.
+        Note: {{pointerdown}} is handled in <a>finalize event timing</a>, where an entry is added to <a>pending pointer downs</a>.
 
     1. Let |window| be |event|'s <a>relevant global object</a>.
     1. Let |keyMap| be |window|'s <a>key press interaction value map</a>.
@@ -518,15 +518,14 @@ Computing interactionId {#sec-computing-interactionid}
             1. Remove |pointerMap|[|pointerId|].
             1. Return |value|.
         1. Assert that |event| is a {{pointerup}} or a {{pointercancel}}.
-        1. If |pendingDowns|[|pointerId|] does not exist:
-            1. If |pointerMap|[|pointerId|] exists, remove |pointerMap|[|pointerId|].
-            1. Return 0.
-        1. Let |pointerDown| be |pendingDowns|[|pointerId|].
+        1. If |pendingDowns|[|pointerId|] does not exist, return 0.
+        1. Let |pointerDownEntry| be |pendingDowns|[|pointerId|].
+        1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
         1. If |event| is a {{pointerup}}:
             1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
             1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
-            1. Set |pointerDown|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
-        1. Append |pointerDown| to |window|’s <a>pending event entries</a>.
+            1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
+        1. Append |pointerDownEntry| to |window|’s <a>pending event entries</a>.
         1. Remove |pendingDowns|[|pointerId|].
         1. If |event| is a {{pointercancel}}, return 0.
         1. Return |pointerMap|[|pointerId|].
@@ -573,13 +572,13 @@ Finalize event timing {#sec-fin-event-timing}
     1. Set <var>timingEntry</var>'s {{processingEnd}} to <var>processingEnd</var>.
     1. Assert that <var>target</var> <a>implements</a> {{Node}}.
 
-    Note: this assertion holds due to the types of events supported by the Event Timing API.
+        Note: this assertion holds due to the types of events supported by the Event Timing API.
 
     1. Set <var>timingEntry</var>'s <a for=PerformanceEventTiming>eventTarget</a> to the result of calling the <a>get an element</a> algorithm with <var>target</var> and <var>relevantGlobal</var>'s <a>associated document</a> as inputs.
 
-    Note: This will set <a for=PerformanceEventTiming>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
+        Note: This will set <a for=PerformanceEventTiming>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
-    Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
+        Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
     1. If |event| is not a {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
     1. Otherwise:
