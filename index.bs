@@ -597,29 +597,39 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
     1. Let <var>window</var> be <var>doc</var>'s <a>relevant global object</a>.
     1. Let <var>renderingTimestamp</var> be the <a>current high resolution time</a>.
     1. For each <var>timingEntry</var> in <var>window</var>'s <a>pending event entries</a>:
-        1. Let <var>start</var> be <var>timingEntry</var>'s {{PerformanceEntry/startTime}} attribute value.
-        1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to a {{DOMHighResTimeStamp}} resulting from <code><var>renderingTimestamp</var> - <var>start</var></code>, with granularity of 8ms or less.
-        1. Let <var>name</var> be <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value.
-        1. Perform the following steps to update the event counts:
-            1. Let <var>performance</var> be <var>window</var>'s {{WindowOrWorkerGlobalScope/performance}} attribute value.
-            1. If <var>performance</var>'s {{Performance/eventCounts}} attribute value does not contain a <a>map entry</a> whose key is <var>name</var>, then:
-                1. Let <var>mapEntry</var> be a new <a>map entry</a> with key equal to <var>name</var> and value equal to 1.
-                1. Add <var>mapEntry</var> to <var>performance</var>'s {{Performance/eventCounts}} attribute value.
-            1. Otherwise, increase the <a>map entry</a>'s value by 1.
-        1. If <var>timingEntry</var>'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> <var>timingEntry</var>.
-        1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
-            1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
-                1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
-                1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending first pointer down</a> to "<code>first-input</code>".
-            1. Otherwise, run the following steps:
-                1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending first pointer down</a> is not null, then:
-                    1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
-                    1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending first pointer down</a>.
-                1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
-                    1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
-                    1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
-                    1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
-                    1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
+        1. <a>Set event timing entry duration</a> passing |timingEntry|, |window|, |renderingTimestamp|.
+        1. If |timingEntry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> |timingEntry|.
+    1. Clear |window|'s <a>pending event entries</a>.
+    1. For each |pendingDown| in the <a lt="get the values">values</a> from |window|'s <a>pending pointer downs</a>:
+        1. <a>Set event timing entry duration</a> passing |pendingDown|, |window|, |renderingTimestamp|.
+</div>
+
+<div algorithm="set event timing entry duration">
+    When asked to <dfn>set event timing entry duration</dfn> given a {{PerformanceEventTiming}} |timingEntry|, a {{Window}} |window|, and a {{DOMHighResTimeStamp}} |renderingTimestamp|, perform the following steps:
+
+    1. If |timingEntry|'s {{PerformanceEntry/duration}} attribute value is nonzero, return.
+    1. Let <var>start</var> be <var>timingEntry</var>'s {{PerformanceEntry/startTime}} attribute value.
+    1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to a {{DOMHighResTimeStamp}} resulting from <code><var>renderingTimestamp</var> - <var>start</var></code>, with granularity of 8ms or less.
+    1. Let <var>name</var> be <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value.
+    1. Perform the following steps to update the event counts:
+        1. Let <var>performance</var> be <var>window</var>'s {{WindowOrWorkerGlobalScope/performance}} attribute value.
+        1. If <var>performance</var>'s {{Performance/eventCounts}} attribute value does not contain a <a>map entry</a> whose key is <var>name</var>, then:
+            1. Let <var>mapEntry</var> be a new <a>map entry</a> with key equal to <var>name</var> and value equal to 1.
+            1. Add <var>mapEntry</var> to <var>performance</var>'s {{Performance/eventCounts}} attribute value.
+        1. Otherwise, increase the <a>map entry</a>'s value by 1.
+    1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
+        1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
+            1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
+            1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending first pointer down</a> to "<code>first-input</code>".
+        1. Otherwise, run the following steps:
+            1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending first pointer down</a> is not null, then:
+                1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
+                1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending first pointer down</a>.
+            1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
+                1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
+                1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
+                1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
+                1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
 </div>
 
 Security & privacy considerations {#priv-sec}
