@@ -597,11 +597,11 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
     1. Let <var>window</var> be <var>doc</var>'s <a>relevant global object</a>.
     1. Let <var>renderingTimestamp</var> be the <a>current high resolution time</a>.
     1. For each <var>timingEntry</var> in <var>window</var>'s <a>pending event entries</a>:
-        1. <a>Set event timing entry duration</a> passing |timingEntry|, |window|, |renderingTimestamp|.
+        1. <a>Set event timing entry duration</a> passing |timingEntry|, |window|, and |renderingTimestamp|.
         1. If |timingEntry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> |timingEntry|.
     1. Clear |window|'s <a>pending event entries</a>.
     1. For each |pendingDown| in the <a lt="get the values">values</a> from |window|'s <a>pending pointer downs</a>:
-        1. <a>Set event timing entry duration</a> passing |pendingDown|, |window|, |renderingTimestamp|.
+        1. <a>Set event timing entry duration</a> passing |pendingDown|, |window|, and |renderingTimestamp|.
 </div>
 
 <div algorithm="set event timing entry duration">
