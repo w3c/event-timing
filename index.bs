@@ -436,7 +436,9 @@ Each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initi
 Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
 By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
 
-Each {{Window}} has <dfn>key press interaction value map</dfn>, a <a>map</a> of strings to integers which is initially empty.
+Each {{Window}} has <dfn>pending key downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
+
+Each {{Window}} has <dfn>is composing</dfn>, a boolean which is initially <code>false</code>.
 
 Each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
 
@@ -491,26 +493,40 @@ Computing interactionId {#sec-computing-interactionid}
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. Let |type| be |event|'s {{Event/type}} attribute value.
-    1. If |type| is not one among {{keydown}}, {{keyup}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
+    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{compositionend}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
 
         Note: {{pointerdown}} is handled in <a>finalize event timing</a>, where an entry is added to <a>pending pointer downs</a>.
 
     1. Let |window| be |event|'s <a>relevant global object</a>.
-    1. Let |keyMap| be |window|'s <a>key press interaction value map</a>.
+    1. Let |pendingKeyDowns| be |window|'s <a>pending key downs</a>.
     1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
-    1. Let |pendingDowns| be |window|'s <a>pending pointer downs</a>.
-    1. If |type| is {{keydown}} or {{keyup}}:
-        1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
-        1. If |type| is {{keydown}}:
-            1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-            1. Let |code| be |event|'s {{KeyboardEvent|code}} attribute value.
-            1. Set |keyMap|[|code|] to |window|'s <a>user interaction value</a>.
-            1. Return |keyMap|[|code|].
-        1. Otherwise (|type| is {{keyup}}):
-            1. If |keyMap|[|code|] does not exist, return 0.
-            1. Let |value| be |keyMap|[|code|].
-            1. Remove |keyMap|[|code|].
-            1. Return |value|.
+    1. Let |pendingPointerDowns| be |window|'s <a>pending pointer downs</a>.
+    1. If |type| is {{keyup}}:
+        1. If |window|'s <a>is composing</a> is true, return 0.
+        1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
+        1. If |pendingKeyDowns|[|code|] does not exist, return 0.
+        1. Let |entry| be |pendingKeyDowns|[|code|].
+        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. Let |interactionId| be |window|'s <a>user interaction value</a> value.
+        1. Set |entry|'s {{PerformanceEventTiming/interactionId}} to |interactionId|.
+        1. Add |entry| to |window|'s <a>pending event entries</a>.
+        1. <a for=map>Remove</a> |pendingKeyDowns|[|code|].
+        1. Return |interactionId|.
+    1. If |type| is {{compositionstart}}:
+        1. Set |window|'s <a>is composing</a> to <code>true</a>.
+        1. For each |entry| in the <a for=map>values</a> of |pendingKeyDowns|:
+            1. Append |entry| to |window|'s <a>pending event entries</a>.
+        1. <a for=map>Clear</a> |pendingKeyDowns|.
+        1. Return 0.
+    1. If |type| is {{compositionend}}:
+        1. Set |window|'s <a>is composing</a> to <code>false</code>.
+        1. Return 0.
+    1. If |type| is {{input}}:
+        1. If |window|'s <a>is composing</a> is false, return 0.
+        1. If |event| is not an instance of {{InputEvent}}, return 0.
+            Note: this check is done to exclude {{Event|Events}} for which the {{Event/type}} is {{input}} but that are not about modified text content.
+        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. Return |window|'s <a>user interaction value</a>.
     1. Otherwise (|type| is {{pointercancel}}, {{pointerup}}, or {{click}}):
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
         1. If |type| is {{click}}:
@@ -519,15 +535,15 @@ Computing interactionId {#sec-computing-interactionid}
             1. Remove |pointerMap|[|pointerId|].
             1. Return |value|.
         1. Assert that |type| is {{pointerup}} or {{pointercancel}}.
-        1. If |pendingDowns|[|pointerId|] does not exist, return 0.
-        1. Let |pointerDownEntry| be |pendingDowns|[|pointerId|].
+        1. If |pendingPointerDowns|[|pointerId|] does not exist, return 0.
+        1. Let |pointerDownEntry| be |pendingPointerDowns|[|pointerId|].
         1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
         1. If |type| is {{pointerup}}:
             1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
             1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
             1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
         1. Append |pointerDownEntry| to |window|’s <a>pending event entries</a>.
-        1. Remove |pendingDowns|[|pointerId|].
+        1. Remove |pendingPointerDowns|[|pointerId|].
         1. If |type| is {{pointercancel}}, return 0.
         1. Return |pointerMap|[|pointerId|].
 </div>
@@ -581,12 +597,27 @@ Finalize event timing {#sec-fin-event-timing}
 
         Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
 
-    1. If |event|'s {{Event/type}} attribute value is not {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
-    1. Otherwise:
-        1. Let |pendingDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
+    1. If |event|'s {{Event/type}} attribute value is not {{keydown}} nor {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
+    1. If |event|'s {{Event/type}} attribute value is {{pointerdown}}:
+        1. Let |pendingPointerDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
-        1. If |pendingDowns|[|pointerId|] exists, append |pendingDowns|[|pointerId|] to |relevantGlobal|'s <a>pending event entries</a>.
-        1. Set |pendingDowns|[|pointerId|] to |timingEntry|.
+        1. If |pendingPointerDowns|[|pointerId|] exists, append |pendingPointerDowns|[|pointerId|] to |relevantGlobal|'s <a>pending event entries</a>.
+        1. Set |pendingPointerDowns|[|pointerId|] to |timingEntry|.
+    1. Otherwise (|event|'s {{Event/type}} attribute value is {{keydown}}):
+        1. If |window|'s <a>is composing</a> is <code>true</code>:
+            1. Append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
+            1. Return.
+        1. Let |pendingKeyDowns| be |relevantGlobal|'s <a>pending key downs</a>.
+        1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
+        1. If |pendingKeyDowns|[|code|] exists:
+            1. Let |entry| be |pendingKeyDowns|[|code|].
+            1. If |code| is not 229:
+                Note: 229 is a special case since it corresponds to IME keyboard events. Sometimes multiple of these are sent by the user agent, and they do not correspond holding a key down repeatedly.
+                1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+                1. Set |entry|'s {{PerformanceEventTiming/interactionId}} to |window|'s <a>user interaction value</a>.
+            1. Add |entry| to |window|'s <a>pending event entries</a>.
+            1. <a for=map>Remove</a> |pendingKeyDowns|[|code|].
+        1. Set |pendingKeyDowns|[|code|] to |timingEntry|.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
