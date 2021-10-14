@@ -513,7 +513,7 @@ Computing interactionId {#sec-computing-interactionid}
         1. <a for=map>Remove</a> |pendingKeyDowns|[|code|].
         1. Return |interactionId|.
     1. If |type| is {{compositionstart}}:
-        1. Set |window|'s <a>is composing</a> to <code>true</a>.
+        1. Set |window|'s <a>is composing</a> to <code>true</code>.
         1. For each |entry| in the <a for=map>values</a> of |pendingKeyDowns|:
             1. Append |entry| to |window|'s <a>pending event entries</a>.
         1. <a for=map>Clear</a> |pendingKeyDowns|.
