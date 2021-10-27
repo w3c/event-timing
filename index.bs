@@ -438,8 +438,6 @@ By starting at a random value, developers are less likely to use it as the sourc
 
 Each {{Window}} has <dfn>pending key downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
 
-Each {{Window}} has <dfn>is composing</dfn>, a boolean which is initially <code>false</code>.
-
 Each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
 
 Finally, each {{Window}} has <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
@@ -493,7 +491,7 @@ Computing interactionId {#sec-computing-interactionid}
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. Let |type| be |event|'s {{Event/type}} attribute value.
-    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{compositionend}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
+    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
 
         Note: {{pointerdown}} is handled in <a>finalize event timing</a>, where an entry is added to <a>pending pointer downs</a>.
 
@@ -502,7 +500,7 @@ Computing interactionId {#sec-computing-interactionid}
     1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
     1. Let |pendingPointerDowns| be |window|'s <a>pending pointer downs</a>.
     1. If |type| is {{keyup}}:
-        1. If |window|'s <a>is composing</a> is true, return 0.
+        1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is true, return 0.
         1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
         1. If |pendingKeyDowns|[|code|] does not exist, return 0.
         1. Let |entry| be |pendingKeyDowns|[|code|].
@@ -513,18 +511,14 @@ Computing interactionId {#sec-computing-interactionid}
         1. <a for=map>Remove</a> |pendingKeyDowns|[|code|].
         1. Return |interactionId|.
     1. If |type| is {{compositionstart}}:
-        1. Set |window|'s <a>is composing</a> to <code>true</code>.
         1. For each |entry| in the <a for=map>values</a> of |pendingKeyDowns|:
             1. Append |entry| to |window|'s <a>pending event entries</a>.
         1. <a for=map>Clear</a> |pendingKeyDowns|.
         1. Return 0.
-    1. If |type| is {{compositionend}}:
-        1. Set |window|'s <a>is composing</a> to <code>false</code>.
-        1. Return 0.
     1. If |type| is {{input}}:
-        1. If |window|'s <a>is composing</a> is false, return 0.
         1. If |event| is not an instance of {{InputEvent}}, return 0.
             Note: this check is done to exclude {{Event|Events}} for which the {{Event/type}} is {{input}} but that are not about modified text content.
+        1. If |event|'s {{InputEvent/isComposing}} attribute value is false, return 0.
         1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
         1. Return |window|'s <a>user interaction value</a>.
     1. Otherwise (|type| is {{pointercancel}}, {{pointerup}}, or {{click}}):
@@ -604,7 +598,7 @@ Finalize event timing {#sec-fin-event-timing}
         1. If |pendingPointerDowns|[|pointerId|] exists, append |pendingPointerDowns|[|pointerId|] to |relevantGlobal|'s <a>pending event entries</a>.
         1. Set |pendingPointerDowns|[|pointerId|] to |timingEntry|.
     1. Otherwise (|event|'s {{Event/type}} attribute value is {{keydown}}):
-        1. If |window|'s <a>is composing</a> is <code>true</code>:
+        1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is <code>true</code>:
             1. Append |timingEntry| to |relevantGlobal|’s <a>pending event entries</a>.
             1. Return.
         1. Let |pendingKeyDowns| be |relevantGlobal|'s <a>pending key downs</a>.
