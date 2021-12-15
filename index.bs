@@ -514,9 +514,9 @@ Increasing interaction count {#sec-increasing-interaction-count}
     When asked to <dfn>increase interaction count</dfn> given a {{Window}} |window| and a {{DOMString}} |type|, perform the following steps:
 
     1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-    1. Assert that |window|'s <a>interactionCounts</a> contains a |type|.
-    1. Let |entry| be the <a>map entry</a> whose key is |type|.
-    1. Increase |entry|'s value by 1.
+    1. Let |interactionCounts| be |window|'s <a>interactionCounts</a>.
+    1. Assert that |interactionCounts| <a for=map>contains</a> |type|.
+    1. <a for=map>Set</a> |interactionCounts|[|type|] to |interactionCounts|[|type|] + 1.
 </div>
 
 Computing interactionId {#sec-computing-interactionid}
@@ -681,8 +681,9 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to a {{DOMHighResTimeStamp}} resulting from <code><var>renderingTimestamp</var> - <var>start</var></code>, with granularity of 8ms or less.
     1. Let <var>name</var> be <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value.
     1. Perform the following steps to update the event counts:
-        1. Assert that |window|'s <a>eventCounts</a> contains a <a>map entry</a> |entry| whose key is |name|.
-        1. Increase |entry|'s value by 1.
+        1. Let |eventCounts| be |window|'s <a>eventCounts</a>.
+        1. Assert that |eventCounts| <a for=map>contains</a> |name|.
+        1. <a for=map>Set</a> |eventCounts|[|name|] to |eventCounts|[|name|] + 1.
     1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
         1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
             1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
