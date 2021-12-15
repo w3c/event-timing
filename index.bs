@@ -382,6 +382,18 @@ interface EventCounts {
 The {{EventCounts}} object is a map where the keys are event <a href=Event/type>types</a> and the values are the number of events that have been dispatched that are of that {{Event/type}}.
 Only events whose {{Event/type}} is supported by {{PerformanceEventTiming}} entries (see section [[#sec-events-exposed]]) are counted via this map.
 
+{{InteractionCounts}} interface {#sec-interaction-counts}
+------------------------
+
+<pre class="idl">
+[Exposed=Window]
+interface InteractionCounts {
+    readonly maplike&lt;DOMString, unsigned long long&gt;;
+};
+</pre>
+
+The {{InteractionCounts}} object is a map where the keys are {{DOMString|DOMStrings}} representing interaction types and the values are the number of interactions that have occurred of that type.
+
 Extensions to the {{Performance}} interface {#sec-extensions}
 ------------------------
 
@@ -389,13 +401,13 @@ Extensions to the {{Performance}} interface {#sec-extensions}
 [Exposed=Window]
 partial interface Performance {
     [SameObject] readonly attribute EventCounts eventCounts;
+    [SameObject] readonly attribute InteractionCounts interactionCounts;
 };
 </pre>
 
-The {{Performance/eventCounts}} attribute's getter returns a map with entries of the form <var>type</var> → <var>numEvents</var>.
-This means that there have been <var>numEvents</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
+The {{Performance/eventCounts}} attribute's getter returns <a>this</a>'s <a>relevant global object</a>'s <a for=Window>eventCounts</a>.
 
-Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, the user agent must initialize the {{Performance/eventCounts}} attribute value to a map containing 0s for all event types that the user agent supports from the list described in [[#sec-events-exposed]].
+The {{Performance/interactionCounts}} attribute's getter return <a>this</a>'s <a>relevant global object</a>'s <a for=Window>interactionCounts</a>.
 
 Processing model {#sec-processing-model}
 ========================================
@@ -425,22 +437,34 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 
 <em>This section will be removed once [[HTML]] has been modified.</em>
 
-Each {{Window}} has <dfn>entries to be queued</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
+Each {{Window}} has the following associated concepts:
 
-Each {{Window}} also has <dfn>pending first pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
+* <dfn>entries to be queued</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
 
-Each {{Window}} has <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
+* <dfn>pending first pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
 
-Each {{Window}} has <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
+* <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
 
-Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
-By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
+* <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
 
-Each {{Window}} has <dfn>pending key downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
+    Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
+    By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
 
-Each {{Window}} has <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
+* <dfn>pending key downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
 
-Finally, each {{Window}} has <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
+* <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
+
+* <dfn>pointer is drag set</dfn>, a <a for=/>set</a> of integers which is initially empty.
+
+* <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
+
+* <dfn for=Window>eventCounts</dfn>, a map with entries of the form <var>type</var> → <var>numEvents</var>.
+    This means that there have been <var>numEvents</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
+    Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, its <a>eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in [[#sec-events-exposed]].
+
+* <dfn for=Window>interactionCounts</dfn>, a map with entries of the form <var>type</var> → <var>numInteractions</var>.
+    This means that there have been <var>numInteractions</var> dispatched of type <var>type</var>.
+    Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, its <a>interactionCounts</a> must be initialized to a map mapping <code>"keyboard"</code>, <code>"drag"</code>, and <code>"tap"</code> to 0.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -483,6 +507,18 @@ https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry>registry<
     1. Otherwise, return false.
 </div>
 
+Increasing interaction count {#sec-increasing-interaction-count}
+--------------------------------------------------------
+
+<div algorithm="increase interaction count">
+    When asked to <dfn>increase interaction count</dfn> given a {{Window}} |window| and a {{DOMString}} |type|, perform the following steps:
+
+    1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+    1. Let |interactionCounts| be |window|'s <a>interactionCounts</a>.
+    1. Assert that |interactionCounts| <a for=map>contains</a> |type|.
+    1. <a for=map>Set</a> |interactionCounts|[|type|] to |interactionCounts|[|type|] + 1.
+</div>
+
 Computing interactionId {#sec-computing-interactionid}
 --------------------------------------------------------
 
@@ -491,20 +527,21 @@ Computing interactionId {#sec-computing-interactionid}
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. Let |type| be |event|'s {{Event/type}} attribute value.
-    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
+    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointermove}}, {{pointerup}}, or {{click}}, return 0.
 
         Note: {{keydown}} and {{pointerdown}} are handled in <a>finalize event timing</a>.
 
     1. Let |window| be |event|'s <a>relevant global object</a>.
     1. Let |pendingKeyDowns| be |window|'s <a>pending key downs</a>.
     1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
+    1. Let |pointerIsDragSet| be |window|'s <a>pointer is drag set</a>.
     1. Let |pendingPointerDowns| be |window|'s <a>pending pointer downs</a>.
     1. If |type| is {{keyup}}:
         1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is true, return 0.
         1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
         1. If |pendingKeyDowns|[|code|] does not exist, return 0.
         1. Let |entry| be |pendingKeyDowns|[|code|].
-        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. <a>Increase interaction count</a>  on |window| and <code>"keyboard"</code>.
         1. Let |interactionId| be |window|'s <a>user interaction value</a> value.
         1. Set |entry|'s {{PerformanceEventTiming/interactionId}} to |interactionId|.
         1. Add |entry| to |window|'s <a>entries to be queued</a>.
@@ -519,21 +556,27 @@ Computing interactionId {#sec-computing-interactionid}
         1. If |event| is not an instance of {{InputEvent}}, return 0.
             Note: this check is done to exclude {{Event|Events}} for which the {{Event/type}} is {{input}} but that are not about modified text content.
         1. If |event|'s {{InputEvent/isComposing}} attribute value is false, return 0.
-        1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+        1. <a>Increase interaction count</a>  on |window| and <code>"keyboard"</code>.
         1. Return |window|'s <a>user interaction value</a>.
-    1. Otherwise (|type| is {{pointercancel}}, {{pointerup}}, or {{click}}):
+    1. Otherwise (|type| is {{pointercancel}}, {{pointermove}}, {{pointerup}}, or {{click}}):
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
         1. If |type| is {{click}}:
             1. If |pointerMap|[|pointerId|] does not exist, return 0.
             1. Let |value| be |pointerMap|[|pointerId|].
             1. Remove |pointerMap|[|pointerId|].
+            1. Remove [|pointerId|] from |pointerIsDragSet|.
             1. Return |value|.
+        1. If |type| is {{pointermove}}:
+            1. Add |pointerId| to |pointerIsDragSet|.
+            1. Return 0.
         1. Assert that |type| is {{pointerup}} or {{pointercancel}}.
         1. If |pendingPointerDowns|[|pointerId|] does not exist, return 0.
         1. Let |pointerDownEntry| be |pendingPointerDowns|[|pointerId|].
         1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
         1. If |type| is {{pointerup}}:
-            1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+            1. Let |interactionType| be <code>"tap"</code>.
+            1. If |pointerIsDragSet| contains [|pointerId|] exists, set |interactionType| to <code>"drag"</code>.
+            1. <a>Increase interaction count</a>  on |window| and |interactionType|.
             1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
             1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
         1. Append |pointerDownEntry| to |window|’s <a>entries to be queued</a>.
@@ -638,11 +681,9 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
     1. Set <var>timingEntry</var>'s {{PerformanceEntry/duration}} to a {{DOMHighResTimeStamp}} resulting from <code><var>renderingTimestamp</var> - <var>start</var></code>, with granularity of 8ms or less.
     1. Let <var>name</var> be <var>timingEntry</var>'s {{PerformanceEntry/name}} attribute value.
     1. Perform the following steps to update the event counts:
-        1. Let <var>performance</var> be <var>window</var>'s {{WindowOrWorkerGlobalScope/performance}} attribute value.
-        1. If <var>performance</var>'s {{Performance/eventCounts}} attribute value does not contain a <a>map entry</a> whose key is <var>name</var>, then:
-            1. Let <var>mapEntry</var> be a new <a>map entry</a> with key equal to <var>name</var> and value equal to 1.
-            1. Add <var>mapEntry</var> to <var>performance</var>'s {{Performance/eventCounts}} attribute value.
-        1. Otherwise, increase the <a>map entry</a>'s value by 1.
+        1. Let |eventCounts| be |window|'s <a>eventCounts</a>.
+        1. Assert that |eventCounts| <a for=map>contains</a> |name|.
+        1. <a for=map>Set</a> |eventCounts|[|name|] to |eventCounts|[|name|] + 1.
     1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
         1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
             1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
