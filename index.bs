@@ -1,8 +1,8 @@
 <pre class=metadata>
 Title: Event Timing API
-Status: CG-DRAFT
+Status: ED
 Shortname: event-timing
-Group: WICG
+Group: webperf 
 Level: 1
 Editor: Nicolás Peña Moreno, Google https://google.com, npm@chromium.org
         Tim Dresser, Google https://google.com, tdresser@chromium.org
