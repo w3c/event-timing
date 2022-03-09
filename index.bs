@@ -78,6 +78,7 @@ urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
 urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
     type: event; url: #event-type-auxclick; text: auxclick;
     type: event; url: #event-type-click; text: click;
+    type: event; url: #event-type-contextmenu; text: contextmenu;
     type: event; url: #event-type-dblclick; text: dblclick;
     type: event; url: #event-type-mousedown; text: mousedown;
     type: event; url: #event-type-mouseenter; text: mouseenter;
