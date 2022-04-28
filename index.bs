@@ -6,7 +6,7 @@ Group: webperf
 Level: 1
 Editor: Nicolás Peña Moreno, Google https://google.com, npm@chromium.org
         Tim Dresser, Google https://google.com, tdresser@chromium.org
-URL: https://wicg.github.io/event-timing
+URL: https://w3c.github.io/event-timing
 Repository: https://github.com/WICG/event-timing
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/event-timing
 Abstract: This document defines an API that provides web page authors with insights into the latency of certain events triggered by user interactions.
