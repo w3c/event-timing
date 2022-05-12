@@ -8,6 +8,7 @@ Editor: Nicolás Peña Moreno, Google https://google.com, npm@chromium.org, w3ci
         Tim Dresser, Google https://google.com, tdresser@chromium.org, w3cid 68214
 
 URL: https://w3c.github.io/event-timing
+TR: https://www.w3.org/TR/event-timing/
 Repository: https://github.com/WICG/event-timing
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/event-timing
 Abstract: This document defines an API that provides web page authors with insights into the latency of certain events triggered by user interactions.
