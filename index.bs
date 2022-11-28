@@ -453,7 +453,7 @@ Each {{Window}} has the following associated concepts:
     This means that there have been <var>numEvents</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
     Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, its <a>eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in [[#sec-events-exposed]].
 
-* <dfn for=Window>interactionCount</dfn>, an integer counts the total number of distinct <a>user interaction value</a> that has been used as an {{interactionId}} through <a lt='compute interactionId'>computing interactionId</a>, which is initially 0.
+* <dfn for=Window>interactionCount</dfn>, an integer which counts the total number of distinct user interactions, for which there was a unique {{interactionId}} computed via <a lt='compute interactionId'>computing interactionId</a>.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
