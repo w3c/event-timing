@@ -385,18 +385,6 @@ interface EventCounts {
 The {{EventCounts}} object is a map where the keys are event <a href=Event/type>types</a> and the values are the number of events that have been dispatched that are of that {{Event/type}}.
 Only events whose {{Event/type}} is supported by {{PerformanceEventTiming}} entries (see section [[#sec-events-exposed]]) are counted via this map.
 
-{{InteractionCounts}} interface {#sec-interaction-counts}
-------------------------
-
-<pre class="idl">
-[Exposed=Window]
-interface InteractionCounts {
-    readonly maplike&lt;DOMString, unsigned long long&gt;;
-};
-</pre>
-
-The {{InteractionCounts}} object is a map where the keys are {{DOMString|DOMStrings}} representing interaction types and the values are the number of interactions that have occurred of that type.
-
 Extensions to the {{Performance}} interface {#sec-extensions}
 ------------------------
 
@@ -404,13 +392,13 @@ Extensions to the {{Performance}} interface {#sec-extensions}
 [Exposed=Window]
 partial interface Performance {
     [SameObject] readonly attribute EventCounts eventCounts;
-    [SameObject] readonly attribute InteractionCounts interactionCounts;
+    readonly attribute unsigned long long interactionCount;
 };
 </pre>
 
 The {{Performance/eventCounts}} attribute's getter returns <a>this</a>'s <a>relevant global object</a>'s <a for=Window>eventCounts</a>.
 
-The {{Performance/interactionCounts}} attribute's getter return <a>this</a>'s <a>relevant global object</a>'s <a for=Window>interactionCounts</a>.
+The {{Performance/interactionCount}} attribute's getter returns <a>this</a>'s <a>relevant global object</a>'s <a for=Window>interactionCount</a>.
 
 Processing model {#sec-processing-model}
 ========================================
@@ -465,9 +453,7 @@ Each {{Window}} has the following associated concepts:
     This means that there have been <var>numEvents</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
     Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, its <a>eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in [[#sec-events-exposed]].
 
-* <dfn for=Window>interactionCounts</dfn>, a map with entries of the form <var>type</var> → <var>numInteractions</var>.
-    This means that there have been <var>numInteractions</var> dispatched of type <var>type</var>.
-    Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, its <a>interactionCounts</a> must be initialized to a map mapping <code>"keyboard"</code>, <code>"drag"</code>, and <code>"tap"</code> to 0.
+* <dfn for=Window>interactionCount</dfn>, an integer which counts the total number of distinct user interactions, for which there was a unique {{interactionId}} computed via <a lt='compute interactionId'>computing interactionId</a>.
 
 <div algorithm="additions to update rendering">
     In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
@@ -514,12 +500,11 @@ Increasing interaction count {#sec-increasing-interaction-count}
 --------------------------------------------------------
 
 <div algorithm="increase interaction count">
-    When asked to <dfn>increase interaction count</dfn> given a {{Window}} |window| and a {{DOMString}} |type|, perform the following steps:
+    When asked to <dfn>increase interaction count</dfn> given a {{Window}} |window| object, perform the following steps:
 
     1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-    1. Let |interactionCounts| be |window|'s <a>interactionCounts</a>.
-    1. Assert that |interactionCounts| <a for=map>contains</a> |type|.
-    1. <a for=map>Set</a> |interactionCounts|[|type|] to |interactionCounts|[|type|] + 1.
+    1. Let |interactionCount| be |window|'s <a>interactionCount</a>.
+    1. Set |interactionCount| to |interactionCount| + 1.
 </div>
 
 Computing interactionId {#sec-computing-interactionid}
@@ -544,7 +529,7 @@ Computing interactionId {#sec-computing-interactionid}
         1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
         1. If |pendingKeyDowns|[|code|] does not exist, return 0.
         1. Let |entry| be |pendingKeyDowns|[|code|].
-        1. <a>Increase interaction count</a>  on |window| and <code>"keyboard"</code>.
+        1. <a>Increase interaction count</a>  on |window|.
         1. Let |interactionId| be |window|'s <a>user interaction value</a> value.
         1. Set |entry|'s {{PerformanceEventTiming/interactionId}} to |interactionId|.
         1. Add |entry| to |window|'s <a>entries to be queued</a>.
@@ -559,7 +544,7 @@ Computing interactionId {#sec-computing-interactionid}
         1. If |event| is not an instance of {{InputEvent}}, return 0.
             Note: this check is done to exclude {{Event|Events}} for which the {{Event/type}} is {{input}} but that are not about modified text content.
         1. If |event|'s {{InputEvent/isComposing}} attribute value is false, return 0.
-        1. <a>Increase interaction count</a>  on |window| and <code>"keyboard"</code>.
+        1. <a>Increase interaction count</a>  on |window|.
         1. Return |window|'s <a>user interaction value</a>.
     1. Otherwise (|type| is {{pointercancel}}, {{pointermove}}, {{pointerup}}, or {{click}}):
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
@@ -579,7 +564,7 @@ Computing interactionId {#sec-computing-interactionid}
         1. If |type| is {{pointerup}}:
             1. Let |interactionType| be <code>"tap"</code>.
             1. If |pointerIsDragSet| contains [|pointerId|] exists, set |interactionType| to <code>"drag"</code>.
-            1. <a>Increase interaction count</a>  on |window| and |interactionType|.
+            1. <a>Increase interaction count</a>  on |window|.
             1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
             1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
         1. Append |pointerDownEntry| to |window|’s <a>entries to be queued</a>.
