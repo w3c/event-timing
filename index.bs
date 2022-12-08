@@ -42,7 +42,7 @@ urlPrefix: https://w3c.github.io/performance-timeline/; spec: PERFORMANCE-TIMELI
         text: observer; url: #dfn-observer;
 urlPrefix: https://w3c.github.io/hr-time/; spec: HR-TIME-2;
     type: typedef; url: #idl-def-domhighrestimestamp; text: DOMHighResTimeStamp;
-    type: interface; url: #dfn-performance; text: Performance;
+    type: interface; url: #dom-performance; text: Performance;
     type: method; for:Performance;
         text: now(); url: #dom-performance-now;
     type: dfn; text: current high resolution time; url: #dfn-current-high-resolution-time;
@@ -102,7 +102,6 @@ urlPrefix: https://html.spec.whatwg.org/multipage/; spec: HTML;
     type: event; url: #event-dnd-drag; text: drag;
     type: event; url: #event-dnd-dragstart; text: dragstart;
     type: event; url: #event-dnd-dragenter; text: dragenter;
-    type: event; url: #event-dnd-dragexit; text: dragexit;
     type: event; url: #event-dnd-dragleave; text: dragleave;
     type: event; url: #event-dnd-dragover; text: dragover;
     type: event; url: #event-dnd-drop; text: drop;
@@ -188,8 +187,6 @@ Certain types of events are considered, and timing information is exposed when t
 Note: {{mousemove}}, {{pointermove}}, {{pointerrawupdate}}, {{touchmove}}, {{wheel}}, and {{drag}} are excluded because these are "continuous" events.
 The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
 Therefore, these event types are not exposed.
-
-Issue: it's unclear whether {{dragexit}} should be on the list. It may be deprecated and removed.
 
 <div class="non-normative">
 
