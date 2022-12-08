@@ -824,7 +824,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Event Timing API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-11-29">29 November 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-12-08">8 December 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -968,7 +968,6 @@ return true.</p>
    <p class="note" role="note"><span>Note:</span> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousemove" id="ref-for-event-type-mousemove">mousemove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointermove-event" id="ref-for-the-pointermove-event">pointermove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerrawupdate-event" id="ref-for-the-pointerrawupdate-event">pointerrawupdate</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchmove-event" id="ref-for-the-touchmove-event">touchmove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-wheel" id="ref-for-event-type-wheel">wheel</a></code>, and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-drag" id="ref-for-event-dnd-drag">drag</a></code> are excluded because these are "continuous" events.
 The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
 Therefore, these event types are not exposed.</p>
-   <p class="issue" id="issue-d9fb8154"><a class="self-link" href="#issue-d9fb8154"></a> it’s unclear whether <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragexit" id="ref-for-event-dnd-dragexit">dragexit</a></code> should be on the list. It may be deprecated and removed.</p>
    <div class="non-normative">
     <p><em> The remainder of this section is non-normative.
 It explains at a high level the information that is exposed in the <a href="#sec-processing-model">§ 3 Processing model</a> section. </em></p>
@@ -1247,7 +1246,7 @@ This allows developers to detect support for event timing.</p>
 </pre>
    <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <a href="Event/type">types</a> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code>.
 Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑧">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§ 1.1 Events exposed</a>) are counted via this map.</p>
-   <h3 class="heading settled" data-level="2.3" id="sec-extensions"><span class="secno">2.3. </span><span class="content">Extensions to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance">Performance</a></code> interface</span><a class="self-link" href="#sec-extensions"></a></h3>
+   <h3 class="heading settled" data-level="2.3" id="sec-extensions"><span class="secno">2.3. </span><span class="content">Extensions to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-performance" id="ref-for-dom-performance">Performance</a></code> interface</span><a class="self-link" href="#sec-extensions"></a></h3>
    <div class="mdn-anno wrapped">
     <button class="mdn-anno-btn"><span>MDN</span></button>
     <div class="feature">
@@ -1266,7 +1265,7 @@ Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.sp
     </div>
    </div>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance①"><c- g>Performance</c-></a> {
+<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dom-performance" id="ref-for-dom-performance①"><c- g>Performance</c-></a> {
     [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SameObject" id="ref-for-SameObject"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#eventcounts" id="ref-for-eventcounts②"><c- n>EventCounts</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Performance" data-dfn-type="attribute" data-export data-readonly data-type="EventCounts" id="dom-performance-eventcounts"><code class="highlight"><c- g>eventCounts</c-></code></dfn>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long②"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Performance" data-dfn-type="attribute" data-export data-readonly data-type="unsigned long long" id="dom-performance-interactioncount"><code class="highlight"><c- g>interactionCount</c-></code></dfn>;
 };
@@ -1318,7 +1317,7 @@ By starting at a random value, developers are less likely to use it as the sourc
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="Window" data-dfn-type="dfn" data-noexport id="window-eventcounts">eventCounts</dfn>, a map with entries of the form <var>type</var> → <var>numEvents</var>.
 This means that there have been <var>numEvents</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value is equal to <var>type</var>.
-Upon construction of a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dfn-performance" id="ref-for-dfn-performance②">Performance</a></code> object whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global④">relevant global object</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window③">Window</a></code>, its <a data-link-type="dfn" href="#window-eventcounts" id="ref-for-window-eventcounts①">eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in <a href="#sec-events-exposed">§ 1.1 Events exposed</a>.</p>
+Upon construction of a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-performance" id="ref-for-dom-performance②">Performance</a></code> object whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global④">relevant global object</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window③">Window</a></code>, its <a data-link-type="dfn" href="#window-eventcounts" id="ref-for-window-eventcounts①">eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in <a href="#sec-events-exposed">§ 1.1 Events exposed</a>.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="Window" data-dfn-type="dfn" data-noexport id="window-interactioncount">interactionCount</dfn>, an integer which counts the total number of distinct user interactions, for which there was a unique <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid②">interactionId</a></code> computed via <a data-link-type="dfn" href="#compute-interactionid" id="ref-for-compute-interactionid①">computing interactionId</a>.</p>
    </ul>
@@ -1906,11 +1905,11 @@ corresponding to this user input will be surfaced in the API under the minimum v
     <li><a href="#ref-for-idl-def-domhighrestimestamp③">3.9. Dispatch pending Event Timing entries</a> <a href="#ref-for-idl-def-domhighrestimestamp④">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-dfn-performance">
-   <a href="https://w3c.github.io/hr-time/#dfn-performance">https://w3c.github.io/hr-time/#dfn-performance</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-dom-performance">
+   <a href="https://w3c.github.io/hr-time/#dom-performance">https://w3c.github.io/hr-time/#dom-performance</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dfn-performance">2.3. Extensions to the Performance interface</a> <a href="#ref-for-dfn-performance①">(2)</a>
-    <li><a href="#ref-for-dfn-performance②">3.2. Modifications to the HTML specification</a>
+    <li><a href="#ref-for-dom-performance">2.3. Extensions to the Performance interface</a> <a href="#ref-for-dom-performance①">(2)</a>
+    <li><a href="#ref-for-dom-performance②">3.2. Modifications to the HTML specification</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-current-high-resolution-time">
@@ -1962,12 +1961,6 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragenter">https://html.spec.whatwg.org/multipage/#event-dnd-dragenter</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-event-dnd-dragenter">1.1. Events exposed</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-event-dnd-dragexit">
-   <a href="https://html.spec.whatwg.org/multipage/#event-dnd-dragexit">https://html.spec.whatwg.org/multipage/#event-dnd-dragexit</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-event-dnd-dragexit">1.1. Events exposed</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-dnd-dragleave">
@@ -2499,7 +2492,7 @@ corresponding to this user input will be surfaced in the API under the minimum v
     <a data-link-type="biblio">[HR-TIME-2]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-idl-def-domhighrestimestamp">DOMHighResTimeStamp</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-performance">Performance</span>
+     <li><span class="dfn-paneled" id="term-for-dom-performance">Performance</span>
      <li><span class="dfn-paneled" id="term-for-dfn-current-high-resolution-time">current high resolution time</span>
      <li><span class="dfn-paneled" id="term-for-dom-performance-now">now()</span>
     </ul>
@@ -2511,7 +2504,6 @@ corresponding to this user input will be surfaced in the API under the minimum v
      <li><span class="dfn-paneled" id="term-for-event-dnd-drag">drag</span>
      <li><span class="dfn-paneled" id="term-for-event-dnd-dragend">dragend</span>
      <li><span class="dfn-paneled" id="term-for-event-dnd-dragenter">dragenter</span>
-     <li><span class="dfn-paneled" id="term-for-event-dnd-dragexit">dragexit</span>
      <li><span class="dfn-paneled" id="term-for-event-dnd-dragleave">dragleave</span>
      <li><span class="dfn-paneled" id="term-for-event-dnd-dragover">dragover</span>
      <li><span class="dfn-paneled" id="term-for-event-dnd-dragstart">dragstart</span>
@@ -2669,7 +2661,7 @@ corresponding to this user input will be surfaced in the API under the minimum v
 };
 
 [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dfn-performance"><c- g>Performance</c-></a> {
+<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dom-performance"><c- g>Performance</c-></a> {
     [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SameObject"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#eventcounts"><c- n>EventCounts</c-></a> <a data-readonly data-type="EventCounts" href="#dom-performance-eventcounts"><code class="highlight"><c- g>eventCounts</c-></code></a>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <a data-readonly data-type="unsigned long long" href="#dom-performance-interactioncount"><code class="highlight"><c- g>interactionCount</c-></code></a>;
 };
@@ -2681,7 +2673,6 @@ corresponding to this user input will be surfaced in the API under the minimum v
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> it’s unclear whether <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-dragexit">dragexit</a></code> should be on the list. It may be deprecated and removed. <a class="issue-return" href="#issue-d9fb8154" title="Jump to section">↵</a></div>
    <div class="issue"> Change the linking of the "get an element" algorithm once it is moved to the DOM spec. <a class="issue-return" href="#issue-3b91075f" title="Jump to section">↵</a></div>
   </div>
   <aside class="dfn-panel" data-for="considered-for-event-timing">
