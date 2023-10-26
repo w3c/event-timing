@@ -2,11 +2,15 @@
 
 ## Background
 
-When a user interacts with a web page, a user interaction (i.e. click/tap, press a key, drag) usually triggers a sequence of events. For example, when the user clicks, several events will be dispatched: pointerdown, pointerup, mousedown, mouseup, click, etc. Measuring the latency of each individual event can't reflect user perceptive responsiveness. Therefore, we want a way to group events up into interactions so we can measure interaction latencies. And further counting the number of interactions on the page so we can aggregate all interactions and calculate the overall page responsiveness of a user visit. For example, calculating INP - the 98th percentile of interaction durations over a page load.
+When a user interacts with a web page (i.e. click, tap, and keyboard) this usually triggers a [sequence of events](https://www.w3.org/TR/uievents/). For example, when the user clicks, several events will be dispatched: pointerdown, pointerup, mousedown, mouseup, click, etc.  Which events are dispatched can even be conditional: hover, focus, blur, change events, etc, all depend on the target of the event and the context of the page.
 
-## What is InteractionId?
+Although measuring the latency of each individual event using Event Timing API is useful, it takes careful effort to interpret this data in a way that best represents user percieved responsiveness.  Therefore, we want a way to simplify the grouping of separate Event Timings into common interactions so we can better represent perceived interaction latencies.
 
-The interactionId is an Id which uniquely identifies an user interaction. Each event has an interactionId assigned, so by comparing the interactionId of two events, we can tell if the two events are fired by the same user interaction. Thus it enables us to aggregate event latencies from the same interaction and calculate an interaction-level latency.
+Additionally, we would like to simplify the task of counting the total number of interactions in a way that matches user intuitions: count the total number of clicks, taps, keypresses -- rather than counting the nunber of UI events which were dispatched, which is not user visible.
+
+## What is an InteractionId?
+
+An `interactionId` is an number which uniquely identifies a user interaction.  Most events will not have an `interactionId` (or have a value of 0), as they are not dispatched due to specific discrete interactions. Event which do have an `interactionId` assigned, can be grouped together with other events sharing the same `interactionId`. This enables us to aggregate event latencies from the same interaction and calculate an overall interaction latency, typically using the single longest event `duration`.
 
 ## What is InteractionCount?
 
@@ -14,7 +18,7 @@ InteractionCount counts the number of interactions that have happened since page
 
 ## Where are we now?
 
-InteractionId is currently not exposed to all event types for implementation complexity reasons. Only certain important event types which we think are just enough to capture the interaction latency are exposed and listed as below:
+Only certain event types may expose an `interactionId`; Those events which are required to capture overall interaction latency.  These are listed below:
 
 | Interaction Type | Event Types with InteractionId Exposed                                                                                           |
 | ----------- | ------------------------------------------------------------------------------------------------ |
@@ -22,9 +26,7 @@ InteractionId is currently not exposed to all event types for implementation com
 | click / tap | pointerdown, pointerup, click, contextmenu(WIP)                                                                    |
 | drag        | pointerdown, pointerup, click                                                                    |
 
-Event types that are not exposed to interactionId will always get an interactionId of 0, which is a trivial and invalid value.
-
-We have current work in progress to include more event types like keypress, keydown/up under IME, contextmenu, etc. Ideally, we would want all event types to have interactionId exposed. However, those that have no impact on the interaction latency calculations are considered not important, thus off our top priorities.
+These events will also not always have an `interactionId` in all cases.  For example, some pointerdown events are followed by pointercancel (scrolling) and are not considered a discrete interaction.  Event Timings which are not Interactions will always get an `interactionId` of `0`.
 
 ## API Definition
 
