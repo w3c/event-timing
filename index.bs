@@ -479,7 +479,7 @@ when a {{PerformanceEventTiming}} entry needs to be added to the buffer of a {{P
 or to the performance timeline, as described in the <a href=
 https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry>registry</a>.
 
-<div algorithm="should add PerformanceEventTiming"/>
+<div algorithm="should add PerformanceEventTiming">
     Given a {{PerformanceEventTiming}} |entry| and a {{PerformanceObserverInit}} |options|, to
     determine if we <dfn export>should add PerformanceEventTiming</dfn>,  with |entry| and
     optionally |options| as inputs, run the following steps:
