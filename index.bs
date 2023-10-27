@@ -360,7 +360,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
         The {{target}} attribute's getter returns the <a>associated event</a>'s last {{Event/target}} when such {{/Node}} is not disconnected nor in the shadow DOM.
     </dd>
     <dt>{{interactionId}}</dt>
-    <dd link-for=>
+    <dd>
       The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identifies the user interaction which triggered the <a>associated event</a>. This attribute is 0 unless the <a>associated event</a>'s {{Event/type}} attribute value is one of:
           * A {{pointerdown}}, {{pointerup}}, or {{click}} belonging to a user tap or drag. Note that {{pointerdown}} that ends in scroll is excluded.
           * A {{keydown}} or {{keyup}} belonging to a user key press.
