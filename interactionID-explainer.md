@@ -53,7 +53,7 @@ The following example computes, for each interaction, the maximum event duration
 
 ```js
 // Hashmap for storing event latencies. The key is Interaction ID.
-var map = {};
+var map = new Map();
 
 const performanceObserver = new PerformanceObserver((entries) => {
     for (const entry of entries.getEntries()) {
@@ -70,15 +70,23 @@ const performanceObserver = new PerformanceObserver((entries) => {
     }
 });
 
-// Print the maximum event duration for each user interaction.
-Object.entries(map).forEach(([k, v]) => {
-    console.log(Math.max(...v));
-});
+performanceObserver.observe(
+    {
+        type: 'event',
+        durationThreshold: 16, // Minimum supported by the spec.
+        buffered: true
+    }
+);
 ```
 
-The following example prints interaction count:
+Some time later, after you've interacted a few times on the page, run the following code example to print interaction durations & count:
 
 ```js
+// Print the maximum event duration for each user interaction.
+Object.entries(map).forEach(([k, v]) => {
+    console.log(`interactionId: ${k}, max event duration: ${Math.max(...v)}`);
+});
+
 // Print the total number of interactions happened so far.
-window.performance.interactionCount;
+console.log(`interaction count: ${window.performance.interactionCount}`);
 ```
