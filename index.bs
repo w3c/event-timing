@@ -99,6 +99,7 @@ urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
     type: event; url: #event-type-compositionupdate; text: compositionupdate;
     type: event; url: #event-type-compositionend; text: compositionend;
 urlPrefix: https://html.spec.whatwg.org/multipage/; spec: HTML;
+    type: dfn; url: #event-loop-processing-model; text: event loop processing model;
     type: event; url: #event-dnd-drag; text: drag;
     type: event; url: #event-dnd-dragstart; text: dragstart;
     type: event; url: #event-dnd-dragenter; text: dragenter;
