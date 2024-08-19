@@ -99,6 +99,7 @@ urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
     type: event; url: #event-type-compositionupdate; text: compositionupdate;
     type: event; url: #event-type-compositionend; text: compositionend;
 urlPrefix: https://html.spec.whatwg.org/multipage/; spec: HTML;
+    type: dfn; url: #event-loop-processing-model; text: event loop processing model;
     type: event; url: #event-dnd-drag; text: drag;
     type: event; url: #event-dnd-dragstart; text: dragstart;
     type: event; url: #event-dnd-dragenter; text: dragenter;
@@ -360,7 +361,7 @@ Each {{PerformanceEventTiming}} object reports timing information about an <dfn 
         The {{target}} attribute's getter returns the <a>associated event</a>'s last {{Event/target}} when such {{/Node}} is not disconnected nor in the shadow DOM.
     </dd>
     <dt>{{interactionId}}</dt>
-    <dd link-for=>
+    <dd link-for=''>
       The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identifies the user interaction which triggered the <a>associated event</a>. This attribute is 0 unless the <a>associated event</a>'s {{Event/type}} attribute value is one of:
           * A {{pointerdown}}, {{pointerup}}, or {{click}} belonging to a user tap or drag. Note that {{pointerdown}} that ends in scroll is excluded.
           * A {{keydown}} or {{keyup}} belonging to a user key press.
@@ -453,7 +454,7 @@ Each {{Window}} has the following associated concepts:
 * <dfn for=Window>interactionCount</dfn>, an integer which counts the total number of distinct user interactions, for which there was a unique {{interactionId}} computed via <a lt='compute interactionId'>computing interactionId</a>.
 
 <div algorithm="additions to update rendering">
-    In the <a>update the rendering</a> step of the <a>event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
+    In the <a>update the rendering</a> step within the <a data-cite="html#event-loop-processing-model">event loop processing model</a>, add a step right after the step that calls <a>mark paint timing</a>:
 
     1. For each <a>fully active</a> {{Document}} in <em>docs</em>, invoke the algorithm to <a>dispatch pending Event Timing entries</a> for that {{Document}}.
 </div>
@@ -479,7 +480,7 @@ when a {{PerformanceEventTiming}} entry needs to be added to the buffer of a {{P
 or to the performance timeline, as described in the <a href=
 https://w3c.github.io/timing-entrytypes-registry/#dfn-should-add-entry>registry</a>.
 
-<div algorithm="should add PerformanceEventTiming"/>
+<div algorithm="should add PerformanceEventTiming">
     Given a {{PerformanceEventTiming}} |entry| and a {{PerformanceObserverInit}} |options|, to
     determine if we <dfn export>should add PerformanceEventTiming</dfn>,  with |entry| and
     optionally |options| as inputs, run the following steps:
