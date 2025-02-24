@@ -443,8 +443,6 @@ Each {{Window}} has the following associated concepts:
 
 * <dfn>pointer interaction value map</dfn>, a <a>map</a> of integers which is initially empty.
 
-* <dfn>pointer is drag set</dfn>, a <a for=/>set</a> of integers which is initially empty.
-
 * <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
 
 * <dfn for=Window>eventCounts</dfn>, a map with entries of the form <var>type</var> → <var>numEvents</var>.
@@ -513,14 +511,13 @@ Computing interactionId {#sec-computing-interactionid}
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. Let |type| be |event|'s {{Event/type}} attribute value.
-    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointermove}}, {{pointerup}}, or {{click}}, return 0.
+    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
 
         Note: {{keydown}} and {{pointerdown}} are handled in <a>finalize event timing</a>.
 
     1. Let |window| be |event|'s <a>relevant global object</a>.
     1. Let |pendingKeyDowns| be |window|'s <a>pending key downs</a>.
     1. Let |pointerMap| be |window|'s <a>pointer interaction value map</a>.
-    1. Let |pointerIsDragSet| be |window|'s <a>pointer is drag set</a>.
     1. Let |pendingPointerDowns| be |window|'s <a>pending pointer downs</a>.
     1. If |type| is {{keyup}}:
         1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is true, return 0.
@@ -544,24 +541,18 @@ Computing interactionId {#sec-computing-interactionid}
         1. If |event|'s {{InputEvent/isComposing}} attribute value is false, return 0.
         1. <a>Increase interaction count</a>  on |window|.
         1. Return |window|'s <a>user interaction value</a>.
-    1. Otherwise (|type| is {{pointercancel}}, {{pointermove}}, {{pointerup}}, or {{click}}):
+    1. Otherwise (|type| is {{pointercancel}}, {{pointerup}}, or {{click}}):
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
         1. If |type| is {{click}}:
             1. If |pointerMap|[|pointerId|] does not exist, return 0.
             1. Let |value| be |pointerMap|[|pointerId|].
             1. Remove |pointerMap|[|pointerId|].
-            1. Remove [|pointerId|] from |pointerIsDragSet|.
             1. Return |value|.
-        1. If |type| is {{pointermove}}:
-            1. Add |pointerId| to |pointerIsDragSet|.
-            1. Return 0.
         1. Assert that |type| is {{pointerup}} or {{pointercancel}}.
         1. If |pendingPointerDowns|[|pointerId|] does not exist, return 0.
         1. Let |pointerDownEntry| be |pendingPointerDowns|[|pointerId|].
         1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
         1. If |type| is {{pointerup}}:
-            1. Let |interactionType| be <code>"tap"</code>.
-            1. If |pointerIsDragSet| contains [|pointerId|] exists, set |interactionType| to <code>"drag"</code>.
             1. <a>Increase interaction count</a>  on |window|.
             1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
             1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
