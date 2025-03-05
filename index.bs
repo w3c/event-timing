@@ -107,8 +107,8 @@ urlPrefix: https://html.spec.whatwg.org/multipage/; spec: HTML;
     type: event; url: #event-dnd-dragover; text: dragover;
     type: event; url: #event-dnd-drop; text: drop;
     type: event; url: #event-dnd-dragend; text: dragend;
-urlPrefix: https://wicg.github.io/element-timing/; spec: ELEMENT-TIMING;
-    type: dfn; url: #get-an-element; text: get an element;
+urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
+    type: dfn; url: #exposed-for-paint-timing; text: exposed for paint timing
 </pre>
 
 Introduction {#sec-intro}
@@ -309,9 +309,16 @@ interface PerformanceEventTiming : PerformanceEntry {
 };
 </pre>
 
-Each {{PerformanceEventTiming}} object has an associated <dfn for=PerformanceEventTiming>eventTarget</dfn>, which is initially set to null.
+A {{PerformanceEventTiming}} object reports timing information about one <dfn for=PerformanceEventTiming>associated {{Event}}</dfn>.
 
-The <dfn export>target</dfn> attribute's getter returns the result of the <a link-for=''>get an element</a> algorithm, passing <a>this</a>'s <a>eventTarget</a> and null as inputs.
+Each {{PerformanceEventTiming}} object has these associated concepts, all of which are initially set to <code>null</code>:
+* An <dfn>eventTarget</dfn> containing the associated {{Node}}.
+
+The {{PerformanceEventTiming/target}} attribute's getter must perform the following steps:
+<div algorithm="PerformanceEventTiming target">
+    1. If <a>this</a>'s <a>eventTarget</a> is not [=exposed for paint timing=] given null, return null.
+    1. Return <a>this</a>'s <a>eventTarget</a>.
+</div>
 
 Note: A user agent implementing the Event Timing API would need to include "<code>first-input</code>" and "<code>event</code>" in {{PerformanceObserver/supportedEntryTypes}} for {{Window}} contexts.
 This allows developers to detect support for event timing.
@@ -323,8 +330,6 @@ This allows developers to detect support for event timing.
     The values of the attributes of {{PerformanceEventTiming}} are set in the processing model in [[#sec-processing-model]].
     This section provides an informative summary of how they will be set.
 </em>
-
-Each {{PerformanceEventTiming}} object reports timing information about an <dfn for=PerformanceEventTiming>associated {{Event}}</dfn>.
 
 {{PerformanceEventTiming}} extends the following attributes of the {{PerformanceEntry}} interface:
 
@@ -595,7 +600,7 @@ Finalize event timing {#sec-fin-event-timing}
 --------------------------------------------------------
 
 <div algorithm="finalize event timing">
-    When asked to to <dfn export>finalize event timing</dfn>, with |timingEntry|, |event|, |target|, and |processingEnd| as inputs, run the following steps:
+    When asked to <dfn export>finalize event timing</dfn>, with |timingEntry|, |event|, |target|, and |processingEnd| as inputs, run the following steps:
 
     1. If <var>timingEntry</var> is null, return.
     1. Let <var>relevantGlobal</var> be <var>target</var>'s <a>relevant global object</a>.
@@ -605,11 +610,9 @@ Finalize event timing {#sec-fin-event-timing}
 
         Note: this assertion holds due to the types of events supported by the Event Timing API.
 
-    1. Set <var>timingEntry</var>'s <a for=PerformanceEventTiming>eventTarget</a> to the result of calling the <a>get an element</a> algorithm with <var>target</var> and <var>relevantGlobal</var>'s <a>associated document</a> as inputs.
+    1. Set <var>timingEntry</var>'s associated <a>eventTarget</a> to <var>target</var>.
 
-        Note: This will set <a for=PerformanceEventTiming>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
-
-        Issue: Change the linking of the "get an element" algorithm once it is moved to the DOM spec.
+        Note: This will set <a>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
     1. If |event|'s {{Event/type}} attribute value is not {{keydown}} nor {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>entries to be queued</a>.
     1. If |event|'s {{Event/type}} attribute value is {{pointerdown}}:
