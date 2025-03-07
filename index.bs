@@ -147,12 +147,22 @@ Finally, this specification allows developers to obtain detailed information abo
 has been processed.
 This can be useful to measure the overhead of website modifications that are triggered by events.
 
-The very first user interaction has a disproportionate impact on user experience, and is often disproportionately slow.
+A single user interaction is typically actually made up several physical input gestures, each of which might dispatch several events on the page, and
+each of those might trigger multiple event listeners and/or default actions.  For example, a single user "tap" interaction on a touchscreen device might
+include a touchstart gesture, followed by a tiny amount of touchmove, and finally a touchend.  And these gestures many trigger multiple Events, each of which produces a single Event Timing entry,
+such as: pointerdown, pointerup, mousedown, mouseup, and click-- and perhaps multiple other synthetic events (depending on the target).
+Therefore, this specification also provices a mechanism for grouping related Event Timings via an "interaction id".  This, together with the other Event Timing
+values, can be used to implement a metric called "Interaction to Next Paint" (INP).  Each user interaction produces one new INP candidate value: the
+single longest Event Timing duration among all Event Timings for that one interaction.  Then, across the whole lifetime of a single page navigation, we
+also count the total number of user interactions, and a developers might summarize the overall responsiveness performcne of the page into a single overall
+INP score: by taking the (near) worst INP candidate value overall (ignoring one large outlier per 50 interactions).
+
+Finally, the very first user interaction typically has a disproportionate impact on user experience, and is also often disproportionately slow.
 It's slow because it's often blocked on JavaScript execution that is not properly split into chunks during page load.
 The latency of the website's response to the first user interaction can be considered a key responsiveness and loading metric.
-To that effect, this API surfaces all the timing information about this interaction, even when this interaction is not handled slowly.
+To that effect, this API always surfaces the timing information about this first interaction, even if this interaction is not actually slow.
 This allows developers to measure percentiles and improvements without having to register event handlers.
-In particular, this API enables measuring the <b>first input delay</b>, the delay in processing for the first "discrete" input event.
+In particular, this API enables measuring the <b>first input delay</b>, the delay in processing for the first Event Timing of the first interaction.
 
 </div>
 
@@ -209,14 +219,9 @@ but a developer can set up a {{PerformanceObserver}} to observe future entries w
 Note that this does not change the entries that are buffered and hence the
 <a href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-buffered">buffered</a> flag only enables receiving past entries with duration greater than or equal to the default threshold.
 
-The Event Timing API also exposes timing information about the <b>first input</b> of a {{Window}} <var>window</var>,
-defined as the first {{Event}} (with {{Event/isTrusted}} set) whose [=relevant global object=] is <var>window</var> and whose {{Event/type}} is one of the following:
-* {{keydown}}
-* {{mousedown}}
-* {{pointerdown}} which is followed by {{pointerup}}
-* {{click}}
-
-This enables computing the <b>first input delay</b>, the <b>delay</b> of the <b>first input</b>.
+The Event Timing API also exposes timing information about the <b>first input</b> of a {{Window}},
+defined as the first {{PerformanceEventTiming}} entry with a non-0 {{PerformanceEventTiming/interactionId}}.
+This enables computing the <b>first input delay</b> (i.e. the <b>input delay</b> of the first Event of the <b>first interaction</b>).
 
 Note that the Event Timing API creates entries for events regardless of whether they have any event listeners.
 In particular, the first click or the first key might not be the user actually trying to interact with the page functionality;
@@ -233,34 +238,23 @@ Usage example {#sec-example}
 ------------------------
 
 <pre class="example highlight">
-    const observer = new PerformanceObserver(function(list) {
-        const perfEntries = list.getEntries().forEach(entry => {
+    const observer = new PerformanceObserver(function(list, obs) {
+        for (let entry of list.getEntries()) {
+            // Input Delay
             const inputDelay = entry.processingStart - entry.startTime;
-            // Report the input delay when the processing start was provided.
-            // Also report the full input duration via entry.duration.
-        });
+            // Processing duration
+            const processingDuration = entry.processingEnd - entry.processingStart;
+            // Presentation Delay (approximate)
+            const presentationDelay = Math.max(0, entry.startTime + entry.duration - entry.processingEnd);
+
+            // Obtain some information about the target of this event, such as the id.
+            const targetId = entry.target ? entry.target.id : 'unknown-target';
+
+            console.log(entry.entryType, entry.name, entry.duration, { inputDelay, processingDuration, presentationDelay });
+        }
     });
-    // Register observer for event.
-    observer.observe({entryTypes: ["event"]});
-    ...
-    // We can also directly query the first input information.
-    new PerformanceObserver(function(list, obs) {
-        const firstInput = list.getEntries()[0];
-
-        // Measure the delay to begin processing the first input event.
-        const firstInputDelay = firstInput.processingStart - firstInput.startTime;
-        // Measure the duration of processing the first input event.
-        // Only use when the important event handling work is done synchronously in the handlers.
-        const firstInputDuration = firstInput.duration;
-        // Obtain some information about the target of this event, such as the id.
-        const targetId = firstInput.target ? firstInput.target.id : 'unknown-target';
-        // Process the first input delay and perhaps its duration...
-
-        // Disconnect this observer since callback is only triggered once.
-        obs.disconnect();
-    }).observe({type: 'first-input', buffered: true});
-
-}
+    observer.observe({ type: 'first-input', buffered: true });
+    observer.observe({ type: 'event', buffered: true, durationThreshold: 40 });
 </pre>
 
 The following example computes a dictionary mapping interactionId to the maximum duration of any of its events.
@@ -269,7 +263,7 @@ This dictionary can later be aggregated and reported to analytics.
 <pre class="example highlight">
     let maxDurations = {};
     new PerformanceObserver(list => {
-        list.getEntries().forEach(entry => {
+        for (let entry of list.getEntries()) {
             if (entry.interactionId > 0) {
                 let id = entry.interactionId;
                 if (!maxDurations[id]) {
@@ -278,8 +272,8 @@ This dictionary can later be aggregated and reported to analytics.
                     maxDurations[id] = Math.max(maxDurations[id], entry.duration);
                 }
             }
-        })
-    }).observe({type: 'event', buffered: true, durationThreshold: 16});
+        }
+    }).observe({ type: 'event', buffered: true, durationThreshold: 16 }) ;
 </pre>
 
 The following are sample use cases that could be achieved by using this API:
@@ -367,9 +361,10 @@ This allows developers to detect support for event timing.
     </dd>
     <dt>{{interactionId}}</dt>
     <dd link-for=''>
-      The <dfn export>interactionId</dfn> attribute's getter returns the ID that uniquely identifies the user interaction which triggered the <a>associated event</a>. This attribute is 0 unless the <a>associated event</a>'s {{Event/type}} attribute value is one of:
-          * A {{pointerdown}}, {{pointerup}}, or {{click}} belonging to a user tap or drag. Note that {{pointerdown}} that ends in scroll is excluded.
-          * A {{keydown}} or {{keyup}} belonging to a user key press.
+      The <dfn export>interactionId</dfn> attribute's getter returns a number that uniquely identifies the user interaction which triggered the <a>associated event</a>.
+      This attribute is 0 unless the <a>associated event</a>'s {{Event/type}} attribute value is one of:
+          * A {{pointerdown}}, {{pointerup}}, or {{click}}, and belongs to a tap or drag gesture. Note that {{pointerdown}} that ends in scroll is excluded.
+          * A {{keydown}} or {{keyup}}, belonging to a user key press.
     </dd>
 </dl>
 
@@ -434,8 +429,6 @@ Modifications to the HTML specification {#sec-modifications-HTML}
 Each {{Window}} has the following associated concepts:
 
 * <dfn>entries to be queued</dfn>, a list that stores {{PerformanceEventTiming}} objects, which will initially be empty.
-
-* <dfn>pending first pointer down</dfn>, a pointer to a {{PerformanceEventTiming}} entry which is initially null.
 
 * <dfn>has dispatched input event</dfn>, a boolean which is initially set to false.
 
@@ -508,6 +501,12 @@ Increasing interaction count {#sec-increasing-interaction-count}
     1. Set |interactionCount| to |interactionCount| + 1.
 </div>
 
+Note: The <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
+This allows the user agent to choose to eagerly assign a <a>user interaction value</a> (i.e. at pointerdown) and then discard it (i.e. after pointercancel), rather than to lazily compute it.
+
+A user agent may choose to increase it by a small random integer every time, or choose a constant.
+A user agent must not use a shared global <a>user interaction value</a>s for all {{Window|Windows}}, because this could introduce cross origin leaks.
+
 Computing interactionId {#sec-computing-interactionid}
 --------------------------------------------------------
 
@@ -518,7 +517,7 @@ Computing interactionId {#sec-computing-interactionid}
     1. Let |type| be |event|'s {{Event/type}} attribute value.
     1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
 
-        Note: {{keydown}} and {{pointerdown}} are handled in <a>finalize event timing</a>.
+        Note: {{keydown}} and {{pointerdown}} are marked pending in <a>finalize event timing</a>, and then updated later when <a lt='compute interactionId'>computing interactionId</a> for future events (like {{keyup}} and {{pointerup}}).
 
     1. Let |window| be |event|'s <a>relevant global object</a>.
     1. Let |pendingKeyDowns| be |window|'s <a>pending key downs</a>.
@@ -575,10 +574,6 @@ If {{pointercancel}} or {{pointerup}} happens, we'll be ready to set the {{Perfo
 If it is {{pointercancel}}, this means we do not want to assign a new interaction ID to the {{pointerdown}}.
 If it is {{pointerup}}, we compute a new interaction ID and set it on both the {{pointerdown}} and the {{pointerup}} (and later, the {{click}} if it occurs).
 
-The <a>user interaction value</a> is increased by a small number chosen by the user agent instead of 1 to discourage developers from considering it as a counter of the number of user interactions that have occurred in the web application.
-A user agent may choose to increase it by a small random integer every time.
-A user agent must not pick a global random integer and increase the <a>user interaction value</a>s of all {{Window|Windows}} by that amount because this could introduce cross origin leaks.
-
 Initialize event timing {#sec-init-event-timing}
 --------------------------------------------------------
 
@@ -614,27 +609,33 @@ Finalize event timing {#sec-fin-event-timing}
 
         Note: This will set <a>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
-    1. If |event|'s {{Event/type}} attribute value is not {{keydown}} nor {{pointerdown}}, append |timingEntry| to |relevantGlobal|’s <a>entries to be queued</a>.
     1. If |event|'s {{Event/type}} attribute value is {{pointerdown}}:
         1. Let |pendingPointerDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
-        1. If |pendingPointerDowns|[|pointerId|] exists, append |pendingPointerDowns|[|pointerId|] to |relevantGlobal|'s <a>entries to be queued</a>.
+        1. If |pendingPointerDowns|[|pointerId|] exists:
+            1. Let |previousPointerDownEntry| be |pendingPointerDowns|[|pointerId|].
+            1. Add |previousPointerDownEntry| to |relevantGlobal|'s <a>entries to be queued</a>.
         1. Set |pendingPointerDowns|[|pointerId|] to |timingEntry|.
-    1. Otherwise (|event|'s {{Event/type}} attribute value is {{keydown}}):
+
+    1. Otherwise, if |event|'s {{Event/type}} attribute value is {{keydown}}:
         1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is <code>true</code>:
             1. Append |timingEntry| to |relevantGlobal|’s <a>entries to be queued</a>.
             1. Return.
         1. Let |pendingKeyDowns| be |relevantGlobal|'s <a>pending key downs</a>.
         1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
         1. If |pendingKeyDowns|[|code|] exists:
-            1. Let |entry| be |pendingKeyDowns|[|code|].
+            1. Let |previousKeyDownEntry| be |pendingKeyDowns|[|code|].
             1. If |code| is not 229:
-                Note: 229 is a special case since it corresponds to IME keyboard events. Sometimes multiple of these are sent by the user agent, and they do not correspond holding a key down repeatedly.
                 1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-                1. Set |entry|'s {{PerformanceEventTiming/interactionId}} to |window|'s <a>user interaction value</a>.
-            1. Add |entry| to |window|'s <a>entries to be queued</a>.
-            1. <a for=map>Remove</a> |pendingKeyDowns|[|code|].
+                1. Set |previousKeyDownEntry|'s {{PerformanceEventTiming/interactionId}} to |window|'s <a>user interaction value</a>.
+
+                Note: 229 is a special case since it corresponds to IME keyboard events. Sometimes multiple of these are sent by the user agent, and they do not correspond to holding a key down repeatedly.
+
+            1. Add |previousKeyDownEntry| to |window|'s <a>entries to be queued</a>.
         1. Set |pendingKeyDowns|[|code|] to |timingEntry|.
+
+    1. Otherwise:
+        1. Append |timingEntry| to |relevantGlobal|’s <a>entries to be queued</a>.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
@@ -649,8 +650,10 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. <a>Set event timing entry duration</a> passing |timingEntry|, |window|, and |renderingTimestamp|.
         1. If |timingEntry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> |timingEntry|.
     1. Clear |window|'s <a>entries to be queued</a>.
-    1. For each |pendingDown| in the <a lt="get the values">values</a> from |window|'s <a>pending pointer downs</a>:
-        1. <a>Set event timing entry duration</a> passing |pendingDown|, |window|, and |renderingTimestamp|.
+    1. For each |pendingPointerDownEntry| in the <a lt="get the values">values</a> from |window|'s <a>pending pointer downs</a>:
+        1. <a>Set event timing entry duration</a> passing |pendingPointerDownEntry|, |window|, and |renderingTimestamp|.
+    1. For each |pendingKeyDownEntry| in the <a lt="get the values">values</a> from |window|'s <a>pending key downs</a>:
+        1. <a>Set event timing entry duration</a> passing |pendingKeyDownEntry|, |window|, and |renderingTimestamp|.
 </div>
 
 <div algorithm="set event timing entry duration">
@@ -664,19 +667,11 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. Let |eventCounts| be |window|'s <a>eventCounts</a>.
         1. Assert that |eventCounts| <a for=map>contains</a> |name|.
         1. <a for=map>Set</a> |eventCounts|[|name|] to |eventCounts|[|name|] + 1.
-    1. If <var>window</var>'s <a>has dispatched input event</a> is false, run the following steps:
-        1. If <var>name</var> is "<code>pointerdown</code>", run the following steps:
-            1. Set <var>window</var>'s <a>pending first pointer down</a> to a copy of <var>timingEntry</var>.
-            1. Set the {{PerformanceEntry/entryType}} of <var>window</var>'s <a>pending first pointer down</a> to "<code>first-input</code>".
-        1. Otherwise, run the following steps:
-            1. If <var>name</var> is "<code>pointerup</code>" AND if <var>window</var>'s <a>pending first pointer down</a> is not null, then:
-                1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
-                1. <a lt='queue the entry'>Queue</a> <var>window</var>'s <a>pending first pointer down</a>.
-            1. Otherwise, if <var>name</var> is one of "<code>click</code>", "<code>keydown</code>" or "<code>mousedown</code>", then:
-                1. Set <var>window</var>'s <a>has dispatched input event</a> to true.
-                1. Let <var>newFirstInputDelayEntry</var> be a copy of <var>timingEntry</var>.
-                1. Set <var>newFirstInputDelayEntry</var>'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
-                1. <a>Queue the entry</a> <var>newFirstInputDelayEntry</var>.
+    1. If |window|'s <a>has dispatched input event</a> is false, and |timingEntry|'s {{PerformanceEventTiming/interactionId}} is not 0, run the following steps:
+        1. Let |firstInputEntry| be a copy of |timingEntry|.
+        1. Set |firstInputEntry|'s {{PerformanceEntry/entryType}} to "<code>first-input</code>".
+        1. <a lt='queue the entry'>queue</a> |firstInputEntry|.
+        1. Set |window|'s <a>has dispatched input event</a> to true.
 </div>
 
 Security & privacy considerations {#priv-sec}
