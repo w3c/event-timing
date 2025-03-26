@@ -78,6 +78,7 @@ urlPrefix: https://w3c.github.io/touch-events/; spec: TOUCH-EVENTS;
 urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
     type: dfn; url: #mark-paint-timing; text: mark paint timing;
 urlPrefix: https://w3c.github.io/uievents/; spec: UIEVENTS;
+    type: event; url: #uievent; text: UIEvent;
     type: event; url: #event-type-auxclick; text: auxclick;
     type: event; url: #event-type-click; text: click;
     type: event; url: #event-type-contextmenu; text: contextmenu;
@@ -114,13 +115,16 @@ urlPrefix: https://w3c.github.io/paint-timing/; spec: PAINT-TIMING;
 Introduction {#sec-intro}
 =====================
 
+Overview {#sec-event-timing-intro}
+------------------------
+
 <div class="non-normative">
 
 <em>This section is non-normative.</em>
 
 When a user engages with a website, they expect their actions to cause changes to the website quickly.
 In fact, <a href=https://www.nngroup.com/articles/response-times-3-important-limits/>research</a> suggests that any user input that is not handled within 100ms is considered slow.
-Therefore, it is important to surface input events that could not achieve those guidelines.
+Therefore, it is important to surface performance timing information about input events that could not achieve those guidelines.
 
 A common way to monitor event latency consists of registering an event listener.
 The timestamp at which the event was created can be obtained via the event's {{Event/timeStamp}}.
@@ -147,30 +151,63 @@ Finally, this specification allows developers to obtain detailed information abo
 has been processed.
 This can be useful to measure the overhead of website modifications that are triggered by events.
 
-A single user interaction is typically actually made up several physical input gestures, each of which might dispatch several events on the page, and
-each of those might trigger multiple event listeners and/or default actions.  For example, a single user "tap" interaction on a touchscreen device might
-include a touchstart gesture, followed by a tiny amount of touchmove, and finally a touchend.  And these gestures many trigger multiple Events, each of which produces a single Event Timing entry,
-such as: pointerdown, pointerup, mousedown, mouseup, and click-- and perhaps multiple other synthetic events (depending on the target).
-Therefore, this specification also provices a mechanism for grouping related Event Timings via an "interaction id".  This, together with the other Event Timing
-values, can be used to implement a metric called "Interaction to Next Paint" (INP).  Each user interaction produces one new INP candidate value: the
-single longest Event Timing duration among all Event Timings for that one interaction.  Then, across the whole lifetime of a single page navigation, we
-also count the total number of user interactions, and a developers might summarize the overall responsiveness performcne of the page into a single overall
-INP score: by taking the (near) worst INP candidate value overall (ignoring one large outlier per 50 interactions).
+</div>
 
-Finally, the very first user interaction typically has a disproportionate impact on user experience, and is also often disproportionately slow.
-It's slow because it's often blocked on JavaScript execution that is not properly split into chunks during page load.
-The latency of the website's response to the first user interaction can be considered a key responsiveness and loading metric.
-To that effect, this API always surfaces the timing information about this first interaction, even if this interaction is not actually slow.
-This allows developers to measure percentiles and improvements without having to register event handlers.
-In particular, this API enables measuring the <b>first input delay</b>, the delay in processing for the first Event Timing of the first interaction.
+Interactions {#sec-event-timing-interactions}
+------------------------
+
+<div class="non-normative">
+
+<em>This section is non-normative.</em>
+
+A single user {{Interaction}} (sometimes called a Gesture) is typically made up of multiple physical hardware input events.
+Each physical input event might cause the User Agent to dispatch several {{UIEvent}}s, and each of those might trigger multiple custom event listeners, or trigger distinct default actions.
+
+For example, a single user "tap" interaction with a touchscreen device is actually made up of a sequence of physical input events:
+- a touch start,
+- a tiny amount of touch movement,
+- a touch end.
+
+Those physical input events might dispatch a series of {{UIEvent}}s:
+- {{pointerdown}},
+- {{touchstart}},
+- {{pointermove}},
+- {{touchmove}},
+- {{pointerup}},
+- {{touchend}},
+- {{click}},
+- ...and potentially some Focus events, Input events, etc, in between.
+
+All these individual {{UIEvent}}s will each produce a distinct {{PerformanceEventTiming}} entry, which is useful for detailed timing.
+
+However, this specification also defines a mechanism for grouping related {{PerformanceEventTiming}}s into {{Interaction}}s via an {{PerformanceEventTiming/interactionId}}.
+This mechanism can be used to define a page responsiveness metric called <a href="https://developer.mozilla.org/en-US/docs/Glossary/Interaction_to_next_paint">Interaction to Next Paint (INP)</a>.
+
+</div>
+
+First Input {#sec-event-timing-first-input}
+------------------------
+
+<div class="non-normative">
+
+<em>This section is non-normative.</em>
+
+The very first user {{Interaction}} typically has a disproportionate impact on user experience, and is also often disproportionately slow.
+
+To that effect, the Event Timing API exposes timing information about the <b>first input</b> of a {{Window}},
+defined as the first {{PerformanceEventTiming}} entry with a non-0 {{PerformanceEventTiming/interactionId}}.
+
+Unlike most {{PerformanceEventTiming}}s, the <b>first input</b> entry is reported even if it does not exceed a provided {{PerformanceObserverInit/durationThreshold}}, and is buffered even if it does not exceed the default duration threshold of 104ms.
+This mechanism can be used to define a page responsiveness metric called <a href="https://developer.mozilla.org/en-US/docs/Glossary/First_input_delay">First Input Delay (FID)</a>.
+
+This also allows developers to better measure percentiles and performance improvements, by including data even from pages which are always very responsive, without having to register event handlers.
 
 </div>
 
 Events exposed {#sec-events-exposed}
 ------------------------
 
-The Event Timing API exposes timing information for certain events.
-Certain types of events are considered, and timing information is exposed when the time difference between user input and paint operations that follow input processing exceeds a certain threshold.
+The Event Timing API exposes timing information only for certain events.
 
 <div algorithm="considered for Event Timing">
     Given an <var>event</var>, to determine if it should be <dfn>considered for Event Timing</dfn>, run the following steps:
@@ -199,29 +236,31 @@ Note: {{mousemove}}, {{pointermove}}, {{pointerrawupdate}}, {{touchmove}}, {{whe
 The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
 Therefore, these event types are not exposed.
 
+When events are measured {#sec-event-timing-when-measured}
+------------------------
+
 <div class="non-normative">
 
 <em>
-The remainder of this section is non-normative.
+This section is non-normative.
 It explains at a high level the information that is exposed in the [[#sec-processing-model]] section.
 </em>
 
-An {{Event}}'s <b>delay</b> is the difference between the time when the browser is about to run event handlers for the event and the {{Event}}'s {{Event/timeStamp}}.
-The former point in time is exposed as the {{PerformanceEventTiming}}'s {{PerformanceEventTiming/processingStart}},
-whereas the latter is exposed as {{PerformanceEventTiming}}'s {{PerformanceEntry/startTime}}.
-Therefore, an {{Event}}'s delay can be computed as <code>{{PerformanceEventTiming/processingStart}} -  {{PerformanceEntry/startTime}}</code>.
+Event timing information is only exposed for certain events, and only when the time difference between user input and paint operations that follow input processing exceeds a certain duration threshold.
 
-The Event Timing API exposes a {{PerformanceEntry/duration}} value, which is meant to be the time from when user interaction occurs
+The Event Timing API exposes a {{PerformanceEntry/duration}} value, which is meant to be the time from when the physical user input occurs
 (estimated via the {{Event}}'s {{Event/timeStamp}}) to the next time the rendering of the {{Event}}'s [=relevant global object=]'s <a>associated Document</a>'s is updated.
 This value is provided with 8 millisecond granularity.
+
 By default, the Event Timing API buffers and exposes entries when the {{PerformanceEntry/duration}} is 104 or greater,
 but a developer can set up a {{PerformanceObserver}} to observe future entries with a different threshold.
 Note that this does not change the entries that are buffered and hence the
 <a href="https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-buffered">buffered</a> flag only enables receiving past entries with duration greater than or equal to the default threshold.
 
-The Event Timing API also exposes timing information about the <b>first input</b> of a {{Window}},
-defined as the first {{PerformanceEventTiming}} entry with a non-0 {{PerformanceEventTiming/interactionId}}.
-This enables computing the <b>first input delay</b> (i.e. the <b>input delay</b> of the first Event of the <b>first interaction</b>).
+An {{Event}}'s <b>delay</b> is the difference between the time when the browser is about to run event handlers for the event and the {{Event}}'s {{Event/timeStamp}}.
+The former point in time is exposed as the {{PerformanceEventTiming}}'s {{PerformanceEventTiming/processingStart}},
+whereas the latter is exposed as {{PerformanceEventTiming}}'s {{PerformanceEntry/startTime}}.
+Therefore, an {{Event}}'s delay can be computed as <code>{{PerformanceEventTiming/processingStart}} -  {{PerformanceEntry/startTime}}</code>.
 
 Note that the Event Timing API creates entries for events regardless of whether they have any event listeners.
 In particular, the first click or the first key might not be the user actually trying to interact with the page functionality;
@@ -257,7 +296,7 @@ Usage example {#sec-example}
     observer.observe({ type: 'event', buffered: true, durationThreshold: 40 });
 </pre>
 
-The following example computes a dictionary mapping interactionId to the maximum duration of any of its events.
+The following example computes a dictionary mapping {{PerformanceEventTiming/interactionId}} to the maximum duration of any of its events.
 This dictionary can later be aggregated and reported to analytics.
 
 <pre class="example highlight">
@@ -273,7 +312,7 @@ This dictionary can later be aggregated and reported to analytics.
                 }
             }
         }
-    }).observe({ type: 'event', buffered: true, durationThreshold: 16 }) ;
+    }).observe({ type: 'event', buffered: true, durationThreshold: 16 });
 </pre>
 
 The following are sample use cases that could be achieved by using this API:
@@ -361,10 +400,10 @@ This allows developers to detect support for event timing.
     </dd>
     <dt>{{interactionId}}</dt>
     <dd link-for=''>
-      The <dfn export>interactionId</dfn> attribute's getter returns a number that uniquely identifies the user interaction which triggered the <a>associated event</a>.
+      The <dfn export>interactionId</dfn> attribute's getter returns a number that uniquely identifies the user <dfn export>Interaction</dfn> which triggered the <a>associated event</a>.
       This attribute is 0 unless the <a>associated event</a>'s {{Event/type}} attribute value is one of:
           * A {{pointerdown}}, {{pointerup}}, or {{click}}, and belongs to a tap or drag gesture. Note that {{pointerdown}} that ends in scroll is excluded.
-          * A {{keydown}} or {{keyup}}, belonging to a user key press.
+          * A {{keydown}} or {{keyup}}, belongs to a user key press.
     </dd>
 </dl>
 
@@ -505,7 +544,7 @@ Note: The <a>user interaction value</a> is increased by a small number chosen by
 This allows the user agent to choose to eagerly assign a <a>user interaction value</a> (i.e. at pointerdown) and then discard it (i.e. after pointercancel), rather than to lazily compute it.
 
 A user agent may choose to increase it by a small random integer every time, or choose a constant.
-A user agent must not use a shared global <a>user interaction value</a>s for all {{Window|Windows}}, because this could introduce cross origin leaks.
+A user agent must not use a shared global <a>user interaction value</a>s for all {{Window|Windows}}, because this could introduce cross-origin leaks.
 
 Computing interactionId {#sec-computing-interactionid}
 --------------------------------------------------------
