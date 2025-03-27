@@ -178,7 +178,9 @@ Those physical input events might dispatch a series of {{UIEvent}}s:
 - {{click}},
 - ...and potentially some Focus events, Input events, etc, in between.
 
-All these individual {{UIEvent}}s will each produce a distinct {{PerformanceEventTiming}} entry, which is useful for detailed timing.
+These individual {{UIEvent}}s will each become candidates for their own {{PerformanceEventTiming}} entry reporting, which is useful for detailed timing.
+
+Note: {{pointermove}} and {{touchmove}} are not currently <a>considered for Event Timing</a>.
 
 However, this specification also defines a mechanism for grouping related {{PerformanceEventTiming}}s into {{Interaction}}s via an {{PerformanceEventTiming/interactionId}}.
 This mechanism can be used to define a page responsiveness metric called <a href="https://developer.mozilla.org/en-US/docs/Glossary/Interaction_to_next_paint">Interaction to Next Paint (INP)</a>.
