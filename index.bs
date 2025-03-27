@@ -4,8 +4,9 @@ Status: ED
 Shortname: event-timing
 Group: webperf 
 Level: none
-Editor: Nicolás Peña Moreno, Google https://google.com, npm@chromium.org, w3cid 103755
-        Tim Dresser, Google https://google.com, tdresser@chromium.org, w3cid 68214
+Editor: Michal Mocny, Google https://google.com, mmocny@chromium.org, w3cid 110398
+Former Editor: Nicolás Peña Moreno, Google https://google.com, npm@chromium.org, w3cid 103755
+               Tim Dresser, Google https://google.com, tdresser@chromium.org, w3cid 68214
 
 URL: https://w3c.github.io/event-timing/
 TR: https://www.w3.org/TR/event-timing/
