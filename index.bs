@@ -485,6 +485,8 @@ Each {{Window}} has the following associated concepts:
 
 * <dfn>pending pointer downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
 
+* <dfn>is contextmenu triggered</dfn>, a boolean which is initially set to false.
+
 * <dfn for=Window>eventCounts</dfn>, a map with entries of the form <var>type</var> → <var>numEvents</var>.
     This means that there have been <var>numEvents</var> dispatched such that their {{Event/type}} attribute value is equal to <var>type</var>.
     Upon construction of a {{Performance}} object whose [=relevant global object=] is a {{Window}}, its <a>eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in [[#sec-events-exposed]].
@@ -557,7 +559,7 @@ Computing interactionId {#sec-computing-interactionid}
 
     1. If |event|'s {{Event/isTrusted}} attribute value is false, return 0.
     1. Let |type| be |event|'s {{Event/type}} attribute value.
-    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointerup}}, or {{click}}, return 0.
+    1. If |type| is not one among {{keyup}}, {{compositionstart}}, {{input}}, {{pointercancel}}, {{pointerup}}, {{click}}, or {{contextmenu}}, return 0.
 
         Note: {{keydown}} and {{pointerdown}} are marked pending in <a>finalize event timing</a>, and then updated later when <a lt='compute interactionId'>computing interactionId</a> for future events (like {{keyup}} and {{pointerup}}).
 
@@ -587,23 +589,27 @@ Computing interactionId {#sec-computing-interactionid}
         1. If |event|'s {{InputEvent/isComposing}} attribute value is false, return 0.
         1. <a>Increase interaction count</a>  on |window|.
         1. Return |window|'s <a>user interaction value</a>.
-    1. Otherwise (|type| is {{pointercancel}}, {{pointerup}}, or {{click}}):
+    1. Otherwise (|type| is {{pointercancel}}, {{pointerup}}, {{click}}, or {{contextmenu}}):
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}} attribute value.
         1. If |type| is {{click}}:
             1. If |pointerMap|[|pointerId|] does not exist, return 0.
             1. Let |value| be |pointerMap|[|pointerId|].
             1. Remove |pointerMap|[|pointerId|].
             1. Return |value|.
-        1. Assert that |type| is {{pointerup}} or {{pointercancel}}.
-        1. If |pendingPointerDowns|[|pointerId|] does not exist, return 0.
+        1. Assert that |type| is {{pointerup}}, {{pointercancel}}, or {{contextmenu}}.
+        1. If |pendingPointerDowns|[|pointerId|] does not exist:
+            1. If |type| is {{contextmenu}}, return |window|'s <a>user interaction value</a>.
+            1. If |type| is {{pointerup}} and |window|'s <a>is contextmenu triggered</a> flag is true, return |window|'s <a>user interaction value</a>.
+            1. Otherwise, return 0.
         1. Let |pointerDownEntry| be |pendingPointerDowns|[|pointerId|].
         1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
-        1. If |type| is {{pointerup}}:
+        1. If |type| is {{pointerup}} or {{contextmenu}}:
             1. <a>Increase interaction count</a>  on |window|.
             1. Set |pointerMap|[|pointerId|] to |window|'s <a>user interaction value</a>.
             1. Set |pointerDownEntry|'s {{PerformanceEventTiming/interactionId}} to |pointerMap|[|pointerId|].
         1. Append |pointerDownEntry| to |window|’s <a>entries to be queued</a>.
         1. Remove |pendingPointerDowns|[|pointerId|].
+        1. If |type| is {{contextmenu}}, set |window|'s <a>is contextmenu triggered</a> to true.
         1. If |type| is {{pointercancel}}, return 0.
         1. Return |pointerMap|[|pointerId|].
 </div>
@@ -658,6 +664,7 @@ Finalize event timing {#sec-fin-event-timing}
             1. Let |previousPointerDownEntry| be |pendingPointerDowns|[|pointerId|].
             1. Add |previousPointerDownEntry| to |relevantGlobal|'s <a>entries to be queued</a>.
         1. Set |pendingPointerDowns|[|pointerId|] to |timingEntry|.
+        1. Set |window|'s <a>is contextmenu triggered</a> to false.
 
     1. Otherwise, if |event|'s {{Event/type}} attribute value is {{keydown}}:
         1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is <code>true</code>:
