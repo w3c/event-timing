@@ -599,7 +599,9 @@ Computing interactionId {#sec-computing-interactionid}
         1. Assert that |type| is {{pointerup}}, {{pointercancel}}, or {{contextmenu}}.
         1. If |pendingPointerDowns|[|pointerId|] does not exist:
             1. If |type| is {{contextmenu}}, return |window|'s <a>user interaction value</a>.
-            1. If |type| is {{pointerup}} and |window|'s <a>is contextmenu triggered</a> flag is true, return |window|'s <a>user interaction value</a>.
+            1. If |type| is {{pointerup}} and |window|'s <a>is contextmenu triggered</a> flag is true:
+                1. Set |window|'s <a>is contextmenu triggered</a> flag to false.
+                1. Return |window|'s <a>user interaction value</a>.
             1. Otherwise, return 0.
         1. Let |pointerDownEntry| be |pendingPointerDowns|[|pointerId|].
         1. Assert that |pointerDownEntry| is a {{PerformanceEventTiming}} entry.
