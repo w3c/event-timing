@@ -340,7 +340,7 @@ interface PerformanceEventTiming : PerformanceEntry {
     readonly attribute DOMHighResTimeStamp processingEnd;
     readonly attribute boolean cancelable;
     readonly attribute Node? target;
-    readonly attribute DOMString targetIdentifier;
+    readonly attribute DOMString targetSelector;
     readonly attribute unsigned long long interactionId;
     [Default] object toJSON();
 };
@@ -402,9 +402,9 @@ This allows developers to detect support for event timing.
     <dd>
         The {{target}} attribute's getter returns the <a>associated event</a>'s last {{Event/target}} when such {{/Node}} is not disconnected nor in the shadow DOM.
     </dd>
-    <dt>{{targetIdentifier}}</dt>
+    <dt>{{targetSelector}}</dt>
     <dd>
-        The <dfn export>targetIdentifier</dfn> attribute's getter returns a string that identifies the <a>associated event</a>'s last {{Event/target}}.
+        The <dfn export>targetSelector</dfn> attribute's getter returns a string that identifies the <a>associated event</a>'s last {{Event/target}}.
     </dd>
     <dt>{{interactionId}}</dt>
     <dd link-for=''>
@@ -664,7 +664,7 @@ Finalize event timing {#sec-fin-event-timing}
 
         Note: This will set <a>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
-    1. Set <var>timingEntry</var>'s {{PerformanceEventTiming/targetIdentifier}} to the result of running the algorithm to <a>generate a target identifier</a> with |target| as input.
+    1. Set <var>timingEntry</var>'s {{PerformanceEventTiming/targetSelector}} to the result of running the algorithm to <a>generate a CSS selector</a> with |target| as input.
     1. If |event|'s {{Event/type}} attribute value is {{pointerdown}}:
         1. Let |pendingPointerDowns| be |relevantGlobal|'s <a>pending pointer downs</a>.
         1. Let |pointerId| be |event|'s {{PointerEvent/pointerId}}.
@@ -731,18 +731,18 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
         1. Set |window|'s <a>has dispatched input event</a> to true.
 </div>
 
-Target Identification {#sec-target-identification}
+Target Selectors {#sec-target-selectors}
 --------------------------------------------------------
 
-<div algorithm="generate a target identifier">
-    To <dfn export>generate a target identifier</dfn> given an {{EventTarget}} |target|, run the following steps:
+<div algorithm="generate a CSS selector">
+    To <dfn export>generate a CSS selector</dfn> given an {{EventTarget}} |target|, run the following steps:
     1. If |target| is a {{Node}}, run the following steps:
-        1. Let |identifier| be a string with an initial value of |target|'s {{Node/nodeName}}.
+        1. Let |selector| be a string with an initial value of |target|'s {{Node/nodeName}}.
         1. If |target| is an {{Element}}, run the following steps:
-            1. If |target| has an `id` attribute, set |identifier| to the [=concatenate|concatenation=] of « |identifier|, "#", the value of the `id` attribute ».
-            1. Otherwise, if |target| has a `src` attribute, set |identifier| to the [=concatenate|concatenation=] of « |identifier|, "[src=", the value of the `src` attribute, "]" ».
-        1. Return |identifier|.
-    1. Otherwise, Return |target|'s interface name.
+            1. If |target| has an `id` attribute, set |selector| to the [=concatenate|concatenation=] of « |selector|, "#", the value of the `id` attribute ».
+            1. Otherwise, if |target| has a `src` attribute, set |selector| to the [=concatenate|concatenation=] of « |selector|, "[src=", the value of the `src` attribute, "]" ».
+        1. Return |selector|.
+    1. Otherwise, Return an empty string.
 </div>
 
 Security & privacy considerations {#priv-sec}
