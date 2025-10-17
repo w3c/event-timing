@@ -742,7 +742,7 @@ Target Selectors {#sec-target-selectors}
             1. If |target| has an `id` attribute, set |selector| to the [=concatenate|concatenation=] of « |selector|, "#", the value of the `id` attribute ».
             1. Otherwise, if |target| has a `src` attribute, set |selector| to the [=concatenate|concatenation=] of « |selector|, "[src=", the value of the `src` attribute, "]" ».
         1. Return |selector|.
-    1. Otherwise, Return an empty string.
+    1. Otherwise, return an empty string.
 </div>
 
 Security & privacy considerations {#priv-sec}
