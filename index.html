@@ -5,7 +5,7 @@
   <title>Event Timing API</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
+  <meta content="Bikeshed version 0ef803fdf, updated Tue Jan 6 11:59:39 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/event-timing/" rel="canonical">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
@@ -319,7 +319,7 @@ body {
 }
 .invalid.example:not(.no-marker)::before,
 .illegal.example:not(.no-marker)::before {
-    content: "Invalid Example" counter(example);
+    content: "Invalid Example " counter(example);
 }
 
 figcaption {
@@ -963,9 +963,9 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
     <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
 </a>
 </p>
-   <h1 class="p-name no-ref" id="title">Event Timing API</h1>
+   <h1 class="no-ref p-name" id="title">Event Timing API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
-    <time class="dt-updated" datetime="2025-10-17">17 October 2025</time></p>
+    <time class="dt-updated" datetime="2026-02-23">23 February 2026</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -979,23 +979,23 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
       <dt>Feedback:
       <dd><a href="https://github.com/WICG/event-timing/issues/">GitHub</a>
       <dt class="editor">Editor:
-      <dd class="editor p-author h-card vcard" data-editor-id="110398"><a class="p-name fn u-email email" href="mailto:mmocny@chromium.org">Michal Mocny</a> (<a class="p-org org" href="https://google.com">Google</a>)
+      <dd class="editor h-card p-author vcard" data-editor-id="110398"><a class="email fn p-name u-email" href="mailto:mmocny@chromium.org">Michal Mocny</a> (<a class="org p-org" href="https://google.com">Google</a>)
       <dt class="editor">Former Editors:
-      <dd class="editor p-author h-card vcard" data-editor-id="103755"><a class="p-name fn u-email email" href="mailto:npm@chromium.org">Nicolás Peña Moreno</a> (<a class="p-org org" href="https://google.com">Google</a>)
-      <dd class="editor p-author h-card vcard" data-editor-id="68214"><a class="p-name fn u-email email" href="mailto:tdresser@chromium.org">Tim Dresser</a> (<a class="p-org org" href="https://google.com">Google</a>)
+      <dd class="editor h-card p-author vcard" data-editor-id="103755"><a class="email fn p-name u-email" href="mailto:npm@chromium.org">Nicolás Peña Moreno</a> (<a class="org p-org" href="https://google.com">Google</a>)
+      <dd class="editor h-card p-author vcard" data-editor-id="68214"><a class="email fn p-name u-email" href="mailto:tdresser@chromium.org">Tim Dresser</a> (<a class="org p-org" href="https://google.com">Google</a>)
      </dl>
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply.
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2026 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply.
 </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
-   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
+   <h2 class="heading no-num no-ref no-toc settled" id="abstract"><span class="content">Abstract</span></h2>
    <p>This document defines an API that provides web page authors with insights into the latency of certain events triggered by user interactions.</p>
   </div>
-  <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
+  <h2 class="heading no-num no-ref no-toc settled" id="sotd"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
    <p>
 	This is a public copy of the editors’ draft.
@@ -1014,8 +1014,8 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
-   <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
-   <ol class="toc" role="directory">
+   <h2 class="no-num no-ref no-toc" id="contents">Table of Contents</h2>
+   <ol class="toc">
     <li>
      <a href="#sec-intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
      <ol class="toc">
@@ -1128,7 +1128,7 @@ Each physical input event might cause the User Agent to dispatch several <code c
      <li data-md>
       <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchend-event" id="ref-for-the-touchend-event">touchend</a></code>,</p>
      <li data-md>
-      <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click">click</a></code>,</p>
+      <p><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click">click</a></code>,</p>
      <li data-md>
       <p>...and potentially some Focus events, Input events, etc, in between.</p>
     </ul>
@@ -1158,7 +1158,7 @@ This mechanism can be used to define a page responsiveness metric called <a href
       <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-istrusted" id="ref-for-dom-event-istrusted">isTrusted</a></code> attribute value is set to false, return false.</p>
      <li data-md>
       <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type">type</a></code> is one of the following:
-<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-auxclick" id="ref-for-event-type-auxclick">auxclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click①">click</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu">contextmenu</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-dblclick" id="ref-for-event-type-dblclick">dblclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousedown" id="ref-for-event-type-mousedown">mousedown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseenter" id="ref-for-event-type-mouseenter">mouseenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseleave" id="ref-for-event-type-mouseleave">mouseleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseout" id="ref-for-event-type-mouseout">mouseout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseover" id="ref-for-event-type-mouseover">mouseover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mouseup" id="ref-for-event-type-mouseup">mouseup</a></code>,
+<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-auxclick" id="ref-for-dfn-auxclick">auxclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click①">click</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu">contextmenu</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-dblclick" id="ref-for-dfn-dblclick">dblclick</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mousedown" id="ref-for-dfn-mousedown">mousedown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mouseenter" id="ref-for-dfn-mouseenter">mouseenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mouseleave" id="ref-for-dfn-mouseleave">mouseleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mouseout" id="ref-for-dfn-mouseout">mouseout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mouseover" id="ref-for-dfn-mouseover">mouseover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mouseup" id="ref-for-dfn-mouseup">mouseup</a></code>,
 <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerover-event" id="ref-for-the-pointerover-event">pointerover</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerenter-event" id="ref-for-the-pointerenter-event">pointerenter</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event①">pointerdown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerout-event" id="ref-for-the-pointerout-event">pointerout</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerleave-event" id="ref-for-the-pointerleave-event">pointerleave</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-gotpointercapture-event" id="ref-for-the-gotpointercapture-event">gotpointercapture</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-lostpointercapture-event" id="ref-for-the-lostpointercapture-event">lostpointercapture</a></code>,
 <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchstart-event" id="ref-for-the-touchstart-event①">touchstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchend-event" id="ref-for-the-touchend-event①">touchend</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchcancel-event" id="ref-for-the-touchcancel-event">touchcancel</a></code>,
 <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown">keydown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keypress" id="ref-for-event-type-keypress">keypress</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup">keyup</a></code>,
@@ -1170,7 +1170,7 @@ return true.</p>
       <p>Return false.</p>
     </ol>
    </div>
-   <p class="note" role="note"><span class="marker">Note:</span> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-mousemove" id="ref-for-event-type-mousemove">mousemove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointermove-event" id="ref-for-the-pointermove-event②">pointermove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerrawupdate-event" id="ref-for-the-pointerrawupdate-event">pointerrawupdate</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchmove-event" id="ref-for-the-touchmove-event②">touchmove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-wheel" id="ref-for-event-type-wheel">wheel</a></code>, and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-drag" id="ref-for-event-dnd-drag">drag</a></code> are excluded because these are "continuous" events.
+   <p class="note" role="note"><span class="marker">Note:</span> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-mousemove" id="ref-for-dfn-mousemove">mousemove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointermove-event" id="ref-for-the-pointermove-event②">pointermove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerrawupdate-event" id="ref-for-the-pointerrawupdate-event">pointerrawupdate</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/touch-events/#the-touchmove-event" id="ref-for-the-touchmove-event②">touchmove</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-wheel" id="ref-for-dfn-wheel">wheel</a></code>, and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/#event-dnd-drag" id="ref-for-event-dnd-drag">drag</a></code> are excluded because these are "continuous" events.
 The current API does not have enough guidance on how to count and aggregate these events to obtain meaningful performance metrics based on entries.
 Therefore, these event types are not exposed.</p>
    <h3 class="heading settled" data-level="1.5" id="sec-event-timing-when-measured"><span class="secno">1.5. </span><span class="content">When events are measured</span><a class="self-link" href="#sec-event-timing-when-measured"></a></h3>
@@ -1251,7 +1251,7 @@ This dictionary can later be aggregated and reported to analytics.</p>
    <h2 class="heading settled" data-level="2" id="sec-event-timing"><span class="secno">2. </span><span class="content">Event Timing</span><a class="self-link" href="#sec-event-timing"></a></h2>
    <p>Event Timing adds the following interfaces:</p>
    <h3 class="heading settled" data-level="2.1" id="sec-performance-event-timing"><span class="secno">2.1. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming⑥">PerformanceEventTiming</a></code> interface</span><a class="self-link" href="#sec-performance-event-timing"></a></h3>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="performanceeventtiming"><code class="highlight"><c- g>PerformanceEventTiming</c-></code></dfn> : <a data-link-type="idl-name" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface" id="ref-for-the-performanceentry-interface"><c- n>PerformanceEntry</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp"><c- n>DOMHighResTimeStamp</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMHighResTimeStamp" href="#dom-performanceeventtiming-processingstart" id="ref-for-dom-performanceeventtiming-processingstart③"><c- g>processingStart</c-></a>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp①"><c- n>DOMHighResTimeStamp</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMHighResTimeStamp" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend②"><c- g>processingEnd</c-></a>;
@@ -1328,22 +1328,22 @@ This allows developers to detect support for event timing.</p>
 
       <ul>
        <li data-md>
-        <p>A <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event②">pointerdown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event②">pointerup</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click②">click</a></code>, and belongs to a tap or drag gesture. Note that <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event③">pointerdown</a></code> that ends in scroll is excluded.</p>
+        <p>A <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event②">pointerdown</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event②">pointerup</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click②">click</a></code>, and belongs to a tap or drag gesture. Note that <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event③">pointerdown</a></code> that ends in scroll is excluded.</p>
        <li data-md>
         <p>A <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown①">keydown</a></code> or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup①">keyup</a></code>, belongs to a user key press.</p>
       </ul>
     </dl>
    </div>
    <h3 class="heading settled" data-level="2.2" id="sec-event-counts"><span class="secno">2.2. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts">EventCounts</a></code> interface</span><a class="self-link" href="#sec-event-counts"></a></h3>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="eventcounts"><code class="highlight"><c- g>EventCounts</c-></code></dfn> {
     <c- b>readonly</c-> <c- b>maplike</c->&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>, <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long①"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a>>;
 };
 </pre>
-   <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <a href="Event/type">types</a> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type③">type</a></code>.
-Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①②">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§ 1.4 Events exposed</a>) are counted via this map.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="#eventcounts" id="ref-for-eventcounts①">EventCounts</a></code> object is a map where the keys are event <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type③">types</a></code> and the values are the number of events that have been dispatched that are of that <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type④">type</a></code>.
+Only events whose <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> is supported by <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①②">PerformanceEventTiming</a></code> entries (see section <a href="#sec-events-exposed">§ 1.4 Events exposed</a>) are counted via this map.</p>
    <h3 class="heading settled" data-level="2.3" id="sec-extensions"><span class="secno">2.3. </span><span class="content">Extensions to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-performance" id="ref-for-dom-performance">Performance</a></code> interface</span><a class="self-link" href="#sec-extensions"></a></h3>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://w3c.github.io/hr-time/#dom-performance" id="ref-for-dom-performance①"><c- g>Performance</c-></a> {
     [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SameObject" id="ref-for-SameObject"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#eventcounts" id="ref-for-eventcounts②"><c- n>EventCounts</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Performance" data-dfn-type="attribute" data-export data-readonly data-type="EventCounts" id="dom-performance-eventcounts"><code class="highlight"><c- g>eventCounts</c-></code></dfn>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long-long" id="ref-for-idl-unsigned-long-long②"><c- b>unsigned</c-> <c- b>long</c-> <c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Performance" data-dfn-type="attribute" data-export data-readonly data-type="unsigned long long" id="dom-performance-interactioncount"><code class="highlight"><c- g>interactionCount</c-></code></dfn>;
@@ -1396,7 +1396,7 @@ By starting at a random value, developers are less likely to use it as the sourc
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="is-contextmenu-triggered">is contextmenu triggered</dfn>, a boolean which is initially set to false.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="Window" data-dfn-type="dfn" data-noexport id="window-eventcounts">eventCounts</dfn>, a map with entries of the form <var>type</var> → <var>numEvents</var>.
-This means that there have been <var>numEvents</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑤">type</a></code> attribute value is equal to <var>type</var>.
+This means that there have been <var>numEvents</var> dispatched such that their <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value is equal to <var>type</var>.
 Upon construction of a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/hr-time/#dom-performance" id="ref-for-dom-performance②">Performance</a></code> object whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③">relevant global object</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#window" id="ref-for-window③">Window</a></code>, its <a data-link-type="dfn" href="#window-eventcounts" id="ref-for-window-eventcounts①">eventCounts</a> must be initialized to a map containing 0s for all event types that the user agent supports from the list described in <a href="#sec-events-exposed">§ 1.4 Events exposed</a>.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-for="Window" data-dfn-type="dfn" data-noexport id="window-interactioncount">interactionCount</dfn>, an integer which counts the total number of distinct user interactions, for which there was a unique <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid⑤">interactionId</a></code> computed via <a data-link-type="dfn" href="#compute-interactionid" id="ref-for-compute-interactionid①">computing interactionId</a>.</p>
@@ -1414,7 +1414,7 @@ Upon construction of a <code class="idl"><a data-link-type="idl" href="https://w
    <h3 class="heading settled" data-level="3.3" id="sec-modifications-perf-timeline"><span class="secno">3.3. </span><span class="content">Modifications to the Performance Timeline specification</span><a class="self-link" href="#sec-modifications-perf-timeline"></a></h3>
    <p><em>This section will be removed once <a data-link-type="biblio" href="#biblio-performance-timeline-2" title="Performance Timeline">[PERFORMANCE-TIMELINE-2]</a> had been modified.</em></p>
    <p>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary">PerformanceObserverInit</a></code> dictionary is augmented:</p>
-<pre class="idl highlight def"><c- b>partial</c-> <c- b>dictionary</c-> <a class="idl-code" data-link-type="dictionary" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary①"><c- g>PerformanceObserverInit</c-></a> {
+<pre class="def highlight idl"><c- b>partial</c-> <c- b>dictionary</c-> <a class="idl-code" data-link-type="dictionary" href="https://w3c.github.io/performance-timeline/#performanceobserverinit-dictionary" id="ref-for-performanceobserverinit-dictionary①"><c- g>PerformanceObserverInit</c-></a> {
     <a data-link-type="idl-name" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp" id="ref-for-idl-def-domhighrestimestamp②"><c- n>DOMHighResTimeStamp</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="PerformanceObserverInit" data-dfn-type="dict-member" data-export data-type="DOMHighResTimeStamp" id="dom-performanceobserverinit-durationthreshold"><code class="highlight"><c- g>durationThreshold</c-></code></dfn>;
 };
 </pre>
@@ -1477,9 +1477,9 @@ A user agent must not use a shared global <a data-link-type="dfn" href="#user-in
      <li data-md>
       <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-istrusted" id="ref-for-dom-event-istrusted①">isTrusted</a></code> attribute value is false, return 0.</p>
      <li data-md>
-      <p>Let <var>type</var> be <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑥">type</a></code> attribute value.</p>
+      <p>Let <var>type</var> be <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑦">type</a></code> attribute value.</p>
      <li data-md>
-      <p>If <var>type</var> is not one among <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup②">keyup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionstart" id="ref-for-event-type-compositionstart①">compositionstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input①">input</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event①">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event③">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click③">click</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu①">contextmenu</a></code>, return 0.</p>
+      <p>If <var>type</var> is not one among <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup②">keyup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-compositionstart" id="ref-for-event-type-compositionstart①">compositionstart</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input①">input</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event①">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event③">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click③">click</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu①">contextmenu</a></code>, return 0.</p>
       <p class="note" role="note"><span class="marker">Note:</span> <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown②">keydown</a></code> and <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event④">pointerdown</a></code> are marked pending in <a data-link-type="dfn" href="#finalize-event-timing" id="ref-for-finalize-event-timing①">finalize event timing</a>, and then updated later when <a data-link-type="dfn" href="#compute-interactionid" id="ref-for-compute-interactionid②">computing interactionId</a> for future events (like <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup③">keyup</a></code> and <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event④">pointerup</a></code>).</p>
      <li data-md>
       <p>Let <var>window</var> be <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global④">relevant global object</a>.</p>
@@ -1532,7 +1532,7 @@ A user agent must not use a shared global <a data-link-type="dfn" href="#user-in
       <ol>
        <li data-md>
         <p>If <var>event</var> is not an instance of <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#inputevent" id="ref-for-inputevent">InputEvent</a></code>, return 0.
-Note: this check is done to exclude <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event⑦">Events</a></code> for which the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑦">type</a></code> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input③">input</a></code> but that are not about modified text content.</p>
+Note: this check is done to exclude <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event⑦">Events</a></code> for which the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑧">type</a></code> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input③">input</a></code> but that are not about modified text content.</p>
        <li data-md>
         <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#dom-inputevent-iscomposing" id="ref-for-dom-inputevent-iscomposing">isComposing</a></code> attribute value is false, return 0.</p>
        <li data-md>
@@ -1541,12 +1541,12 @@ Note: this check is done to exclude <code class="idl"><a data-link-type="idl" hr
         <p>Return <var>window</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value⑥">user interaction value</a>.</p>
       </ol>
      <li data-md>
-      <p>Otherwise (<var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event②">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑤">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click④">click</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu②">contextmenu</a></code>):</p>
+      <p>Otherwise (<var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event②">pointercancel</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑤">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click④">click</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu②">contextmenu</a></code>):</p>
       <ol>
        <li data-md>
         <p>Let <var>pointerId</var> be <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dom-pointerevent-pointerid" id="ref-for-dom-pointerevent-pointerid">pointerId</a></code> attribute value.</p>
        <li data-md>
-        <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click⑤">click</a></code>:</p>
+        <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click⑤">click</a></code>:</p>
         <ol>
          <li data-md>
           <p>If <var>pointerMap</var>[<var>pointerId</var>] does not exist, return 0.</p>
@@ -1558,12 +1558,12 @@ Note: this check is done to exclude <code class="idl"><a data-link-type="idl" hr
           <p>Return <var>value</var>.</p>
         </ol>
        <li data-md>
-        <p>Assert that <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑥">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event③">pointercancel</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu③">contextmenu</a></code>.</p>
+        <p>Assert that <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑥">pointerup</a></code>, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event③">pointercancel</a></code>, or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu③">contextmenu</a></code>.</p>
        <li data-md>
         <p>If <var>pendingPointerDowns</var>[<var>pointerId</var>] does not exist:</p>
         <ol>
          <li data-md>
-          <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu④">contextmenu</a></code>, return <var>window</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value⑦">user interaction value</a>.</p>
+          <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu④">contextmenu</a></code>, return <var>window</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value⑦">user interaction value</a>.</p>
          <li data-md>
           <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑦">pointerup</a></code> and <var>window</var>’s <a data-link-type="dfn" href="#is-contextmenu-triggered" id="ref-for-is-contextmenu-triggered">is contextmenu triggered</a> flag is true:</p>
           <ol>
@@ -1580,7 +1580,7 @@ Note: this check is done to exclude <code class="idl"><a data-link-type="idl" hr
        <li data-md>
         <p>Assert that <var>pointerDownEntry</var> is a <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①⑧">PerformanceEventTiming</a></code> entry.</p>
        <li data-md>
-        <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑧">pointerup</a></code> or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu⑤">contextmenu</a></code>:</p>
+        <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑧">pointerup</a></code> or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu⑤">contextmenu</a></code>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#increase-interaction-count" id="ref-for-increase-interaction-count②">Increase interaction count</a>  on <var>window</var>.</p>
@@ -1594,7 +1594,7 @@ Note: this check is done to exclude <code class="idl"><a data-link-type="idl" hr
        <li data-md>
         <p>Remove <var>pendingPointerDowns</var>[<var>pointerId</var>].</p>
        <li data-md>
-        <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-contextmenu" id="ref-for-event-type-contextmenu⑥">contextmenu</a></code>, set <var>window</var>’s <a data-link-type="dfn" href="#is-contextmenu-triggered" id="ref-for-is-contextmenu-triggered②">is contextmenu triggered</a> to true.</p>
+        <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-contextmenu" id="ref-for-dfn-contextmenu⑥">contextmenu</a></code>, set <var>window</var>’s <a data-link-type="dfn" href="#is-contextmenu-triggered" id="ref-for-is-contextmenu-triggered②">is contextmenu triggered</a> to true.</p>
        <li data-md>
         <p>If <var>type</var> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event④">pointercancel</a></code>, return 0.</p>
        <li data-md>
@@ -1605,10 +1605,10 @@ Note: this check is done to exclude <code class="idl"><a data-link-type="idl" hr
    <p class="note" role="note"><span class="marker">Note:</span> the algorithm attempts to assign events to the corresponding interactiond IDs.
 For keyboard events, a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown③">keydown</a></code> triggers a new interaction ID, whereas a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup⑤">keyup</a></code> has to match its ID with a previous <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown④">keydown</a></code>.
 For pointer events, when we get a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑤">pointerdown</a></code> we have to wait until <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event⑤">pointercancel</a></code> or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑨">pointerup</a></code> occur to know its <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid⑧">interactionId</a></code>.
-We try to match <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click⑥">click</a></code> with a previous interaction ID from a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑥">pointerdown</a></code>.
+We try to match <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click⑥">click</a></code> with a previous interaction ID from a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑥">pointerdown</a></code>.
 If <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event⑥">pointercancel</a></code> or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①⓪">pointerup</a></code> happens, we’ll be ready to set the <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid⑨">interactionId</a></code> for the stored entry corresponding to <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑦">pointerdown</a></code>.
 If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event⑦">pointercancel</a></code>, this means we do not want to assign a new interaction ID to the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑧">pointerdown</a></code>.
-If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①①">pointerup</a></code>, we compute a new interaction ID and set it on both the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑨">pointerdown</a></code> and the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①②">pointerup</a></code> (and later, the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-click" id="ref-for-event-type-click⑦">click</a></code> if it occurs).</p>
+If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①①">pointerup</a></code>, we compute a new interaction ID and set it on both the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑨">pointerdown</a></code> and the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event①②">pointerup</a></code> (and later, the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click⑦">click</a></code> if it occurs).</p>
    <h3 class="heading settled" data-level="3.7" id="sec-init-event-timing"><span class="secno">3.7. </span><span class="content">Initialize event timing</span><a class="self-link" href="#sec-init-event-timing"></a></h3>
    <div class="algorithm" data-algorithm="initialize event timing">
     
@@ -1621,7 +1621,7 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
      <li data-md>
       <p>Let <var>timingEntry</var> be a new <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①⑨">PerformanceEventTiming</a></code> object with <var>event</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm" id="ref-for-concept-relevant-realm">relevant realm</a>.</p>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑧">type</a></code> attribute value.</p>
+      <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-name" id="ref-for-dom-performanceentry-name②">name</a></code> to <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑨">type</a></code> attribute value.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype" id="ref-for-dom-performanceentry-entrytype④">entryType</a></code> to "<code class="highlight">event</code>".</p>
      <li data-md>
@@ -1660,7 +1660,7 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-targetselector" id="ref-for-dom-performanceeventtiming-targetselector②">targetSelector</a></code> to the result of running the algorithm to <a data-link-type="dfn" href="#generate-a-css-selector" id="ref-for-generate-a-css-selector">generate a CSS selector</a> with <var>target</var> as input.</p>
      <li data-md>
-      <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑨">type</a></code> attribute value is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event①⓪">pointerdown</a></code>:</p>
+      <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①⓪">type</a></code> attribute value is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event①⓪">pointerdown</a></code>:</p>
       <ol>
        <li data-md>
         <p>Let <var>pendingPointerDowns</var> be <var>relevantGlobal</var>’s <a data-link-type="dfn" href="#pending-pointer-downs" id="ref-for-pending-pointer-downs①">pending pointer downs</a>.</p>
@@ -1680,7 +1680,7 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
         <p>Set <var>window</var>’s <a data-link-type="dfn" href="#is-contextmenu-triggered" id="ref-for-is-contextmenu-triggered③">is contextmenu triggered</a> to false.</p>
       </ol>
      <li data-md>
-      <p>Otherwise, if <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①⓪">type</a></code> attribute value is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown⑤">keydown</a></code>:</p>
+      <p>Otherwise, if <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①①">type</a></code> attribute value is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown⑤">keydown</a></code>:</p>
       <ol>
        <li data-md>
         <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#dom-keyboardevent-iscomposing" id="ref-for-dom-keyboardevent-iscomposing①">isComposing</a></code> attribute value is <code class="highlight"><c- kc>true</c-></code>:</p>
@@ -1841,8 +1841,8 @@ making sure that the response is smooth. In 120Hz displays, a response that skip
 corresponding to this user input will be surfaced in the API under the minimum value.</p>
   </main>
   <div data-fill-with="conformance">
-   <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
-   <h3 class="no-ref no-num heading settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
+   <h2 class="heading no-num no-ref settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
+   <h3 class="heading no-num no-ref settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
    <p>Conformance requirements are expressed
     with a combination of descriptive assertions
     and RFC 2119 terminology.
@@ -1877,7 +1877,7 @@ corresponding to this user input will be surfaced in the API under the minimum v
     </p>
    <p class="note" role="note">Note, this is an informative note.</p>
    <section>
-    <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
+    <h3 class="heading no-num no-ref settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
     <p>Requirements phrased in the imperative as part of algorithms
     (such as "strip any leading space characters"
     or "return false and abort these steps")
@@ -1897,8 +1897,8 @@ corresponding to this user input will be surfaced in the API under the minimum v
    </section>
   </div>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
-  <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
-  <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
+  <h2 class="heading no-num no-ref settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
+  <h3 class="heading no-num no-ref settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#performanceeventtiming-associated-event">associated Event</a><span>, in § 2.1</span>
    <li><a href="#dom-performanceeventtiming-cancelable">cancelable</a><span>, in § 2.1</span>
@@ -1942,7 +1942,7 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <li><a href="#dom-performanceeventtiming-tojson">toJSON()</a><span>, in § 2.1</span>
    <li><a href="#user-interaction-value">user interaction value</a><span>, in § 3.2</span>
   </ul>
-  <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+  <h3 class="heading no-num no-ref settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
@@ -2020,10 +2020,22 @@ corresponding to this user input will be surfaced in the API under the minimum v
      <li><span class="dfn-paneled" id="de4bb79b">supportedEntryTypes</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[POINTEREVENTS]</a> defines the following terms:
+    <a data-link-type="biblio">[POINTEREVENTS4]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="eb43d864">auxclick</span>
+     <li><span class="dfn-paneled" id="aec67a86">click</span>
+     <li><span class="dfn-paneled" id="5265e60e">contextmenu</span>
+     <li><span class="dfn-paneled" id="491fae17">dblclick</span>
      <li><span class="dfn-paneled" id="3ef75aae">gotpointercapture</span>
      <li><span class="dfn-paneled" id="90bdc7a8">lostpointercapture</span>
+     <li><span class="dfn-paneled" id="bfbd70f2">mousedown</span>
+     <li><span class="dfn-paneled" id="528d4de7">mouseenter</span>
+     <li><span class="dfn-paneled" id="068b3063">mouseleave</span>
+     <li><span class="dfn-paneled" id="a01efedc">mousemove</span>
+     <li><span class="dfn-paneled" id="50330e1c">mouseout</span>
+     <li><span class="dfn-paneled" id="b5aa89be">mouseover</span>
+     <li><span class="dfn-paneled" id="f96dc64b">mouseup</span>
+     <li><span class="dfn-paneled" id="d6aab74b">pointerId</span>
      <li><span class="dfn-paneled" id="e26d6abc">pointercancel</span>
      <li><span class="dfn-paneled" id="116cc32c">pointerdown</span>
      <li><span class="dfn-paneled" id="728dc60d">pointerenter</span>
@@ -2033,11 +2045,7 @@ corresponding to this user input will be surfaced in the API under the minimum v
      <li><span class="dfn-paneled" id="31982c92">pointerover</span>
      <li><span class="dfn-paneled" id="4da4b1df">pointerrawupdate</span>
      <li><span class="dfn-paneled" id="d47009fc">pointerup</span>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[POINTEREVENTS3]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="d6aab74b">pointerId</span>
+     <li><span class="dfn-paneled" id="a382f6fe">wheel</span>
     </ul>
    <li>
     <a data-link-type="biblio">[TOUCH-EVENTS]</a> defines the following terms:
@@ -2052,14 +2060,10 @@ corresponding to this user input will be surfaced in the API under the minimum v
     <ul>
      <li><span class="dfn-paneled" id="518be2ae">InputEvent</span>
      <li><span class="dfn-paneled" id="92000da2">UIEvent</span>
-     <li><span class="dfn-paneled" id="fba88163">auxclick</span>
      <li><span class="dfn-paneled" id="28e2feb0">beforeinput</span>
-     <li><span class="dfn-paneled" id="4391ca3e">click</span>
      <li><span class="dfn-paneled" id="ce94a9ec">compositionend</span>
      <li><span class="dfn-paneled" id="46557268">compositionstart</span>
      <li><span class="dfn-paneled" id="eeade806">compositionupdate</span>
-     <li><span class="dfn-paneled" id="d6d67163">contextmenu</span>
-     <li><span class="dfn-paneled" id="e61d571d">dblclick</span>
      <li><span class="dfn-paneled" id="d4ca4296">input</span>
      <li><span class="dfn-paneled" id="db9ba2b1">isComposing <small>(for InputEvent)</small></span>
      <li><span class="dfn-paneled" id="4b516875">isComposing <small>(for KeyboardEvent)</small></span>
@@ -2067,14 +2071,6 @@ corresponding to this user input will be surfaced in the API under the minimum v
      <li><span class="dfn-paneled" id="b3e4c892">keydown</span>
      <li><span class="dfn-paneled" id="51e2f421">keypress</span>
      <li><span class="dfn-paneled" id="ef3cfa4b">keyup</span>
-     <li><span class="dfn-paneled" id="0280f580">mousedown</span>
-     <li><span class="dfn-paneled" id="09adf34e">mouseenter</span>
-     <li><span class="dfn-paneled" id="5df15a52">mouseleave</span>
-     <li><span class="dfn-paneled" id="384d35c4">mousemove</span>
-     <li><span class="dfn-paneled" id="ebd158f9">mouseout</span>
-     <li><span class="dfn-paneled" id="4a661dde">mouseover</span>
-     <li><span class="dfn-paneled" id="53b4e4fd">mouseup</span>
-     <li><span class="dfn-paneled" id="0d860495">wheel</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
@@ -2090,8 +2086,8 @@ corresponding to this user input will be surfaced in the API under the minimum v
      <li><span class="dfn-paneled" id="f14b47b8">unsigned long long</span>
     </ul>
   </ul>
-  <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
-  <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
+  <h2 class="heading no-num no-ref settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
+  <h3 class="heading no-num no-ref settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
@@ -2105,21 +2101,19 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <dd>Ian Clelland; Noam Rosenthal. <a href="https://w3c.github.io/paint-timing/"><cite>Paint Timing</cite></a>. URL: <a href="https://w3c.github.io/paint-timing/">https://w3c.github.io/paint-timing/</a>
    <dt id="biblio-performance-timeline-2">[PERFORMANCE-TIMELINE-2]
    <dd>Nicolas Pena Moreno. <a href="https://w3c.github.io/performance-timeline/"><cite>Performance Timeline</cite></a>. URL: <a href="https://w3c.github.io/performance-timeline/">https://w3c.github.io/performance-timeline/</a>
-   <dt id="biblio-pointerevents">[POINTEREVENTS]
-   <dd>Jacob Rossi; Matt Brubeck. <a href="https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html"><cite>Pointer Events</cite></a>. URL: <a href="https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html">https://dvcs.w3.org/hg/pointerevents/raw-file/tip/pointerEvents.html</a>
-   <dt id="biblio-pointerevents3">[POINTEREVENTS3]
+   <dt id="biblio-pointerevents4">[POINTEREVENTS4]
    <dd>Patrick Lauke; Robert Flack. <a href="https://w3c.github.io/pointerevents/"><cite>Pointer Events</cite></a>. URL: <a href="https://w3c.github.io/pointerevents/">https://w3c.github.io/pointerevents/</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
    <dt id="biblio-touch-events">[TOUCH-EVENTS]
    <dd>Doug Schepers; et al. <a href="https://w3c.github.io/touch-events/"><cite>Touch Events</cite></a>. URL: <a href="https://w3c.github.io/touch-events/">https://w3c.github.io/touch-events/</a>
    <dt id="biblio-uievents">[UIEVENTS]
-   <dd>Gary Kacmarcik; Travis Leithead. <a href="https://w3c.github.io/uievents/"><cite>UI Events</cite></a>. URL: <a href="https://w3c.github.io/uievents/">https://w3c.github.io/uievents/</a>
+   <dd>Xiaoqian Wu. <a href="https://w3c.github.io/uievents/"><cite>UI Events</cite></a>. URL: <a href="https://w3c.github.io/uievents/">https://w3c.github.io/uievents/</a>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
   </dl>
-  <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
+  <h2 class="heading no-num no-ref settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <a href="#performanceeventtiming"><code class="highlight"><c- g>PerformanceEventTiming</c-></code></a> : <a data-link-type="idl-name" href="https://w3c.github.io/performance-timeline/#the-performanceentry-interface"><c- n>PerformanceEntry</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp"><c- n>DOMHighResTimeStamp</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMHighResTimeStamp" href="#dom-performanceeventtiming-processingstart"><c- g>processingStart</c-></a>;
     <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp"><c- n>DOMHighResTimeStamp</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMHighResTimeStamp" href="#dom-performanceeventtiming-processingend"><c- g>processingEnd</c-></a>;
@@ -2151,13 +2145,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/EventCounts" title="The EventCounts interface of the Performance API provides the number of events that have been dispatched for each event type.">EventCounts</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>85+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>85+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>85+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>85+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2166,15 +2160,15 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance/eventCounts" title="The read-only performance.eventCounts property is an EventCounts map containing the number of events which have been dispatched per event type.">Performance/eventCounts</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>85+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>85+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>85+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>85+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
      <hr>
-     <span class="nodejs no"><span>Node.js</span><span>None</span></span>
+     <span class="no nodejs"><span>Node.js</span><span>None</span></span>
     </div>
    </div>
   </details>
@@ -2183,13 +2177,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming/cancelable" title="The read-only cancelable property returns the associated event&apos;s cancelable property, indicating whether the event can be canceled.">PerformanceEventTiming/cancelable</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2199,13 +2193,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming/interactionId" title="The read-only interactionId property returns an ID that uniquely identifies a user interaction which triggered a series of associated events.">PerformanceEventTiming/interactionId</a></p>
     <p class="less-than-two-engines-text">In only one current engine.</p>
     <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>96+</span></span>
+     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>96+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>96+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>96+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2214,13 +2208,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming/processingEnd" title="The read-only processingEnd property returns the time the last event handler finished executing.">PerformanceEventTiming/processingEnd</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2229,13 +2223,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming/processingStart" title="The read-only processingStart property returns the time at which event dispatch started. This is when event handlers are about to be executed.">PerformanceEventTiming/processingStart</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2244,13 +2238,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming/target" title="The read-only target property returns the associated event&apos;s last target which is the node onto which the event was last dispatched.">PerformanceEventTiming/target</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>85+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>85+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>85+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>85+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2259,13 +2253,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming/toJSON" title="The toJSON() method of the PerformanceEventTiming interface is a serializer; it returns a JSON representation of the PerformanceEventTiming object.">PerformanceEventTiming/toJSON</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2274,13 +2268,13 @@ corresponding to this user input will be surfaced in the API under the minimum v
    <div class="feature">
     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming" title="The PerformanceEventTiming interface of the Event Timing API provides insights into the latency of certain event types triggered by user interaction.">PerformanceEventTiming</a></p>
     <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
+     <span class="firefox yes"><span>Firefox</span><span>89+</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>76+</span></span>
      <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
      <hr>
      <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
      <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
     </div>
    </div>
   </details>
@@ -2484,11 +2478,9 @@ function parseHTML(markup) {
 "use strict";
 {
 let dfnPanelData = {
-"0280f580": {"dfnID":"0280f580","dfnText":"mousedown","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mousedown"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mousedown"},
+"068b3063": {"dfnID":"068b3063","dfnText":"mouseleave","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mouseleave"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mouseleave"},
 "08a90f22": {"dfnID":"08a90f22","dfnText":"entryType","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-performanceentry-entrytype"},{"id":"ref-for-dom-performanceentry-entrytype\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dom-performanceentry-entrytype\u2461"},{"id":"ref-for-dom-performanceentry-entrytype\u2462"}],"title":"3.4. Should add PerformanceEventTiming"},{"refs":[{"id":"ref-for-dom-performanceentry-entrytype\u2463"}],"title":"3.7. Initialize event timing"},{"refs":[{"id":"ref-for-dom-performanceentry-entrytype\u2464"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype"},
-"09adf34e": {"dfnID":"09adf34e","dfnText":"mouseenter","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mouseenter"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mouseenter"},
 "09c54b53": {"dfnID":"09c54b53","dfnText":"name","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-performanceentry-name"},{"id":"ref-for-dom-performanceentry-name\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dom-performanceentry-name\u2461"}],"title":"3.7. Initialize event timing"},{"refs":[{"id":"ref-for-dom-performanceentry-name\u2462"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://w3c.github.io/performance-timeline/#dom-performanceentry-name"},
-"0d860495": {"dfnID":"0d860495","dfnText":"wheel","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-wheel"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-wheel"},
 "0e3ba9f8": {"dfnID":"0e3ba9f8","dfnText":"fully active","external":true,"refSections":[{"refs":[{"id":"ref-for-fully-active"}],"title":"3.2. Modifications to the HTML specification"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active"},
 "0e6b2056": {"dfnID":"0e6b2056","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-map-set"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://infra.spec.whatwg.org/#map-set"},
 "0f9a8616": {"dfnID":"0f9a8616","dfnText":"touchmove","external":true,"refSections":[{"refs":[{"id":"ref-for-the-touchmove-event"},{"id":"ref-for-the-touchmove-event\u2460"}],"title":"1.2. Interactions"},{"refs":[{"id":"ref-for-the-touchmove-event\u2461"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/touch-events/#the-touchmove-event"},
@@ -2506,26 +2498,25 @@ let dfnPanelData = {
 "31982c92": {"dfnID":"31982c92","dfnText":"pointerover","external":true,"refSections":[{"refs":[{"id":"ref-for-the-pointerover-event"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#the-pointerover-event"},
 "32dd7834": {"dfnID":"32dd7834","dfnText":"get the values","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-values"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-map-getting-the-values\u2460"},{"id":"ref-for-map-getting-the-values\u2461"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
 "3349d69f": {"dfnID":"3349d69f","dfnText":"associated Document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-window"}],"title":"1.5. When events are measured"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window"},
-"384d35c4": {"dfnID":"384d35c4","dfnText":"mousemove","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mousemove"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mousemove"},
 "3b786c72": {"dfnID":"3b786c72","dfnText":"exposed for paint timing","external":true,"refSections":[{"refs":[{"id":"ref-for-exposed-for-paint-timing"}],"title":"2.1. PerformanceEventTiming interface"}],"url":"https://w3c.github.io/paint-timing/#exposed-for-paint-timing"},
 "3ef75aae": {"dfnID":"3ef75aae","dfnText":"gotpointercapture","external":true,"refSections":[{"refs":[{"id":"ref-for-the-gotpointercapture-event"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#the-gotpointercapture-event"},
 "3fca5a9e": {"dfnID":"3fca5a9e","dfnText":"map","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-map"},{"id":"ref-for-ordered-map\u2460"},{"id":"ref-for-ordered-map\u2461"}],"title":"3.2. Modifications to the HTML specification"}],"url":"https://infra.spec.whatwg.org/#ordered-map"},
 "4013a022": {"dfnID":"4013a022","dfnText":"this","external":true,"refSections":[{"refs":[{"id":"ref-for-this"},{"id":"ref-for-this\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-this\u2461"},{"id":"ref-for-this\u2462"}],"title":"2.3. Extensions to the Performance interface"}],"url":"https://webidl.spec.whatwg.org/#this"},
 "41cd0b68": {"dfnID":"41cd0b68","dfnText":"DOMHighResTimeStamp","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-def-domhighrestimestamp"},{"id":"ref-for-idl-def-domhighrestimestamp\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-idl-def-domhighrestimestamp\u2461"}],"title":"3.3. Modifications to the Performance Timeline specification"},{"refs":[{"id":"ref-for-idl-def-domhighrestimestamp\u2462"},{"id":"ref-for-idl-def-domhighrestimestamp\u2463"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://w3c.github.io/hr-time/#idl-def-domhighrestimestamp"},
-"4391ca3e": {"dfnID":"4391ca3e","dfnText":"click","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-click"}],"title":"1.2. Interactions"},{"refs":[{"id":"ref-for-event-type-click\u2460"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-event-type-click\u2461"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-event-type-click\u2462"},{"id":"ref-for-event-type-click\u2463"},{"id":"ref-for-event-type-click\u2464"},{"id":"ref-for-event-type-click\u2465"},{"id":"ref-for-event-type-click\u2466"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/uievents/#event-type-click"},
 "46557268": {"dfnID":"46557268","dfnText":"compositionstart","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-compositionstart"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-event-type-compositionstart\u2460"},{"id":"ref-for-event-type-compositionstart\u2461"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/uievents/#event-type-compositionstart"},
+"491fae17": {"dfnID":"491fae17","dfnText":"dblclick","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-dblclick"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-dblclick"},
 "4a3bf5fb": {"dfnID":"4a3bf5fb","dfnText":"concatenate","external":true,"refSections":[{"refs":[{"id":"ref-for-string-concatenate"},{"id":"ref-for-string-concatenate\u2460"}],"title":"3.10. Target Selectors"}],"url":"https://infra.spec.whatwg.org/#string-concatenate"},
-"4a661dde": {"dfnID":"4a661dde","dfnText":"mouseover","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mouseover"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mouseover"},
 "4b516875": {"dfnID":"4b516875","dfnText":"isComposing (for KeyboardEvent)","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-keyboardevent-iscomposing"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-dom-keyboardevent-iscomposing\u2460"}],"title":"3.8. Finalize event timing"}],"url":"https://w3c.github.io/uievents/#dom-keyboardevent-iscomposing"},
 "4bd9e0af": {"dfnID":"4bd9e0af","dfnText":"dragend","external":true,"refSections":[{"refs":[{"id":"ref-for-event-dnd-dragend"}],"title":"1.4. Events exposed"}],"url":"https://html.spec.whatwg.org/multipage/#event-dnd-dragend"},
 "4da4b1df": {"dfnID":"4da4b1df","dfnText":"pointerrawupdate","external":true,"refSections":[{"refs":[{"id":"ref-for-the-pointerrawupdate-event"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#the-pointerrawupdate-event"},
+"50330e1c": {"dfnID":"50330e1c","dfnText":"mouseout","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mouseout"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mouseout"},
 "518be2ae": {"dfnID":"518be2ae","dfnText":"InputEvent","external":true,"refSections":[{"refs":[{"id":"ref-for-inputevent"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/uievents/#inputevent"},
 "51e2f421": {"dfnID":"51e2f421","dfnText":"keypress","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-keypress"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-keypress"},
+"5265e60e": {"dfnID":"5265e60e","dfnText":"contextmenu","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-contextmenu"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-dfn-contextmenu\u2460"},{"id":"ref-for-dfn-contextmenu\u2461"},{"id":"ref-for-dfn-contextmenu\u2462"},{"id":"ref-for-dfn-contextmenu\u2463"},{"id":"ref-for-dfn-contextmenu\u2464"},{"id":"ref-for-dfn-contextmenu\u2465"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/pointerevents/#dfn-contextmenu"},
+"528d4de7": {"dfnID":"528d4de7","dfnText":"mouseenter","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mouseenter"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mouseenter"},
 "5372cca8": {"dfnID":"5372cca8","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-boolean"}],"title":"2.1. PerformanceEventTiming interface"}],"url":"https://webidl.spec.whatwg.org/#idl-boolean"},
-"53b4e4fd": {"dfnID":"53b4e4fd","dfnText":"mouseup","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mouseup"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mouseup"},
 "5991ccfb": {"dfnID":"5991ccfb","dfnText":"relevant realm","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-relevant-realm"}],"title":"3.7. Initialize event timing"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm"},
 "5d7209e9": {"dfnID":"5d7209e9","dfnText":"Window","external":true,"refSections":[{"refs":[{"id":"ref-for-window"}],"title":"1.3. First Input"},{"refs":[{"id":"ref-for-window\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-window\u2461"},{"id":"ref-for-window\u2462"}],"title":"3.2. Modifications to the HTML specification"},{"refs":[{"id":"ref-for-window\u2463"},{"id":"ref-for-window\u2464"}],"title":"3.5. Increasing interaction count"},{"refs":[{"id":"ref-for-window\u2465"}],"title":"3.8. Finalize event timing"},{"refs":[{"id":"ref-for-window\u2466"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#window"},
-"5df15a52": {"dfnID":"5df15a52","dfnText":"mouseleave","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mouseleave"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mouseleave"},
 "61ef5011": {"dfnID":"61ef5011","dfnText":"pointermove","external":true,"refSections":[{"refs":[{"id":"ref-for-the-pointermove-event"},{"id":"ref-for-the-pointermove-event\u2460"}],"title":"1.2. Interactions"},{"refs":[{"id":"ref-for-the-pointermove-event\u2461"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#the-pointermove-event"},
 "6bcebfc2": {"dfnID":"6bcebfc2","dfnText":"queue the entry","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-queue-a-performanceentry"},{"id":"ref-for-dfn-queue-a-performanceentry\u2460"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry"},
 "71e707a1": {"dfnID":"71e707a1","dfnText":"drop","external":true,"refSections":[{"refs":[{"id":"ref-for-event-dnd-drop"}],"title":"1.4. Events exposed"}],"url":"https://html.spec.whatwg.org/multipage/#event-dnd-drop"},
@@ -2544,18 +2535,23 @@ let dfnPanelData = {
 "90bdc7a8": {"dfnID":"90bdc7a8","dfnText":"lostpointercapture","external":true,"refSections":[{"refs":[{"id":"ref-for-the-lostpointercapture-event"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#the-lostpointercapture-event"},
 "92000da2": {"dfnID":"92000da2","dfnText":"UIEvent","external":true,"refSections":[{"refs":[{"id":"ref-for-uievent"},{"id":"ref-for-uievent\u2460"},{"id":"ref-for-uievent\u2461"}],"title":"1.2. Interactions"}],"url":"https://w3c.github.io/uievents/#uievent"},
 "96c16e60": {"dfnID":"96c16e60","dfnText":"Node","external":true,"refSections":[{"refs":[{"id":"ref-for-node"},{"id":"ref-for-node\u2460"},{"id":"ref-for-node\u2461"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-node\u2462"}],"title":"3.8. Finalize event timing"},{"refs":[{"id":"ref-for-node\u2463"}],"title":"3.10. Target Selectors"}],"url":"https://dom.spec.whatwg.org/#node"},
-"9d09d04c": {"dfnID":"9d09d04c","dfnText":"type","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-event-type"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-dom-event-type\u2460"},{"id":"ref-for-dom-event-type\u2461"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dom-event-type\u2462"},{"id":"ref-for-dom-event-type\u2463"}],"title":"2.2. EventCounts interface"},{"refs":[{"id":"ref-for-dom-event-type\u2464"}],"title":"3.2. Modifications to the HTML specification"},{"refs":[{"id":"ref-for-dom-event-type\u2465"},{"id":"ref-for-dom-event-type\u2466"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-dom-event-type\u2467"}],"title":"3.7. Initialize event timing"},{"refs":[{"id":"ref-for-dom-event-type\u2468"},{"id":"ref-for-dom-event-type\u2460\u24ea"}],"title":"3.8. Finalize event timing"}],"url":"https://dom.spec.whatwg.org/#dom-event-type"},
+"9d09d04c": {"dfnID":"9d09d04c","dfnText":"type","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-event-type"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-dom-event-type\u2460"},{"id":"ref-for-dom-event-type\u2461"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dom-event-type\u2462"},{"id":"ref-for-dom-event-type\u2463"},{"id":"ref-for-dom-event-type\u2464"}],"title":"2.2. EventCounts interface"},{"refs":[{"id":"ref-for-dom-event-type\u2465"}],"title":"3.2. Modifications to the HTML specification"},{"refs":[{"id":"ref-for-dom-event-type\u2466"},{"id":"ref-for-dom-event-type\u2467"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-dom-event-type\u2468"}],"title":"3.7. Initialize event timing"},{"refs":[{"id":"ref-for-dom-event-type\u2460\u24ea"},{"id":"ref-for-dom-event-type\u2460\u2460"}],"title":"3.8. Finalize event timing"}],"url":"https://dom.spec.whatwg.org/#dom-event-type"},
+"a01efedc": {"dfnID":"a01efedc","dfnText":"mousemove","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mousemove"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mousemove"},
 "a16836e4": {"dfnID":"a16836e4","dfnText":"dragenter","external":true,"refSections":[{"refs":[{"id":"ref-for-event-dnd-dragenter"}],"title":"1.4. Events exposed"}],"url":"https://html.spec.whatwg.org/multipage/#event-dnd-dragenter"},
 "a326add7": {"dfnID":"a326add7","dfnText":"contain","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
 "a32c65d4": {"dfnID":"a32c65d4","dfnText":"implements","external":true,"refSections":[{"refs":[{"id":"ref-for-implements"},{"id":"ref-for-implements\u2460"}],"title":"3.8. Finalize event timing"}],"url":"https://webidl.spec.whatwg.org/#implements"},
+"a382f6fe": {"dfnID":"a382f6fe","dfnText":"wheel","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-wheel"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-wheel"},
 "a5c91173": {"dfnID":"a5c91173","dfnText":"SameObject","external":true,"refSections":[{"refs":[{"id":"ref-for-SameObject"}],"title":"2.3. Extensions to the Performance interface"}],"url":"https://webidl.spec.whatwg.org/#SameObject"},
 "a6a7afb3": {"dfnID":"a6a7afb3","dfnText":"pointerout","external":true,"refSections":[{"refs":[{"id":"ref-for-the-pointerout-event"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#the-pointerout-event"},
 "adafea49": {"dfnID":"adafea49","dfnText":"dragleave","external":true,"refSections":[{"refs":[{"id":"ref-for-event-dnd-dragleave"}],"title":"1.4. Events exposed"}],"url":"https://html.spec.whatwg.org/multipage/#event-dnd-dragleave"},
+"aec67a86": {"dfnID":"aec67a86","dfnText":"click","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-click"}],"title":"1.2. Interactions"},{"refs":[{"id":"ref-for-dfn-click\u2460"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-dfn-click\u2461"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dfn-click\u2462"},{"id":"ref-for-dfn-click\u2463"},{"id":"ref-for-dfn-click\u2464"},{"id":"ref-for-dfn-click\u2465"},{"id":"ref-for-dfn-click\u2466"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/pointerevents/#dfn-click"},
 "b3e4c892": {"dfnID":"b3e4c892","dfnText":"keydown","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-keydown"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-event-type-keydown\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-event-type-keydown\u2461"},{"id":"ref-for-event-type-keydown\u2462"},{"id":"ref-for-event-type-keydown\u2463"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-event-type-keydown\u2464"}],"title":"3.8. Finalize event timing"}],"url":"https://w3c.github.io/uievents/#event-type-keydown"},
+"b5aa89be": {"dfnID":"b5aa89be","dfnText":"mouseover","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mouseover"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mouseover"},
 "b7656f31": {"dfnID":"b7656f31","dfnText":"touchcancel","external":true,"refSections":[{"refs":[{"id":"ref-for-the-touchcancel-event"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/touch-events/#the-touchcancel-event"},
 "b815f411": {"dfnID":"b815f411","dfnText":"update the rendering","external":true,"refSections":[{"refs":[{"id":"ref-for-update-the-rendering"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-update-the-rendering\u2460"}],"title":"3.2. Modifications to the HTML specification"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#update-the-rendering"},
 "bc7b9068": {"dfnID":"bc7b9068","dfnText":"clear","external":true,"refSections":[{"refs":[{"id":"ref-for-map-clear"}],"title":"3.6. Computing interactionId"}],"url":"https://infra.spec.whatwg.org/#map-clear"},
 "bd45e189": {"dfnID":"bd45e189","dfnText":"Performance","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-performance"},{"id":"ref-for-dom-performance\u2460"}],"title":"2.3. Extensions to the Performance interface"},{"refs":[{"id":"ref-for-dom-performance\u2461"}],"title":"3.2. Modifications to the HTML specification"}],"url":"https://w3c.github.io/hr-time/#dom-performance"},
+"bfbd70f2": {"dfnID":"bfbd70f2","dfnText":"mousedown","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mousedown"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mousedown"},
 "c200d9ce": {"dfnID":"c200d9ce","dfnText":"retargeting","external":true,"refSections":[{"refs":[{"id":"ref-for-retarget"}],"title":"3.8. Finalize event timing"}],"url":"https://dom.spec.whatwg.org/#retarget"},
 "c55fb3e1": {"dfnID":"c55fb3e1","dfnText":"keyCode","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-keyboardevent-keycode"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-dom-keyboardevent-keycode\u2460"}],"title":"3.8. Finalize event timing"}],"url":"https://w3c.github.io/uievents/#dom-keyboardevent-keycode"},
 "c9626b82": {"dfnID":"c9626b82","dfnText":"dragover","external":true,"refSections":[{"refs":[{"id":"ref-for-event-dnd-dragover"}],"title":"1.4. Events exposed"}],"url":"https://html.spec.whatwg.org/multipage/#event-dnd-dragover"},
@@ -2568,7 +2564,6 @@ let dfnPanelData = {
 "d4ec1548": {"dfnID":"d4ec1548","dfnText":"timeStamp","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-event-timestamp"}],"title":"1.1. Overview"},{"refs":[{"id":"ref-for-dom-event-timestamp\u2460"},{"id":"ref-for-dom-event-timestamp\u2461"}],"title":"1.5. When events are measured"},{"refs":[{"id":"ref-for-dom-event-timestamp\u2462"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dom-event-timestamp\u2463"}],"title":"3.7. Initialize event timing"}],"url":"https://dom.spec.whatwg.org/#dom-event-timestamp"},
 "d62af025": {"dfnID":"d62af025","dfnText":"now()","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-performance-now"}],"title":"1.1. Overview"},{"refs":[{"id":"ref-for-dom-performance-now\u2460"}],"title":"4. Security & privacy considerations"}],"url":"https://w3c.github.io/hr-time/#dom-performance-now"},
 "d6aab74b": {"dfnID":"d6aab74b","dfnText":"pointerId","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-pointerevent-pointerid"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-dom-pointerevent-pointerid\u2460"}],"title":"3.8. Finalize event timing"}],"url":"https://w3c.github.io/pointerevents/#dom-pointerevent-pointerid"},
-"d6d67163": {"dfnID":"d6d67163","dfnText":"contextmenu","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-contextmenu"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-event-type-contextmenu\u2460"},{"id":"ref-for-event-type-contextmenu\u2461"},{"id":"ref-for-event-type-contextmenu\u2462"},{"id":"ref-for-event-type-contextmenu\u2463"},{"id":"ref-for-event-type-contextmenu\u2464"},{"id":"ref-for-event-type-contextmenu\u2465"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/uievents/#event-type-contextmenu"},
 "d83e787a": {"dfnID":"d83e787a","dfnText":"event loop processing model","external":true,"refSections":[{"refs":[{"id":"ref-for-event-loop-processing-model"}],"title":"3.2. Modifications to the HTML specification"}],"url":"https://html.spec.whatwg.org/multipage/#event-loop-processing-model"},
 "db9ba2b1": {"dfnID":"db9ba2b1","dfnText":"isComposing (for InputEvent)","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-inputevent-iscomposing"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/uievents/#dom-inputevent-iscomposing"},
 "de4bb79b": {"dfnID":"de4bb79b","dfnText":"supportedEntryTypes","external":true,"refSections":[{"refs":[{"id":"ref-for-supportedentrytypes-attribute"}],"title":"2.1. PerformanceEventTiming interface"}],"url":"https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute"},
@@ -2586,10 +2581,9 @@ let dfnPanelData = {
 "dom-performanceeventtiming-tojson": {"dfnID":"dom-performanceeventtiming-tojson","dfnText":"toJSON","external":false,"refSections":[],"url":"#dom-performanceeventtiming-tojson"},
 "dom-performanceobserverinit-durationthreshold": {"dfnID":"dom-performanceobserverinit-durationthreshold","dfnText":"durationThreshold","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-performanceobserverinit-durationthreshold"}],"title":"1.3. First Input"},{"refs":[{"id":"ref-for-dom-performanceobserverinit-durationthreshold\u2460"},{"id":"ref-for-dom-performanceobserverinit-durationthreshold\u2461"}],"title":"3.4. Should add PerformanceEventTiming"},{"refs":[{"id":"ref-for-dom-performanceobserverinit-durationthreshold\u2462"}],"title":"4. Security & privacy considerations"}],"url":"#dom-performanceobserverinit-durationthreshold"},
 "e26d6abc": {"dfnID":"e26d6abc","dfnText":"pointercancel","external":true,"refSections":[{"refs":[{"id":"ref-for-the-pointercancel-event"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-the-pointercancel-event\u2460"},{"id":"ref-for-the-pointercancel-event\u2461"},{"id":"ref-for-the-pointercancel-event\u2462"},{"id":"ref-for-the-pointercancel-event\u2463"},{"id":"ref-for-the-pointercancel-event\u2464"},{"id":"ref-for-the-pointercancel-event\u2465"},{"id":"ref-for-the-pointercancel-event\u2466"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/pointerevents/#the-pointercancel-event"},
-"e61d571d": {"dfnID":"e61d571d","dfnText":"dblclick","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-dblclick"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-dblclick"},
 "e8478f36": {"dfnID":"e8478f36","dfnText":"target","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-event-target"},{"id":"ref-for-dom-event-target\u2460"}],"title":"2.1. PerformanceEventTiming interface"}],"url":"https://dom.spec.whatwg.org/#dom-event-target"},
 "e99bd18e": {"dfnID":"e99bd18e","dfnText":"relevant global object","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-relevant-global"}],"title":"1.5. When events are measured"},{"refs":[{"id":"ref-for-concept-relevant-global\u2460"},{"id":"ref-for-concept-relevant-global\u2461"}],"title":"2.3. Extensions to the Performance interface"},{"refs":[{"id":"ref-for-concept-relevant-global\u2462"}],"title":"3.2. Modifications to the HTML specification"},{"refs":[{"id":"ref-for-concept-relevant-global\u2463"}],"title":"3.6. Computing interactionId"},{"refs":[{"id":"ref-for-concept-relevant-global\u2464"}],"title":"3.8. Finalize event timing"},{"refs":[{"id":"ref-for-concept-relevant-global\u2465"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global"},
-"ebd158f9": {"dfnID":"ebd158f9","dfnText":"mouseout","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-mouseout"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-mouseout"},
+"eb43d864": {"dfnID":"eb43d864","dfnText":"auxclick","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-auxclick"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-auxclick"},
 "eeade806": {"dfnID":"eeade806","dfnText":"compositionupdate","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-compositionupdate"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-compositionupdate"},
 "ef3cfa4b": {"dfnID":"ef3cfa4b","dfnText":"keyup","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-keyup"}],"title":"1.4. Events exposed"},{"refs":[{"id":"ref-for-event-type-keyup\u2460"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-event-type-keyup\u2461"},{"id":"ref-for-event-type-keyup\u2462"},{"id":"ref-for-event-type-keyup\u2463"},{"id":"ref-for-event-type-keyup\u2464"}],"title":"3.6. Computing interactionId"}],"url":"https://w3c.github.io/uievents/#event-type-keyup"},
 "efd1ec5d": {"dfnID":"efd1ec5d","dfnText":"object","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-object"}],"title":"2.1. PerformanceEventTiming interface"}],"url":"https://webidl.spec.whatwg.org/#idl-object"},
@@ -2600,8 +2594,8 @@ let dfnPanelData = {
 "f14b47b8": {"dfnID":"f14b47b8","dfnText":"unsigned long long","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-unsigned-long-long"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-idl-unsigned-long-long\u2460"}],"title":"2.2. EventCounts interface"},{"refs":[{"id":"ref-for-idl-unsigned-long-long\u2461"}],"title":"2.3. Extensions to the Performance interface"}],"url":"https://webidl.spec.whatwg.org/#idl-unsigned-long-long"},
 "f4531911": {"dfnID":"f4531911","dfnText":"Default","external":true,"refSections":[{"refs":[{"id":"ref-for-Default"}],"title":"2.1. PerformanceEventTiming interface"}],"url":"https://webidl.spec.whatwg.org/#Default"},
 "f7960529": {"dfnID":"f7960529","dfnText":"root","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-root"}],"title":"3.8. Finalize event timing"}],"url":"https://dom.spec.whatwg.org/#concept-tree-root"},
+"f96dc64b": {"dfnID":"f96dc64b","dfnText":"mouseup","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-mouseup"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/pointerevents/#dfn-mouseup"},
 "fabd3046": {"dfnID":"fabd3046","dfnText":"duration","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-performanceentry-duration"},{"id":"ref-for-dom-performanceentry-duration\u2460"}],"title":"1.5. When events are measured"},{"refs":[{"id":"ref-for-dom-performanceentry-duration\u2461"},{"id":"ref-for-dom-performanceentry-duration\u2462"}],"title":"2.1. PerformanceEventTiming interface"},{"refs":[{"id":"ref-for-dom-performanceentry-duration\u2463"}],"title":"3.4. Should add PerformanceEventTiming"},{"refs":[{"id":"ref-for-dom-performanceentry-duration\u2464"},{"id":"ref-for-dom-performanceentry-duration\u2465"},{"id":"ref-for-dom-performanceentry-duration\u2466"}],"title":"3.9. Dispatch pending Event Timing entries"},{"refs":[{"id":"ref-for-dom-performanceentry-duration\u2467"},{"id":"ref-for-dom-performanceentry-duration\u2468"},{"id":"ref-for-dom-performanceentry-duration\u2460\u24ea"}],"title":"4. Security & privacy considerations"}],"url":"https://w3c.github.io/performance-timeline/#dom-performanceentry-duration"},
-"fba88163": {"dfnID":"fba88163","dfnText":"auxclick","external":true,"refSections":[{"refs":[{"id":"ref-for-event-type-auxclick"}],"title":"1.4. Events exposed"}],"url":"https://w3c.github.io/uievents/#event-type-auxclick"},
 "finalize-event-timing": {"dfnID":"finalize-event-timing","dfnText":"finalize event timing","external":false,"refSections":[{"refs":[{"id":"ref-for-finalize-event-timing"}],"title":"3.1. Modifications to the DOM specification"},{"refs":[{"id":"ref-for-finalize-event-timing\u2460"}],"title":"3.6. Computing interactionId"}],"url":"#finalize-event-timing"},
 "generate-a-css-selector": {"dfnID":"generate-a-css-selector","dfnText":"generate a CSS selector","external":false,"refSections":[{"refs":[{"id":"ref-for-generate-a-css-selector"}],"title":"3.8. Finalize event timing"}],"url":"#generate-a-css-selector"},
 "has-dispatched-input-event": {"dfnID":"has-dispatched-input-event","dfnText":"has dispatched input event","external":false,"refSections":[{"refs":[{"id":"ref-for-has-dispatched-input-event"},{"id":"ref-for-has-dispatched-input-event\u2460"}],"title":"3.9. Dispatch pending Event Timing entries"}],"url":"#has-dispatched-input-event"},
@@ -3144,7 +3138,19 @@ let refsData = {
 "https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute": {"displayText":"supportedEntryTypes","export":true,"for_":["PerformanceObserver"],"level":"2","normative":true,"shortname":"performance-timeline","spec":"performance-timeline-2","status":"anchor-block","text":"supportedEntryTypes","type":"attribute","url":"https://w3c.github.io/performance-timeline/#supportedentrytypes-attribute"},
 "https://w3c.github.io/performance-timeline/#the-performanceentry-interface": {"displayText":"PerformanceEntry","export":true,"for_":[],"level":"2","normative":true,"shortname":"performance-timeline","spec":"performance-timeline-2","status":"anchor-block","text":"PerformanceEntry","type":"interface","url":"https://w3c.github.io/performance-timeline/#the-performanceentry-interface"},
 "https://w3c.github.io/performance-timeline/#the-performanceobserver-interface": {"displayText":"PerformanceObserver","export":true,"for_":[],"level":"2","normative":true,"shortname":"performance-timeline","spec":"performance-timeline-2","status":"anchor-block","text":"PerformanceObserver","type":"interface","url":"https://w3c.github.io/performance-timeline/#the-performanceobserver-interface"},
-"https://w3c.github.io/pointerevents/#dom-pointerevent-pointerid": {"displayText":"pointerId","export":true,"for_":["PointerEvent"],"level":"3","normative":true,"shortname":"pointerevents","spec":"pointerevents3","status":"current","text":"pointerId","type":"attribute","url":"https://w3c.github.io/pointerevents/#dom-pointerevent-pointerid"},
+"https://w3c.github.io/pointerevents/#dfn-auxclick": {"displayText":"auxclick","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"auxclick","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-auxclick"},
+"https://w3c.github.io/pointerevents/#dfn-click": {"displayText":"click","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"click","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-click"},
+"https://w3c.github.io/pointerevents/#dfn-contextmenu": {"displayText":"contextmenu","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"contextmenu","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-contextmenu"},
+"https://w3c.github.io/pointerevents/#dfn-dblclick": {"displayText":"dblclick","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"dblclick","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-dblclick"},
+"https://w3c.github.io/pointerevents/#dfn-mousedown": {"displayText":"mousedown","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mousedown","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mousedown"},
+"https://w3c.github.io/pointerevents/#dfn-mouseenter": {"displayText":"mouseenter","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mouseenter","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mouseenter"},
+"https://w3c.github.io/pointerevents/#dfn-mouseleave": {"displayText":"mouseleave","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mouseleave","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mouseleave"},
+"https://w3c.github.io/pointerevents/#dfn-mousemove": {"displayText":"mousemove","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mousemove","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mousemove"},
+"https://w3c.github.io/pointerevents/#dfn-mouseout": {"displayText":"mouseout","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mouseout","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mouseout"},
+"https://w3c.github.io/pointerevents/#dfn-mouseover": {"displayText":"mouseover","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mouseover","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mouseover"},
+"https://w3c.github.io/pointerevents/#dfn-mouseup": {"displayText":"mouseup","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"mouseup","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-mouseup"},
+"https://w3c.github.io/pointerevents/#dfn-wheel": {"displayText":"wheel","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"wheel","type":"event","url":"https://w3c.github.io/pointerevents/#dfn-wheel"},
+"https://w3c.github.io/pointerevents/#dom-pointerevent-pointerid": {"displayText":"pointerId","export":true,"for_":["PointerEvent"],"level":"4","normative":true,"shortname":"pointerevents","spec":"pointerevents4","status":"current","text":"pointerId","type":"attribute","url":"https://w3c.github.io/pointerevents/#dom-pointerevent-pointerid"},
 "https://w3c.github.io/pointerevents/#the-gotpointercapture-event": {"displayText":"gotpointercapture","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"gotpointercapture","type":"event","url":"https://w3c.github.io/pointerevents/#the-gotpointercapture-event"},
 "https://w3c.github.io/pointerevents/#the-lostpointercapture-event": {"displayText":"lostpointercapture","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"lostpointercapture","type":"event","url":"https://w3c.github.io/pointerevents/#the-lostpointercapture-event"},
 "https://w3c.github.io/pointerevents/#the-pointercancel-event": {"displayText":"pointercancel","export":true,"for_":[],"level":"","normative":true,"shortname":"pointerevents","spec":"pointerevents","status":"anchor-block","text":"pointercancel","type":"event","url":"https://w3c.github.io/pointerevents/#the-pointercancel-event"},
@@ -3163,26 +3169,14 @@ let refsData = {
 "https://w3c.github.io/uievents/#dom-inputevent-iscomposing": {"displayText":"isComposing","export":true,"for_":["InputEvent"],"level":"1","normative":true,"shortname":"uievents","spec":"uievents","status":"current","text":"isComposing","type":"attribute","url":"https://w3c.github.io/uievents/#dom-inputevent-iscomposing"},
 "https://w3c.github.io/uievents/#dom-keyboardevent-iscomposing": {"displayText":"isComposing","export":true,"for_":["KeyboardEvent"],"level":"1","normative":true,"shortname":"uievents","spec":"uievents","status":"current","text":"isComposing","type":"attribute","url":"https://w3c.github.io/uievents/#dom-keyboardevent-iscomposing"},
 "https://w3c.github.io/uievents/#dom-keyboardevent-keycode": {"displayText":"keyCode","export":true,"for_":["KeyboardEvent"],"level":"1","normative":true,"shortname":"uievents","spec":"uievents","status":"current","text":"keyCode","type":"attribute","url":"https://w3c.github.io/uievents/#dom-keyboardevent-keycode"},
-"https://w3c.github.io/uievents/#event-type-auxclick": {"displayText":"auxclick","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"auxclick","type":"event","url":"https://w3c.github.io/uievents/#event-type-auxclick"},
 "https://w3c.github.io/uievents/#event-type-beforeinput": {"displayText":"beforeinput","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"beforeinput","type":"event","url":"https://w3c.github.io/uievents/#event-type-beforeinput"},
-"https://w3c.github.io/uievents/#event-type-click": {"displayText":"click","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"click","type":"event","url":"https://w3c.github.io/uievents/#event-type-click"},
 "https://w3c.github.io/uievents/#event-type-compositionend": {"displayText":"compositionend","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"compositionend","type":"event","url":"https://w3c.github.io/uievents/#event-type-compositionend"},
 "https://w3c.github.io/uievents/#event-type-compositionstart": {"displayText":"compositionstart","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"compositionstart","type":"event","url":"https://w3c.github.io/uievents/#event-type-compositionstart"},
 "https://w3c.github.io/uievents/#event-type-compositionupdate": {"displayText":"compositionupdate","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"compositionupdate","type":"event","url":"https://w3c.github.io/uievents/#event-type-compositionupdate"},
-"https://w3c.github.io/uievents/#event-type-contextmenu": {"displayText":"contextmenu","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"contextmenu","type":"event","url":"https://w3c.github.io/uievents/#event-type-contextmenu"},
-"https://w3c.github.io/uievents/#event-type-dblclick": {"displayText":"dblclick","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"dblclick","type":"event","url":"https://w3c.github.io/uievents/#event-type-dblclick"},
 "https://w3c.github.io/uievents/#event-type-input": {"displayText":"input","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"input","type":"event","url":"https://w3c.github.io/uievents/#event-type-input"},
 "https://w3c.github.io/uievents/#event-type-keydown": {"displayText":"keydown","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"keydown","type":"event","url":"https://w3c.github.io/uievents/#event-type-keydown"},
 "https://w3c.github.io/uievents/#event-type-keypress": {"displayText":"keypress","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"keypress","type":"event","url":"https://w3c.github.io/uievents/#event-type-keypress"},
 "https://w3c.github.io/uievents/#event-type-keyup": {"displayText":"keyup","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"keyup","type":"event","url":"https://w3c.github.io/uievents/#event-type-keyup"},
-"https://w3c.github.io/uievents/#event-type-mousedown": {"displayText":"mousedown","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mousedown","type":"event","url":"https://w3c.github.io/uievents/#event-type-mousedown"},
-"https://w3c.github.io/uievents/#event-type-mouseenter": {"displayText":"mouseenter","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mouseenter","type":"event","url":"https://w3c.github.io/uievents/#event-type-mouseenter"},
-"https://w3c.github.io/uievents/#event-type-mouseleave": {"displayText":"mouseleave","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mouseleave","type":"event","url":"https://w3c.github.io/uievents/#event-type-mouseleave"},
-"https://w3c.github.io/uievents/#event-type-mousemove": {"displayText":"mousemove","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mousemove","type":"event","url":"https://w3c.github.io/uievents/#event-type-mousemove"},
-"https://w3c.github.io/uievents/#event-type-mouseout": {"displayText":"mouseout","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mouseout","type":"event","url":"https://w3c.github.io/uievents/#event-type-mouseout"},
-"https://w3c.github.io/uievents/#event-type-mouseover": {"displayText":"mouseover","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mouseover","type":"event","url":"https://w3c.github.io/uievents/#event-type-mouseover"},
-"https://w3c.github.io/uievents/#event-type-mouseup": {"displayText":"mouseup","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"mouseup","type":"event","url":"https://w3c.github.io/uievents/#event-type-mouseup"},
-"https://w3c.github.io/uievents/#event-type-wheel": {"displayText":"wheel","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"wheel","type":"event","url":"https://w3c.github.io/uievents/#event-type-wheel"},
 "https://w3c.github.io/uievents/#inputevent": {"displayText":"InputEvent","export":true,"for_":[],"level":"1","normative":true,"shortname":"uievents","spec":"uievents","status":"current","text":"InputEvent","type":"interface","url":"https://w3c.github.io/uievents/#inputevent"},
 "https://w3c.github.io/uievents/#uievent": {"displayText":"UIEvent","export":true,"for_":[],"level":"","normative":true,"shortname":"uievents","spec":"uievents","status":"anchor-block","text":"UIEvent","type":"event","url":"https://w3c.github.io/uievents/#uievent"},
 "https://webidl.spec.whatwg.org/#Default": {"displayText":"Default","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Default","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Default"},
