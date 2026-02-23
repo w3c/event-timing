@@ -138,8 +138,8 @@ Finally, when inputs are handled synchronously, the duration from event hardware
 
 This approach has several fundamental flaws.
 First, requiring event listeners precludes measuring event latency very early in the page load because
-listeners will likely not be registered yet at that point in time.
-Second, developers that are only interested in the input delay might be forced to add new listeners to events that originally did not have one.
+listeners might not be registered yet.
+Second, developers who are only interested in input delay might be forced to add new listeners to events that originally did not have them.
 This adds unnecessary performance overhead to the event latency calculation.
 And lastly, it would be very hard to measure asynchronous work caused by the event via this approach.
 
@@ -252,7 +252,7 @@ It explains at a high level the information that is exposed in the [[#sec-proces
 Event timing information is only exposed for certain events, and only when the time difference between user input and paint operations that follow input processing exceeds a certain duration threshold.
 
 The Event Timing API exposes a {{PerformanceEntry/duration}} value, which is meant to be the time from when the physical user input occurs
-(estimated via the {{Event}}'s {{Event/timeStamp}}) to the next time the rendering of the {{Event}}'s [=relevant global object=]'s <a>associated Document</a>'s is updated.
+(estimated via the {{Event}}'s {{Event/timeStamp}}) to the next time the rendering of the {{Event}}'s [=relevant global object=]'s <a>associated Document</a> is updated.
 This value is provided with 8 millisecond granularity.
 
 By default, the Event Timing API buffers and exposes entries when the {{PerformanceEntry/duration}} is 104 or greater,
@@ -481,7 +481,7 @@ Each {{Window}} has the following associated concepts:
 
 * <dfn>user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.
 
-    Note: the <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
+    Note: The <a>user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
     By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.
 
 * <dfn>pending key downs</dfn>, a <a>map</a> of integers to {{PerformanceEventTiming|PerformanceEventTimings}} which is initially empty.
@@ -590,7 +590,7 @@ Computing interactionId {#sec-computing-interactionid}
         1. Return 0.
     1. If |type| is {{input}}:
         1. If |event| is not an instance of {{InputEvent}}, return 0.
-            Note: this check is done to exclude {{Event|Events}} for which the {{Event/type}} is {{input}} but that are not about modified text content.
+            Note: This check is done to exclude {{Event|Events}} for which the {{Event/type}} is {{input}} but that are not about modified text content.
         1. If |event|'s {{InputEvent/isComposing}} attribute value is false, return 0.
         1. <a>Increase interaction count</a>  on |window|.
         1. Return |window|'s <a>user interaction value</a>.
@@ -621,7 +621,7 @@ Computing interactionId {#sec-computing-interactionid}
         1. Return |pointerMap|[|pointerId|].
 </div>
 
-Note: the algorithm attempts to assign events to the corresponding interactiond IDs.
+Note: The algorithm attempts to assign events to the corresponding interaction IDs.
 For keyboard events, a {{keydown}} triggers a new interaction ID, whereas a {{keyup}} has to match its ID with a previous {{keydown}}.
 For pointer events, when we get a {{pointerdown}} we have to wait until {{pointercancel}} or {{pointerup}} occur to know its {{PerformanceEventTiming/interactionId}}.
 We try to match {{click}} with a previous interaction ID from a {{pointerdown}}.
@@ -652,15 +652,15 @@ Finalize event timing {#sec-fin-event-timing}
 <div algorithm="finalize event timing">
     When asked to <dfn export>finalize event timing</dfn>, with |timingEntry|, |event|, |target|, and |processingEnd| as inputs, run the following steps:
 
-    1. If <var>timingEntry</var> is null, return.
+    1. If |timingEntry| is null, then return.
     1. Let <var>relevantGlobal</var> be <var>target</var>'s <a>relevant global object</a>.
     1. If <var>relevantGlobal</var> does not <a>implement</a> {{Window}}, return.
     1. Set <var>timingEntry</var>'s {{processingEnd}} to <var>processingEnd</var>.
     1. Assert that <var>target</var> <a>implements</a> {{Node}}.
 
-        Note: this assertion holds due to the types of events supported by the Event Timing API.
+        Note: This assertion holds due to the types of events supported by the Event Timing API.
 
-    1. Set <var>timingEntry</var>'s associated <a>eventTarget</a> to <var>target</var>.
+    1. Set <var>timingEntry</var>'s <a>eventTarget</a> to <var>target</var>.
 
         Note: This will set <a>eventTarget</a> to the last event target. So if <a>retargeting</a> occurs, the last target, closest to the <a for=tree>root</a>, will be used.
 
@@ -672,27 +672,27 @@ Finalize event timing {#sec-fin-event-timing}
             1. Let |previousPointerDownEntry| be |pendingPointerDowns|[|pointerId|].
             1. Add |previousPointerDownEntry| to |relevantGlobal|'s <a>entries to be queued</a>.
         1. Set |pendingPointerDowns|[|pointerId|] to |timingEntry|.
-        1. Set |window|'s <a>is contextmenu triggered</a> to false.
+        1. Set |relevantGlobal|'s <a>is contextmenu triggered</a> to false.
 
     1. Otherwise, if |event|'s {{Event/type}} attribute value is {{keydown}}:
         1. If |event|'s {{KeyboardEvent/isComposing}} attribute value is <code>true</code>:
-            1. Append |timingEntry| to |relevantGlobal|’s <a>entries to be queued</a>.
+            1. Append |timingEntry| to |relevantGlobal|'s <a>entries to be queued</a>.
             1. Return.
         1. Let |pendingKeyDowns| be |relevantGlobal|'s <a>pending key downs</a>.
         1. Let |code| be |event|'s {{KeyboardEvent/keyCode}} attribute value.
         1. If |pendingKeyDowns|[|code|] exists:
             1. Let |previousKeyDownEntry| be |pendingKeyDowns|[|code|].
             1. If |code| is not 229:
-                1. Increase |window|'s <a>user interaction value</a> value by a small number chosen by the user agent.
-                1. Set |previousKeyDownEntry|'s {{PerformanceEventTiming/interactionId}} to |window|'s <a>user interaction value</a>.
+                1. Increase |relevantGlobal|'s <a>user interaction value</a> value by a small number chosen by the user agent.
+                1. Set |previousKeyDownEntry|'s {{PerformanceEventTiming/interactionId}} to |relevantGlobal|'s <a>user interaction value</a>.
 
                 Note: 229 is a special case since it corresponds to IME keyboard events. Sometimes multiple of these are sent by the user agent, and they do not correspond to holding a key down repeatedly.
 
-            1. Add |previousKeyDownEntry| to |window|'s <a>entries to be queued</a>.
+            1. Add |previousKeyDownEntry| to |relevantGlobal|'s <a>entries to be queued</a>.
         1. Set |pendingKeyDowns|[|code|] to |timingEntry|.
 
     1. Otherwise:
-        1. Append |timingEntry| to |relevantGlobal|’s <a>entries to be queued</a>.
+        1. Append |timingEntry| to |relevantGlobal|'s <a>entries to be queued</a>.
 </div>
 
 Dispatch pending Event Timing entries {#sec-dispatch-pending}
@@ -706,7 +706,7 @@ Dispatch pending Event Timing entries {#sec-dispatch-pending}
     1. For each <var>timingEntry</var> in <var>window</var>'s <a>entries to be queued</a>:
         1. <a>Set event timing entry duration</a> passing |timingEntry|, |window|, and |renderingTimestamp|.
         1. If |timingEntry|'s {{PerformanceEntry/duration}} attribute value is greater than or equal to 16, then <a lt='queue the entry'>queue</a> |timingEntry|.
-    1. Clear |window|'s <a>entries to be queued</a>.
+    1. Set |window|'s <a>entries to be queued</a> to an empty list.
     1. For each |pendingPointerDownEntry| in the <a lt="get the values">values</a> from |window|'s <a>pending pointer downs</a>:
         1. <a>Set event timing entry duration</a> passing |pendingPointerDownEntry|, |window|, and |renderingTimestamp|.
     1. For each |pendingKeyDownEntry| in the <a lt="get the values">values</a> from |window|'s <a>pending key downs</a>:
@@ -755,9 +755,9 @@ exposing these attributes does not produce new attack surfaces.
 Thus, {{PerformanceEntry/duration}} is the only one which requires further consideration.
 
 The {{PerformanceEntry/duration}} has an 8 millisecond granularity (it is computed as such by performing rounding).
-Thus, a high resolution timer cannot be produced from this timestamps.
+Thus, a high resolution timer cannot be produced from these timestamps.
 However, it does introduce new information that is not readily available to web developers: the time pixels draw after an event has been processed.
-We do not find security or privacy concerns on exposing the timestamp, especially given its granularity.
+We do not find security or privacy concerns with exposing the timestamp, especially given its granularity.
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.
 
