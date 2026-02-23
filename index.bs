@@ -427,7 +427,7 @@ interface EventCounts {
 };
 </pre>
 
-The {{EventCounts}} object is a map where the keys are event <a href=Event/type>types</a> and the values are the number of events that have been dispatched that are of that {{Event/type}}.
+The {{EventCounts}} object is a map where the keys are event {{Event/type|types}} and the values are the number of events that have been dispatched that are of that {{Event/type}}.
 Only events whose {{Event/type}} is supported by {{PerformanceEventTiming}} entries (see section [[#sec-events-exposed]]) are counted via this map.
 
 Extensions to the {{Performance}} interface {#sec-extensions}
