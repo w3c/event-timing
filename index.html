@@ -965,7 +965,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
 </p>
    <h1 class="no-ref p-name" id="title">Event Timing API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
-    <time class="dt-updated" datetime="2026-02-23">23 February 2026</time></p>
+    <time class="dt-updated" datetime="2026-02-24">24 February 2026</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1086,8 +1086,8 @@ the developer can compute the amount of synchronous work performed in the event 
 Finally, when inputs are handled synchronously, the duration from event hardware timestamp to the next paint after the event is handled is a useful user experience metric.</p>
     <p>This approach has several fundamental flaws.
 First, requiring event listeners precludes measuring event latency very early in the page load because
-listeners will likely not be registered yet at that point in time.
-Second, developers that are only interested in the input delay might be forced to add new listeners to events that originally did not have one.
+listeners might not be registered yet.
+Second, developers who are only interested in input delay might be forced to add new listeners to events that originally did not have them.
 This adds unnecessary performance overhead to the event latency calculation.
 And lastly, it would be very hard to measure asynchronous work caused by the event via this approach.</p>
     <p>This specification provides an alternative to event latency monitoring that solves some of these problems.
@@ -1181,7 +1181,7 @@ It explains at a high level the information that is exposed in the <a href="#sec
 </em></p>
     <p>Event timing information is only exposed for certain events, and only when the time difference between user input and paint operations that follow input processing exceeds a certain duration threshold.</p>
     <p>The Event Timing API exposes a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration">duration</a></code> value, which is meant to be the time from when the physical user input occurs
-(estimated via the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event">Event</a></code>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp①">timeStamp</a></code>) to the next time the rendering of the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event①">Event</a></code>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a>’s is updated.
+(estimated via the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event">Event</a></code>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-timestamp" id="ref-for-dom-event-timestamp①">timeStamp</a></code>) to the next time the rendering of the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event①">Event</a></code>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a> is updated.
 This value is provided with 8 millisecond granularity.</p>
     <p>By default, the Event Timing API buffers and exposes entries when the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①">duration</a></code> is 104 or greater,
 but a developer can set up a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#the-performanceobserver-interface" id="ref-for-the-performanceobserver-interface">PerformanceObserver</a></code> to observe future entries with a different threshold.
@@ -1384,7 +1384,7 @@ In this case, it will estimate the value of <code class="idl"><a data-link-type=
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="has-dispatched-input-event">has dispatched input event</dfn>, a boolean which is initially set to false.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="user-interaction-value">user interaction value</dfn>, an integer which is initially set to a random integer between 100 and 10000.</p>
-     <p class="note" role="note"><span class="marker">Note:</span> the <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value">user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
+     <p class="note" role="note"><span class="marker">Note:</span> The <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value">user interaction value</a> is set to a random integer instead of 0 so that developers do not rely on it to count the number of interactions in the page.
 By starting at a random value, developers are less likely to use it as the source of truth for the number of interactions that have occurred in the page.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="pending-key-downs">pending key downs</dfn>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of integers to <code class="idl"><a data-link-type="idl" href="#performanceeventtiming" id="ref-for-performanceeventtiming①④">PerformanceEventTimings</a></code> which is initially empty.</p>
@@ -1532,7 +1532,7 @@ A user agent must not use a shared global <a data-link-type="dfn" href="#user-in
       <ol>
        <li data-md>
         <p>If <var>event</var> is not an instance of <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#inputevent" id="ref-for-inputevent">InputEvent</a></code>, return 0.
-Note: this check is done to exclude <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event⑦">Events</a></code> for which the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑧">type</a></code> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input③">input</a></code> but that are not about modified text content.</p>
+Note: This check is done to exclude <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#event" id="ref-for-event⑦">Events</a></code> for which the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type⑧">type</a></code> is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-input" id="ref-for-event-type-input③">input</a></code> but that are not about modified text content.</p>
        <li data-md>
         <p>If <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#dom-inputevent-iscomposing" id="ref-for-dom-inputevent-iscomposing">isComposing</a></code> attribute value is false, return 0.</p>
        <li data-md>
@@ -1602,7 +1602,7 @@ Note: this check is done to exclude <code class="idl"><a data-link-type="idl" hr
       </ol>
     </ol>
    </div>
-   <p class="note" role="note"><span class="marker">Note:</span> the algorithm attempts to assign events to the corresponding interactiond IDs.
+   <p class="note" role="note"><span class="marker">Note:</span> The algorithm attempts to assign events to the corresponding interaction IDs.
 For keyboard events, a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown③">keydown</a></code> triggers a new interaction ID, whereas a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keyup" id="ref-for-event-type-keyup⑤">keyup</a></code> has to match its ID with a previous <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown④">keydown</a></code>.
 For pointer events, when we get a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑤">pointerdown</a></code> we have to wait until <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointercancel-event" id="ref-for-the-pointercancel-event⑤">pointercancel</a></code> or <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerup-event" id="ref-for-the-pointerup-event⑨">pointerup</a></code> occur to know its <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid⑧">interactionId</a></code>.
 We try to match <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#dfn-click" id="ref-for-dfn-click⑥">click</a></code> with a previous interaction ID from a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/pointerevents/#the-pointerdown-event" id="ref-for-the-pointerdown-event⑥">pointerdown</a></code>.
@@ -1644,7 +1644,7 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
 
     <ol>
      <li data-md>
-      <p>If <var>timingEntry</var> is null, return.</p>
+      <p>If <var>timingEntry</var> is null, then return.</p>
      <li data-md>
       <p>Let <var>relevantGlobal</var> be <var>target</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global⑤">relevant global object</a>.</p>
      <li data-md>
@@ -1653,9 +1653,9 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-processingend" id="ref-for-dom-performanceeventtiming-processingend⑤">processingEnd</a></code> to <var>processingEnd</var>.</p>
      <li data-md>
       <p>Assert that <var>target</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements①">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node" id="ref-for-node③">Node</a></code>.</p>
-      <p class="note" role="note"><span class="marker">Note:</span> this assertion holds due to the types of events supported by the Event Timing API.</p>
+      <p class="note" role="note"><span class="marker">Note:</span> This assertion holds due to the types of events supported by the Event Timing API.</p>
      <li data-md>
-      <p>Set <var>timingEntry</var>’s associated <a data-link-type="dfn" href="#eventtarget" id="ref-for-eventtarget②">eventTarget</a> to <var>target</var>.</p>
+      <p>Set <var>timingEntry</var>’s <a data-link-type="dfn" href="#eventtarget" id="ref-for-eventtarget②">eventTarget</a> to <var>target</var>.</p>
       <p class="note" role="note"><span class="marker">Note:</span> This will set <a data-link-type="dfn" href="#eventtarget" id="ref-for-eventtarget③">eventTarget</a> to the last event target. So if <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#retarget" id="ref-for-retarget">retargeting</a> occurs, the last target, closest to the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-root" id="ref-for-concept-tree-root">root</a>, will be used.</p>
      <li data-md>
       <p>Set <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-targetselector" id="ref-for-dom-performanceeventtiming-targetselector②">targetSelector</a></code> to the result of running the algorithm to <a data-link-type="dfn" href="#generate-a-css-selector" id="ref-for-generate-a-css-selector">generate a CSS selector</a> with <var>target</var> as input.</p>
@@ -1677,7 +1677,7 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
        <li data-md>
         <p>Set <var>pendingPointerDowns</var>[<var>pointerId</var>] to <var>timingEntry</var>.</p>
        <li data-md>
-        <p>Set <var>window</var>’s <a data-link-type="dfn" href="#is-contextmenu-triggered" id="ref-for-is-contextmenu-triggered③">is contextmenu triggered</a> to false.</p>
+        <p>Set <var>relevantGlobal</var>’s <a data-link-type="dfn" href="#is-contextmenu-triggered" id="ref-for-is-contextmenu-triggered③">is contextmenu triggered</a> to false.</p>
       </ol>
      <li data-md>
       <p>Otherwise, if <var>event</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-event-type" id="ref-for-dom-event-type①①">type</a></code> attribute value is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/uievents/#event-type-keydown" id="ref-for-event-type-keydown⑤">keydown</a></code>:</p>
@@ -1703,13 +1703,13 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
           <p>If <var>code</var> is not 229:</p>
           <ol>
            <li data-md>
-            <p>Increase <var>window</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value①⓪">user interaction value</a> value by a small number chosen by the user agent.</p>
+            <p>Increase <var>relevantGlobal</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value①⓪">user interaction value</a> value by a small number chosen by the user agent.</p>
            <li data-md>
-            <p>Set <var>previousKeyDownEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid①①">interactionId</a></code> to <var>window</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value①①">user interaction value</a>.</p>
+            <p>Set <var>previousKeyDownEntry</var>’s <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtiming-interactionid" id="ref-for-dom-performanceeventtiming-interactionid①①">interactionId</a></code> to <var>relevantGlobal</var>’s <a data-link-type="dfn" href="#user-interaction-value" id="ref-for-user-interaction-value①①">user interaction value</a>.</p>
           </ol>
           <p class="note" role="note"><span class="marker">Note:</span> 229 is a special case since it corresponds to IME keyboard events. Sometimes multiple of these are sent by the user agent, and they do not correspond to holding a key down repeatedly.</p>
          <li data-md>
-          <p>Add <var>previousKeyDownEntry</var> to <var>window</var>’s <a data-link-type="dfn" href="#entries-to-be-queued" id="ref-for-entries-to-be-queued⑤">entries to be queued</a>.</p>
+          <p>Add <var>previousKeyDownEntry</var> to <var>relevantGlobal</var>’s <a data-link-type="dfn" href="#entries-to-be-queued" id="ref-for-entries-to-be-queued⑤">entries to be queued</a>.</p>
         </ol>
        <li data-md>
         <p>Set <var>pendingKeyDowns</var>[<var>code</var>] to <var>timingEntry</var>.</p>
@@ -1742,7 +1742,7 @@ If it is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/p
         <p>If <var>timingEntry</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑤">duration</a></code> attribute value is greater than or equal to 16, then <a data-link-type="dfn" href="https://w3c.github.io/performance-timeline/#dfn-queue-a-performanceentry" id="ref-for-dfn-queue-a-performanceentry">queue</a> <var>timingEntry</var>.</p>
       </ol>
      <li data-md>
-      <p>Clear <var>window</var>’s <a data-link-type="dfn" href="#entries-to-be-queued" id="ref-for-entries-to-be-queued⑧">entries to be queued</a>.</p>
+      <p>Set <var>window</var>’s <a data-link-type="dfn" href="#entries-to-be-queued" id="ref-for-entries-to-be-queued⑧">entries to be queued</a> to an empty list.</p>
      <li data-md>
       <p>For each <var>pendingPointerDownEntry</var> in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values①">values</a> from <var>window</var>’s <a data-link-type="dfn" href="#pending-pointer-downs" id="ref-for-pending-pointer-downs②">pending pointer downs</a>:</p>
       <ol>
@@ -1828,9 +1828,9 @@ Since <code class="idl"><a data-link-type="idl" href="#dom-performanceeventtimin
 exposing these attributes does not produce new attack surfaces.
 Thus, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑧">duration</a></code> is the only one which requires further consideration.</p>
    <p>The <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration⑨">duration</a></code> has an 8 millisecond granularity (it is computed as such by performing rounding).
-Thus, a high resolution timer cannot be produced from this timestamps.
+Thus, a high resolution timer cannot be produced from these timestamps.
 However, it does introduce new information that is not readily available to web developers: the time pixels draw after an event has been processed.
-We do not find security or privacy concerns on exposing the timestamp, especially given its granularity.
+We do not find security or privacy concerns with exposing the timestamp, especially given its granularity.
 In an effort to expose the minimal amount of new information that is useful, we decided to pick 8 milliseconds as the granularity.
 This allows relatively precise timing even for 120Hz displays.</p>
    <p>The choice of 104ms as the default cutoff value for the <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/performance-timeline/#dom-performanceentry-duration" id="ref-for-dom-performanceentry-duration①⓪">duration</a></code> is just the first multiple of 8 greater than 100ms.
