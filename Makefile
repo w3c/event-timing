@@ -10,7 +10,9 @@ index.html: index.bs
 	                       --header "Accept: text/plain, text/html" \
 	                       -F type=bikeshed-spec \
 	                       -F die-on=warning \
-	                       -F file=@index.bs) && \
+	                       -F file=@index.bs \
+	                       -F type=bikeshed-spec \
+	                       -F output=html) && \
 	[[ "$$HTTP_STATUS" -eq "200" ]]) || ( \
 		echo ""; cat index.html; echo ""; \
 		rm -f index.html; \
