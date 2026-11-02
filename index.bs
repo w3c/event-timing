@@ -166,6 +166,48 @@ This mechanism can be used to define a page responsiveness metric called <a href
 
 </div>
 
+Interaction to Next Paint {#sec-inp}
+------------------------
+
+<div class="non-normative">
+
+<em>This section is non-normative.</em>
+
+<a href="https://web.dev/articles/inp">INP</a> is computed from the same {{PerformanceEventTiming}} entries this specification exposes.
+For one {{Window}} it goes like this.
+
+Every entry with a nonzero {{PerformanceEventTiming/interactionId}} belongs to an interaction, and one tap can produce several of them.
+The interaction's latency is the longest {{PerformanceEntry/duration}} among its entries, not the sum.
+Sort the latencies longest first, then skip one for every 50 interactions the page has had, going by {{Performance/interactionCount}}.
+So a page with 30 interactions reports its slowest one, and at 120 the two slowest get dropped and INP is the third.
+If the skip runs past the end of the list, use the last latency in it.
+
+The value keeps moving as the user interacts, so compute it again right before reporting it.
+
+<pre class="example highlight">
+    const latencies = new Map();
+
+    new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+            if (entry.interactionId > 0) {
+                const latency = latencies.get(entry.interactionId) ?? 0;
+                latencies.set(entry.interactionId, Math.max(latency, entry.duration));
+            }
+        }
+        const sorted = [...latencies.values()].sort((a, b) => b - a);
+        const skip = Math.floor(performance.interactionCount / 50);
+        const inp = sorted[Math.min(skip, sorted.length - 1)];
+    }).observe({ type: 'event', buffered: true, durationThreshold: 16 });
+</pre>
+
+Observers only get entries at or above their {{PerformanceObserverInit/durationThreshold}}, and the buffer only holds entries of 104ms or more from before the observer was registered, though the faster interactions still add to {{Performance/interactionCount}}.
+That is how the skip can run off the end of the list, and when it does the real value is somewhere under the threshold.
+
+An implementation does not have to keep every interaction around.
+Keeping the 10 longest gives the same answer until a page reaches 500 interactions.
+
+</div>
+
 First Input {#sec-event-timing-first-input}
 ------------------------
 
