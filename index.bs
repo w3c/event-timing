@@ -163,6 +163,7 @@ Note: {{pointermove}} and {{touchmove}} are not currently <a>considered for Even
 
 However, this specification also defines a mechanism for grouping related {{PerformanceEventTiming}}s into {{Interaction}}s via an {{PerformanceEventTiming/interactionId}}.
 This mechanism can be used to define a page responsiveness metric called <a href="https://developer.mozilla.org/en-US/docs/Glossary/Interaction_to_next_paint">Interaction to Next Paint (INP)</a>.
+The <a href="https://github.com/w3c/event-timing/blob/main/inp-explainer.md">INP explainer</a> describes how to derive this metric from Event Timing entries.
 
 </div>
 
